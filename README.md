@@ -1,4 +1,4 @@
-# Robotic Beverage Technologies Inc Tapomatic Kiosk Software
+# Robotic Beverage Technologies Tapomatic Kiosk Software
 
 Author(s): Blaze Sanders Email: blaze.d.a.sanders@gmail.com Skype: blaze.sanders Twitter: @BlazeDSanders
 
