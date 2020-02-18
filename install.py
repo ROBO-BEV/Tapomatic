@@ -4,13 +4,13 @@ ___author__ = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-02-17"
+__date__    = "Late Updated: 2020-02-18"
 __doc__     = "Install script to setup run and dev enviroment for CoCoTaps Tapomatic v2020.0"
 
-CURRENT_CONFIG = "Pi3B+"
+CURRENT_CONFIG = "Pi4B"
 #POSSIBLE_CONFIGS = "UnbuntuOnWindows" of "UbuntuMateOnPC" or "NvidiaTX2" or "NvidiaNano"
 
-# Allow program pausing and ?TODO?
+# Allow program pausing and timestamp creation
 import time
 
 # Allow BASH command to be run inside Python3 code like this file
