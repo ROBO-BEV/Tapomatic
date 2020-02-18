@@ -1,0 +1,87 @@
+<!--
+ * @file welcome.html
+ * @author Blaze Sanders Robotic Beverage Technologies Inc
+ * @date 2020-02-18
+ * @link https://aryaboudaie.com/python/technical/educational/web/flask/2018/10/17/flask.html
+ * @version 0.0
+ *
+ * @brief HTML code to render highest level screen for the CoCoTaps food service system
+ *	
+ * @section DESCRIPTION
+ *
+ * Brand colors: 
+ * Dark Green (0x086D38), Light Green (0x86C042), 
+ * Apple White (0xFDFDFD), White (0xFFFFFF,)
+ * Apple Black (0x010306), Logo Black (0x2A3627)
+ * 
+ * HTML Help:
+ * https://www.brunildo.org/test/space-chars.html [　] ideographic space U+3000
+ * https://htmldog.com/guides/html/beginner/forms/
+ * <center><img src="{{ url_for('static', filename='Images/CoCoTapsLogoV0.png') }}" width="864" height="402" alt="CoCoTaps Logo"> </center>
+ * <center><h1 style="color: #B8191D;"> Welcome to BEEP BEEP </h1></center>
+ -->
+<html lang="en">
+  <head>
+    <title> Welcome to CoCoTaps </title>
+
+    <!--TODO CSS STUFF HERE-->
+    <style type="text/css">
+      
+      table {
+      	font-family: Source Sans Pro, Arial, Courier New; /* Try Source San PRo typeface first and Courier New last */ 
+      }
+      
+      button {
+      	outline: 0;  /* Turn off annoying blue highlight around button during click> */ 
+      }
+    </style>
+  </head>
+
+  <body>
+    <!--TODO: FIX SCRIPT TO ALLOW USE OF ARRAYS-->
+    <script language ="JavaScript">
+ 	  var drinkID = new Array();
+	  drinkID[0] = TEST;
+    </script>
+
+    <table> <!Table layout for portrait mode 1080 wide x 1980 tall>
+      <tr>
+        <td width="90" height="210">
+        </td> <!ROW 1, COL 1>
+
+        <td width="900" height="210">
+        </td> <!ROW 1, COL 2>
+
+        <td width="90" height="210">
+	  <h1 style="color: #2A3627; align="right"> | </h1>
+        </td> <!ROW 1, COL 3>
+      </tr> <!END ROW #1>
+
+      <tr>
+        <td width="90" height="960">
+        </td> <!ROW 2, COL 1>
+
+        <td width="900" height="960">
+	  <!CoCoTaps Logo is 3155x1428 at full resolution>
+	  <center> <img src="../Images/CoCoTapsLogoV0.png" width="864" height="402" alt="CoCoTaps Logo"> </center> 
+        </td> <!ROW 2, COL 2>
+    
+        <td width="90" height="960">        
+	  <h1 style="color: #2A3627; align="right"> | </h1>
+        </td> <!ROW 2, COL 3>
+      </tr> <!END ROW #3>
+
+      <tr>
+        <td width="90" height="630">
+        </td> <!ROW 3, COL 1>
+
+        <td width="900" height="630">
+        </td> <!ROW 3, COL 2>
+
+        <td width="90" height="630">
+	  <h1 style="color: #2A3627; align="right"> | </h1>
+        </td> <!ROW 3, COL 3>
+      </tr> <!END ROW #3>
+    </table>
+  </body>
+</html>
