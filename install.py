@@ -33,8 +33,13 @@ if __name__ == "__main__":
 	# Flask requires Python 3 to work
 	check_call("sudo apt install python3-pip", shell=True)
 
-	# Use Python Virtual Environment Packaging Tool
-	#TODO check_call("pip install pipenv", shell=True)
+	# Use Python Virtual Environment packaging tool PIPENV by installing homebrew on Linux 
+	#TODO check_call("brew install pipenv", shell=True)
+	#TODO check_call("git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew", shell=True)
+	#TODO check_call("mkdir ~/.linuxbrew/bin", shell=True)
+	#TODO lcheck_call("vn -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin", shell=True)
+	#TODO check_call("eval $(~/.linuxbrew/bin/brew shellenv)", shell=True)
+	#TODO check_call("brew install pipenv", shell=True)
 
 	# Flask is the GUI frontend to that runs in parallel with python backend controling pumps
 	# Remember to run flask with "python3" NOT "python" command, or you will get weird errors :)
