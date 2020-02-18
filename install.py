@@ -10,6 +10,9 @@ __doc__     = "Install script to setup run and dev enviroment for CoCoTaps Tapom
 CURRENT_CONFIG = "Pi3B+"
 #POSSIBLE_CONFIGS = "UnbuntuOnWindows" of "UbuntuMateOnPC" or "NvidiaTX2" or "NvidiaNano"
 
+# Allow program pausing and ?TODO?
+import time
+
 # Allow BASH command to be run inside Python3 code like this file
 import subprocess
 from subprocess import Popen, PIPE
@@ -31,7 +34,7 @@ if __name__ == "__main__":
 	check_call("sudo apt install python3-pip", shell=True)
 
 	# Use Python Virtual Environment Packaging Tool
-	check_call("pip install pipenv", shell=True)
+	#TODO check_call("pip install pipenv", shell=True)
 
 	# Flask is the GUI frontend to that runs in parallel with python backend controling pumps
 	# Remember to run flask with "python3" NOT "python" command, or you will get weird errors :)

@@ -18,7 +18,11 @@
  * https://www.brunildo.org/test/space-chars.html [　] ideographic space U+3000
  * https://htmldog.com/guides/html/beginner/forms/
  * <center><img src="{{ url_for('static', filename='Images/CoCoTapsLogoV0.png') }}" width="864" height="402" alt="CoCoTaps Logo"> </center>
+ * https://github.com/ROBO-BEV/Tapomatic/blob/master/v2020.0/static/Images/CoCoTapsLogoV0.png
+ * <center> <img src="../Images/CoCoTapsLogoV0.png" /width="864" height="402" alt="CoCoTaps Logo"/> </center> 
  * <center><h1 style="color: #B8191D;"> Welcome to BEEP BEEP </h1></center>
+ * sudo lsof -i :5000
+ * kill -9 <PID>
  -->
 <html lang="en">
   <head>
@@ -53,8 +57,12 @@
         </td> <!ROW 1, COL 2>
 
         <td width="90" height="210">
-	  <h1 style="color: #2A3627; align="right"> | </h1>
         </td> <!ROW 1, COL 3>
+	
+        <!TODO REMOVE THIS RIGHT SIDE OF SCREEN PIXL MARKER> 
+	<td width="1" height="210" >
+	  <h1 style="color: #2A3627"> I </h1>
+        </td>
       </tr> <!END ROW #1>
 
       <tr>
@@ -63,11 +71,10 @@
 
         <td width="900" height="960">
 	  <!CoCoTaps Logo is 3155x1428 at full resolution>
-	  <center> <img src="../Images/CoCoTapsLogoV0.png" width="864" height="402" alt="CoCoTaps Logo"> </center> 
+	  <center> <img src="../static/Images/CoCoTapsLogoV0.png" / width="864" height="402" alt="CoCoTaps Logo"> </center> 
         </td> <!ROW 2, COL 2>
     
         <td width="90" height="960">        
-	  <h1 style="color: #2A3627; align="right"> | </h1>
         </td> <!ROW 2, COL 3>
       </tr> <!END ROW #3>
 
@@ -76,10 +83,10 @@
         </td> <!ROW 3, COL 1>
 
         <td width="900" height="630">
+	  <button>
         </td> <!ROW 3, COL 2>
 
         <td width="90" height="630">
-	  <h1 style="color: #2A3627; align="right"> | </h1>
         </td> <!ROW 3, COL 3>
       </tr> <!END ROW #3>
     </table>
