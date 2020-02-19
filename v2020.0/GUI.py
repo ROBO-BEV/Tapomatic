@@ -19,13 +19,20 @@ from flask import Flask, render_template, session
 
 # Make a Flask application and start running code from __main__
 app = Flask(__name__)
-app.secret_key = 'FreshCoConuts@42'		# TODO Select STRONG key for production code
+app.secret_key = 'FreshCoConuts@42'			# TODO Select STRONG key for production code
 app.config['SESSION_TYPE'] = 'filesystem'	# TODO Fix Image URL filepath code in welcome.html
 
 @app.route('/')
 def HomeScreen():
-    HTMLtoDisplay = "welcome.html"
-    return render_template(HTMLtoDisplay)
+	HTMLtoDisplay = "welcome.html"
+	return render_template(HTMLtoDisplay)
+
+def WaitingScreen():
+	HTMLtoDisplay = "waiting.html"
+	return render_template(HTMLtoDisplay)
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0')
+	app.run(host='0.0.0.0')
+	HomeScreen()
+	#TODO IF BUTTON PRESSED
+	#WaitingScreen()

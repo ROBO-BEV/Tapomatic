@@ -1,29 +1,23 @@
 <!--
- * @file welcome.html
+ * @file waiting.html
  * @author Blaze Sanders Robotic Beverage Technologies Inc
  * @date 2020-02-18
  * @link https://aryaboudaie.com/python/technical/educational/web/flask/2018/10/17/flask.html
  * @version 0.0
  *
- * @brief HTML code to render highest level screen for the CoCoTaps food service system
+ * @brief HTML code to render screen with 10 second countdown and video on the CoCoTaps food service system
  *	
  * @section DESCRIPTION
  *
  * Brand colors: 
  * Dark Green (0x086D38), Light Green (0x86C042), 
- * Apple White (0xFDFDFD), White (0xFFFFFF),
+ * Apple White (0xFDFDFD), White (0xFFFFFF,)
  * Apple Black (0x010306), Logo Black (0x2A3627)
  * 
- * HTML Help:
- * https://www.brunildo.org/test/space-chars.html [　] ideographic space U+3000
- * https://htmldog.com/guides/html/beginner/forms/
- * <center><img src="{{ url_for('static', filename='Images/CoCoTapsLogoV0.png') }}" width="864" height="402" alt="CoCoTaps Logo"> </center>
- * sudo lsof -i :5000
- * kill -9 <PID>
  -->
 <html lang="en">
   <head>
-    <title> Welcome to CoCoTaps </title>
+    <title> Drilling and tapping coconuts </title>
 
     <!--TODO CSS STUFF HERE-->
     <style type="text/css">
@@ -41,10 +35,10 @@
   <body>
     <!--TODO: FIX SCRIPT TO ALLOW USE OF ARRAYS-->
     <script language ="JavaScript">
- 	  var drinkID = new Array();
-	  drinkID[0] = RumCoConut;
+ 	  var timeLeft = 10 <!units are seconds>
+	  <!TODO FOR LOOP WITH TIMER>
+      var fontSize = 60;
 
-	  var fontSize = 60;
     </script>
 
     <table> <!Table layout for portrait mode 1080 wide x 1980 tall>
@@ -57,23 +51,25 @@
 
         <td width="90" height="100">
         </td> <!ROW 1, COL 3>
-	
-        <!TODO REMOVE THIS RIGHT SIDE OF SCREEN PIXL MARKER> 
-	    <td width="1" height="210" >
-	      <h1 style="color: #2A3627"> I </h1>
+
+        <!TODO REMOVE THIS RIGHT SIDE OF SCREEN PIXL MARKER>
+        <td width="1" height="210" >
+          <h1 style="color: #2A3627"> I </h1>
         </td>
       </tr> <!END ROW #1>
+
 
       <tr>
         <td width="90" height="860">
         </td> <!ROW 2, COL 1>
 
         <td width="900" height="800">
-	  <!CoCoTaps Logo is 3155x1428 at full resolution>
-	  <center> <img src="../static/Images/CoCoTapsLogoV0.png" / width="864" height="402" alt="CoCoTaps Logo"> </center> 
+      <!CoCoTaps Logo is 3155x1428 at full resolution>
+	  <center> <iframe width="1024" height="576" src="https://www.youtube.com/embed/-zPbhY-2Jro" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe> </center> 
+      <center> <img src="../static/Images/CoCoTapsLogoV0.png" / width="864" height="402" alt="CoCoTaps Logo"> </center>
         </td> <!ROW 2, COL 2>
-    
-        <td width="90" height="860">        
+
+        <td width="90" height="860">
         </td> <!ROW 2, COL 3>
       </tr> <!END ROW #2>
 
@@ -82,9 +78,9 @@
         </td> <!ROW 3, COL 1>
 
         <td width="900" height="330">
-	      <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; padding: 15px 5px; width: 900px; height: 220px; font-weight: bold; font-size: 60; border-radius: 40px;" type="/User_Instructions\" value="/User_Instructions\">
-	      <center> Place coconut in circle <br> and press here to start </center>
-	    </td> <!ROW 3, COL 2>
+	      <button style="background-color: #FDFDFD; color: #000; display: inline-block; padding: 15px 5px; width: 900px; height: 120px; font-weight: bold; font-size: 42; border-radius: 10px;" type="/User_Instructions\" value="/User_Instructions\">
+	      <center> {{ timeLeft }} s </center>
+        </td> <!ROW 3, COL 2>
 
         <td width="90" height="330">
         </td> <!ROW 3, COL 3>
@@ -95,8 +91,8 @@
         </td> <!ROW 4, COL 1>
 
         <td width="900" height="630">
-	      <!TODO ADD GREEN UP ARROWS HERE>
-	    </td> <!ROW 4, COL 2>
+          <!TODO ADD GREEN DOWN ARROWS HERE>
+        </td> <!ROW 4, COL 2>
 
         <td width="90" height="630">
         </td> <!ROW 4, COL 3>
