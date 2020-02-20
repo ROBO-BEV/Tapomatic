@@ -31,6 +31,10 @@ def WaitingScreen():
 	HTMLtoDisplay = "waiting.html"
 	return render_template(HTMLtoDisplay)
 
+def CompleteScreen():
+	HTMLtoDisplay = "complete.html"
+	return render_template(HTMLtoDisplay)
+
 if __name__ == '__main__':
 	app.run(host='0.0.0.0')
 	HomeScreen()
