@@ -36,7 +36,13 @@ def CompleteScreen():
 	return render_template(HTMLtoDisplay)
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0')
+	if(Debug.GetMode()):
+		# Allow URLs to be refreshed (F5) without restarting web server after code changes
+		app.run(debug=True) # check_call("export FLASK_DEBUG=1", shell=True)
+	else::
+		check_call("export FLASK_DEBUG=0", shell=True)
+		app.run(host='0.0.0.0')
+
 	HomeScreen()
 	#TODO IF BUTTON PRESSED
 	#WaitingScreen()

@@ -46,3 +46,9 @@ if __name__ == "__main__":
 	# https://aryaboudaie.com/python/technical/educational/web/flask/2018/10/17/flask.html
 	check_call("pip3 install flask", shell=True)
 	#TODO check_call("pipenv install flask", shell=True)
+
+	# Set enviroment variable to select GUI.py file as the Flask application
+	check_call("export FLASK_APP=GUI.py", shell=True)
+
+	# Start flask app running
+	check_call("flask run", shell=True)
