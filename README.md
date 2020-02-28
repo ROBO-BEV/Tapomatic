@@ -8,7 +8,18 @@ This Git repo holds code for many open source libraries. It's broken down into t
 
 Please use Style Guide: https://github.com/google/styleguide/blob/gh-pages/pyguide.md
 
-Please use ***pipenv*** Virtual Enviroment software: https://realpython.com/pipenv-guide
+The code was written on and designed to run on the Ubuntu Mate Linux Distro. 
+Download Ubuntu Mate for the Raspberry Pi 4 at www.ubuntu-mate.org/raspberry-pi
+
+You can make a bootable microSD card (8 GB or larger) on Desktop Linux using the following commands: 
+sudo apt-get install gddrescue xz-utils
+unxz ubuntu-mate-18.04.2-beta1-desktop-armhf+raspi-ext4.img.xz
+sudo ddrescue -D --force ubuntu-mate-18.04.2-beta1-desktop-armhf+raspi-ext4.img /dev/sd?
+
+Where the ? in sd? can be determined by using the "lsblk" command to find your microSD card name.
+
+We plan to use ***pipenv*** Virtual Enviroment software for v2020.1: https://realpython.com/pipenv-guide
+
 
 ***
 v2020.0:

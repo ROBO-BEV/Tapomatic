@@ -1,7 +1,7 @@
 <!--
  * @file welcome.html
  * @author Blaze Sanders Robotic Beverage Technologies Inc
- * @date 2020-02-26
+ * @date 2020-02-28
  * @link https://aryaboudaie.com/python/technical/educational/web/flask/2018/10/17/flask.html
  * @version 0.0
  *
@@ -47,60 +47,121 @@
 	  var fontSize = 60;
     </script>
 
-    <table> <!Table layout for portrait mode 1080 wide x 1980 tall>
-      <tr>
-        <td width="90" height="100">
+    <table> <!9 row x 3 AND 5 column table layout in portrait mode 1080 wide x 1980 tall>
+			<!Heigth = 1980 pixels = 40.0 cm on digital ruler thus (6.65 cm * 48) == 316 pixels>
+			<!Width  = 1080 pixels = 22.5 cm on digital ruler thus (2.35 cm * 48) == 113 pixels>
+
+      <tr>  <!ALL BLANK WHITE ROW> 
+        <td width="113" height="316"> 
         </td> <!ROW 1, COL 1>
 
-        <td width="900" height="100">
+        <td width="854" height="316">
         </td> <!ROW 1, COL 2>
 
-        <td width="90" height="100">
+        <td width="113" height="316">
         </td> <!ROW 1, COL 3>
 	
         <!TODO REMOVE THIS RIGHT SIDE OF SCREEN PIXL MARKER> 
-	    <td width="1" height="210" >
+	    <td width="1" height="316" >
 	      <h1 style="color: #2A3627"> I </h1>
         </td>
-      </tr> <!END ROW #1>
+      </tr> <!END ROW #1> 
 
-      <tr>
-        <td width="90" height="860">
+      <tr>  <!COCOTAPS LOGO ROW>
+        <td width="113" height="386">
         </td> <!ROW 2, COL 1>
 
-        <td width="900" height="800">
-	  <!CoCoTaps Logo is 3155x1428 at full resolution>
-	  <center> <img src="../static/images/CoCoTapsLogoV0.png" / width="864" height="402" alt="CoCoTaps Logo"> </center> 
+        <td width="854" height="386">
+	  	  <!CoCoTaps Logo is 3155x1428 at full resolution>
+	  	  <center> <img src="../static/images/CoCoTapsLogoV0.png" / width="854" height="386" alt="CoCoTaps Logo"> </center> 
         </td> <!ROW 2, COL 2>
     
-        <td width="90" height="860">        
+        <td width="113" height="386">        
         </td> <!ROW 2, COL 3>
-      </tr> <!END ROW #2>
+      </tr> <!END ROW #2> <!1080 x 702>
 
-      <tr>
-        <td width="90" height="330">
+      <tr>  <!ALL BLANK WHITE ROW> 
+        <td width="113" height="30?">
         </td> <!ROW 3, COL 1>
-
-        <td width="900" height="330">
-	      <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; padding: 15px 5px; width: 864px; height: 220px; font-weight: bold; font-size: 60; border-radius: 40px;" type="/User_Instructions\" value="/User_Instructions\">
-	      <center> Place coconut in the green circle <br> and press here to start </center>
-	    </td> <!ROW 3, COL 2>
-
-        <td width="90" height="330">
+        <td width="854" height="30?">
+        </td> <!ROW 3, COL 2>
+        <td width="113" height="30?">
         </td> <!ROW 3, COL 3>
-      </tr> <!END ROW #3>
+	  </tr> <!END ROW #3>
 
-      <tr>
-        <td width="90" height="630">
+	  <tr> <!BUTTON (3 OR 5 COLUMNS) AND TEXT COUNTDOWN CLOCK LABEL (3 COLUMN) ROW>
+        <td width="113" height="30?">
         </td> <!ROW 4, COL 1>
-
-        <td width="900" height="630">
-	      <!TODO ADD GREEN UP ARROWS HERE>
+        
+		<td width="854" height="30?"> <!THE 5 COLUMN LAYOUT WILL HAVE 3 COLUMNS INSIDE THIS CELL>
+	      <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; padding: 15px 5px; width: 864px; height: 220px; font-weight: bold; font-size: 60; border-radius: 40px;" type="/User_Instructions\" value="/User_Instructions\">
+	      <center> Place coconut in green circle <br> and press here to start </center>
 	    </td> <!ROW 4, COL 2>
 
-        <td width="90" height="630">
+        <td width="113" height="30?">
         </td> <!ROW 4, COL 3>
       </tr> <!END ROW #4>
+
+      <tr> <!ONE OR TWO BUTTON OR BLANK WHITE ROW>
+        <td width="113" height="30?">
+        </td> <!ROW 5, COL 1>
+
+        <td width="854" height="30?">
+	    </td> <!ROW 5, COL 2>
+
+        <td width="113" height="30?">
+        </td> <!ROW 5, COL 3>
+      </tr> <!END ROW #5>
+
+      <tr> <!ONE OR TWO BUTTON OR GREEN ARROW ROW>
+        <td width="113" height="153">
+        </td> <!ROW 6, COL 1>
+
+        <td width="854" height="153"> <!THE 5 COLUMN LAYOUT WILL HAVE 3 COLUMNS INSIDE THIS CELL>
+	  	  <!GREEN ARROW IMAGE IS 3003x1527 AT FULL RESOLUTION>
+	  	  <center> <img src="../static/images/DownGreenArrow.png" / width="300" height="153" alt="Down Green Arrow"> </center> 
+	    </td> <!ROW 6, COL 2>
+
+        <td width="113" height="153">
+        </td> <!ROW 6, COL 3>
+      </tr> <!END ROW #6>
+
+      <tr> <!ONE OR TWO BUTTON OR GREEN ARROW ROW>
+        <td width="113" height="153">
+        </td> <!ROW 7, COL 1>
+
+        <td width="854" height="153"> <!THE 5 COLUMN LAYOUT WILL HAVE 3 COLUMNS INSIDE THIS CELL>
+	  	  <!GREEN ARROW IMAGE IS 3003x1527 AT FULL RESOLUTION>
+	  	  <center> <img src="../static/images/DownGreenArrow.png" / width="300" height="153" alt="Down Green Arrow"> </center> 
+	    </td> <!ROW 7, COL 2>
+
+        <td width="113" height="153">
+        </td> <!ROW 7, COL 3>
+      </tr> <!END ROW #7>
+
+      <tr> <!ONE OR TWO BUTTON OR GREEN ARROW ROW> 
+        <td width="113" height="153">
+        </td> <!ROW 8, COL 1>
+	  
+        <td width="854" height="153"> <!THE 5 COLUMN LAYOUT WILL HAVE 3 COLUMNS INSIDE THIS CELL>
+	  	  <!GREEN ARROW IMAGE IS 3003x1527 AT FULL RESOLUTION>
+	  	  <center> <img src="../static/images/DownGreenArrow.png" / width="300" height="153" alt="Down Green Arrow"> </center> 
+	    </td> <!ROW 8, COL 2>
+
+        <td width="113" height="153">
+        </td> <!ROW 8, COL 3>
+      </tr> <!END ROW #8>
+
+      <tr> <!ALL BLANK WHITE ROW>
+        <td width="113" height="???">
+        </td> <!ROW 9, COL 1>
+
+        <td width="854" height="???">
+	    </td> <!ROW 9, COL 2>
+
+        <td width="113" height="???">
+        </td> <!ROW 9, COL 3>
+      </tr> <!END ROW #9>
 
     </table>
   </body>
