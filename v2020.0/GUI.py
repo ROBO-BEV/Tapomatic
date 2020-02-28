@@ -39,7 +39,7 @@ if __name__ == '__main__':
 	if(Debug.GetMode()):
 		# Allow URLs to be refreshed (F5) without restarting web server after code changes
 		app.run(debug=True) # check_call("export FLASK_DEBUG=1", shell=True)
-	else::
+	else:
 		check_call("export FLASK_DEBUG=0", shell=True)
 		app.run(host='0.0.0.0')
 
