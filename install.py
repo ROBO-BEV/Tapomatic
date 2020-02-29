@@ -4,7 +4,7 @@ ___author__ = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-02-18"
+__date__    = "Late Updated: 2020-02-29"
 __doc__     = "Install script to setup run and dev enviroment for CoCoTaps Tapomatic v2020.0"
 
 CURRENT_CONFIG = "Pi4B"
@@ -49,6 +49,3 @@ if __name__ == "__main__":
 
 	# Set enviroment variable to select GUI.py file as the Flask application
 	check_call("export FLASK_APP=GUI.py", shell=True)
-
-	# Start flask app running
-	check_call("flask run", shell=True)
