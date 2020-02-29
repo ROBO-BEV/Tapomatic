@@ -23,14 +23,14 @@ class LASER:
 		#TODO Calculate firing duration based on LASER power level and image size
 		if(powerLevel != STANDARD_POWER):
 			numOfPixels = GetNumOfPixels()
-			moistureLevel = GetCocoNutMoistureLevel()
+			moistureLevel = GetCoconutMoistureLevel()
 			duration = LASER_CONSTANT * moistureLevel * numOfPixels 
 		elif():
 			#TODO CHANGE POWER LEVEL HERE
 		elif():
 
 		else:
-			Debug.Dprint("ERROR: Invalid power level choosen in COnfigureLaserForNewImage() function")
+			Debug.Lprint("ERROR: Invalid power level choosen in COnfigureLaserForNewImage() function")
 
 		return duration
 
@@ -39,3 +39,13 @@ class LASER:
 	def FireLaser(duration):
 
 	def SetPowerLevel():
+
+    def GetNumOfPixels():
+
+    ###
+    # Moisture level from 1 to 10 corresponing to % humidity
+    #
+    # return Integer from 1 to 100
+    def GetCoconutMoistureLevel():
+        #TODO Moisture sensor in fridge
+        return 5
