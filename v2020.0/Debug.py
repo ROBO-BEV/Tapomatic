@@ -2,20 +2,22 @@ import sys
 
 import Writer		#TODO Find correct name
 
-DEBUG_STATEMENTS_ON = True    		# Toogle debug statements on and off for this python file
+class Debug:
 
+	def __init__(self):
+		self.DEBUG_STATEMENTS_ON = False	# Toogle debug statements on and off for this python file
 
-def __init__():
-	DEBUG_STATEMENTS_ON = False		# Toogle debug statements on and off for this python file
+	def GetMode():
+		return DEBUG_STATEMENTS_ON
 
-def TurnOnDebugMode():
-	DEBUG_STATEMENTS_ON = True
+	def TurnOnDebugMode():
+		DEBUG_STATEMENTS_ON = True
 
-def TurnOffDebugMode():
-	DEBUG_STATEMENTS_ON = False
+	def TurnOffDebugMode():
+		DEBUG_STATEMENTS_ON = False
 
 ###
-# Debug prini to terminal only
+# Debug print to terminal only
 # Calls standard Python 3 print("X") statement if global variable is TRUE
 #
 ###
@@ -26,7 +28,7 @@ def Dprint(logMessage):
 		print("/n") # PRINT NEW LINE / DO NOTHING
 
 ###
-# Log prini to both datalog.txt file and terminal
+# Log print to both a datalog.txt file and the terminal
 #
 # @link - https://docs.python.org/3/library/time.html#time.strftime
 #

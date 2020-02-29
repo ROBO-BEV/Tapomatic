@@ -17,13 +17,16 @@ import sys, time, traceback, argparse, string
 # Saves user state / data across page refreshes and crashes, by using browser cookies
 from flask import Flask, render_template, session
 
+# Robotic Beverage Technologies code for custom data logging and terminal debugging output
+import Debug
+
 # Make a Flask application and start running code from __main__
 app = Flask(__name__)
 app.secret_key = 'FreshCoConuts@42'			# TODO Select STRONG key for production code
 app.config['SESSION_TYPE'] = 'filesystem'	# TODO Fix Image URL filepath code in welcome.html
 
 @app.route('/')
-def HomeScreen():
+def WelcomeScreen():
 	HTMLtoDisplay = "welcome.html"
 	return render_template(HTMLtoDisplay)
 
@@ -36,14 +39,14 @@ def CompleteScreen():
 	return render_template(HTMLtoDisplay)
 
 if __name__ == '__main__':
-	if(Debug.GetMode()):
+	if(Debug.GetMode() == True):
 		# Allow URLs to be refreshed (F5) without restarting web server after code changes
 		app.run(debug=True) # check_call("export FLASK_DEBUG=1", shell=True)
 	else:
 		check_call("export FLASK_DEBUG=0", shell=True)
 		app.run(host='0.0.0.0')
 
-	HomeScreen()
+	WelcomeScreen()
 	#TODO IF BUTTON PRESSED
 	#WaitingScreen()
 	#CompleteScreen()
