@@ -13,8 +13,8 @@ from time import gmtime, strftime
 class Debug:
 
     def __init__(self):
-        self.f = open('DataLog.txt','r+')
-        self.DEBUG_STATEMENTS_ON = False	# Toogle debug statements on and off for this python file
+        self.f = open('DataLog.txt','r+')   # Open read and append at end write access to .txt file
+        self.DEBUG_STATEMENTS_ON = True	    # Used to toogle debug statements on and off
 
     def GetMode(self):
 	    return self.DEBUG_STATEMENTS_ON
@@ -30,35 +30,40 @@ class Debug:
 
     ###
     # Debug print to terminal only
-    # Calls standard Python 3 print("X") statement if global variable is TRUE
+    # Calls standard Python 3 print("X") statement if class variable is TRUE
     #
+    # return NOTHING
     ###
     def Dprint(self, logMessage):
         if(self.DEBUG_STATEMENTS_ON):
-            print("MESSAGE: " + logMessage)
+            print("MESSAGE: " + logMessage + "\n")
         else:
-            print("/n") # PRINT NEW LINE / DO NOTHING
+            print("\n") # PRINT NEW LINE / DO NOTHING
 
     ###
-    # Log print to both a datalog.txt file and the terminal
+    # Log debugging print with LOCAL TIME to both a datalog.txt file and the terminal
+    # Calls Dprint() and standard Python 3 write() if class variable is TRUE
     #
     # @link - https://docs.python.org/3/library/time.html#time.strftime
     #
     # return NOTHING
     ###
     def Lprint(self, logMessage):
-        self.Dprint("DAY & TIME: " +  strftime("%c")) # Sat Feb 29 13:48:05 2020 
-        self.Dprint(logMessage)
+        if(self.DEBUG_STATEMENTS_ON):
+            self.Dprint(logMessage + " on " + strftime("%c") + "\n")
 
-        self.f.write("DAY & TIME: " +  strftime("%c"))
-        self.f.write("MESSAGE: " + logMessage)
-
+            self.f.write("DAY & TIME: " + strftime("%c") + "\n")
+            self.f.write("MESSAGE: " + logMessage + "\n")
+        else:
+            print("\n") # PRINT NEW LINE / DO NOTHING
 
 if __name__ == "__main__":
     print("UNIT TESTING:")
     test = Debug()
 
     print(test.GetMode())
+    test.TurnOffDebugMode()
+
     test.Dprint("This should not print :)")
     test.TurnOnDebugMode()
     print(test.GetMode())
