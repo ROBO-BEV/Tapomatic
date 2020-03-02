@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-02-29"
+__date__    = "Late Updated: 2020-03-02"
 __doc__     = "Logic to run Flask based GUI front-end for CoCoTaps"
 
 # Useful system jazz
@@ -18,7 +18,7 @@ import sys, traceback, argparse, string
 from flask import Flask, render_template, session
 
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
-import Debug
+from Debug import *
 #TODO import Drink
 
 # Make a Flask application and start running code from __main__
@@ -40,14 +40,15 @@ def CompleteScreen():
 	return render_template(HTMLtoDisplay)
 
 if __name__ == '__main__':
-	if(Debug.GetMode() == True):
-		# Allow URLs to be refreshed (F5) without restarting web server after code changes
-		app.run(debug=True) # check_call("export FLASK_DEBUG=1", shell=True)
-	else:
-		check_call("export FLASK_DEBUG=0", shell=True)
-		app.run(host='0.0.0.0')
+    d = Debug(True)
+    if(d.GetMode == True):
+	    # Allow URLs to be refreshed (F5) without restarting web server after code changes
+	    app.run(debug=True) # check_call("export FLASK_DEBUG=1", shell=True)
+    else:
+	    app.run(debug=False) # check_call("export FLASK_DEBUG=0", shell=True)
+	    app.run(host='0.0.0.0')
 
-	WelcomeScreen()
-	#TODO IF BUTTON PRESSED
-	#WaitingScreen()
-	#CompleteScreen()
+    WelcomeScreen()
+    #TODO IF BUTTON PRESSED
+    #WaitingScreen()
+    #CompleteScreen()

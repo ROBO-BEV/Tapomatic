@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-02-29"
+__date__    = "Late Updated: 2020-03-02"
 __doc__     = "Code to make print() debuggging and data logging easier"
 
 # Allow program to create GMT and local timestamps
@@ -12,9 +12,15 @@ from time import gmtime, strftime
 
 class Debug:
 
-    def __init__(self):
-        self.f = open('DataLog.txt','r+')   # Open read and append at end write access to .txt file
-        self.DEBUG_STATEMENTS_ON = True	    # Used to toogle debug statements on and off
+    def __init__(self, initState):
+        self.f = open('DataLog.txt','r+')    # Open read and append at end write access to .txt file
+
+        # Toogle initial debug statements ON (true) or Off (false)
+        if(initState == False):
+            self.DEBUG_STATEMENTS_ON = False
+        else:
+            self.DEBUG_STATEMENTS_ON = True
+            print("DEBUG STATEMENTS ARE ON")
 
     def GetMode(self):
 	    return self.DEBUG_STATEMENTS_ON
