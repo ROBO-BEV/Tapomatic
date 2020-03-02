@@ -11,7 +11,7 @@ CURRENT_CONFIG = "PI_4_B"
 #POSSIBLE_CONFIGS = "NVIDIA_TX2" or "NVIDIA_NANO" # Hard code CURRENT_CONFIG by swapping with one of these
 
 # Allow program to pause operation and create local timestamps
-import time
+from time import sleep
 
 # Allow BASH command to be run inside Python3 code like this file
 import subprocess
@@ -24,7 +24,7 @@ if __name__ == "__main__":
 	# Check and update your system
 	check_call("sudo apt update", shell=True)
 	check_call("sudo apt upgrade", shell=True)
-	time.sleep(5) 			                    # Pause program to allow user to read upgrade output
+	sleep(5) 			                        # Pause program to allow user to read upgrade output
 	check_call("clear",shell=True)
 
 
