@@ -36,10 +36,17 @@ def WelcomeScreen():
 	HTMLtoDisplay = "welcome.html"
 	return render_template(HTMLtoDisplay)
 
+@app.route('/Waiting')
 def WaitingScreen():
 	HTMLtoDisplay = "waiting.html"
 	return render_template(HTMLtoDisplay)
 
+@app.route('/TapOrCut')
+def TapOrCutScreen():
+	HTMLtoDisplay = "tapOrCut.html"
+	return render_template(HTMLtoDisplay)
+
+@app.route('/Complete')
 def CompleteScreen():
 	HTMLtoDisplay = "complete.html"
 	return render_template(HTMLtoDisplay)
@@ -54,15 +61,16 @@ if __name__ == '__main__':
 	    app.run(debug=False) # check_call("export FLASK_DEBUG=0", shell=True)
 	    app.run(host='0.0.0.0')
 
-    WelcomeScreen()
+    #WelcomeScreen()
     #TODO Add button code
-    sleep(3)
+    #sleep(3)
     TapOrCutScreen()
     sleep(3)
-    FlavorScreen()
-    sleep(3)
-    BrandScreen()
-    sleep(3)
-    WaitingScreen()
-    sleep(3)
-    CompleteScreen()
+    print("Sleeping Worked")
+    #FlavorScreen()
+    #sleep(3)
+    #BrandScreen()
+    #sleep(3)
+    #WaitingScreen()
+    #sleep(3)
+    #CompleteScreen()
