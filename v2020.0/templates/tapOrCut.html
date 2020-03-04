@@ -1,11 +1,11 @@
 <!--
- * @file welcome.html
+ * @file tapOrCut.html
  * @author Blaze Sanders Robotic Beverage Technologies Inc
- * @date 2020-03-02
+ * @date 2020-03-03
  * @link https://aryaboudaie.com/python/technical/educational/web/flask/2018/10/17/flask.html
  * @version 0.0
  *
- * @brief HTML code to render highest level screen for the CoCoTaps food service system
+ * @brief HTML code to render second screen for the CoCoTaps food service system
  *	
  * @section DESCRIPTION
  *
@@ -14,15 +14,10 @@
  * Apple White (0xFDFDFD), White (0xFFFFFF),
  * Apple Black (0x010306), Logo Black (0x2A3627)
  * 
- * HTML Help:
- * https://www.brunildo.org/test/space-chars.html [　] ideographic space U+3000
- * https://htmldog.com/guides/html/beginner/forms/
- * sudo lsof -i :5000
- * kill -9 <PID>
  -->
 <html lang="en">
   <head>
-    <title> Welcome to CoCoTaps </title>
+    <title> Would you like to tap of top off your coconut? </title>
 
     <!--TODO CSS STUFF HERE-->
     <style type="text/css">
@@ -40,9 +35,6 @@
   <body>
     <!--TODO: FIX SCRIPT TO ALLOW USE OF ARRAYS-->
     <script language ="JavaScript">
- 	  var drinkID = new Array();
-	  drinkID[0] = RumCoConut;
-
 	  var fontSize = 60;
     </script>
 
@@ -87,6 +79,13 @@
         <td width="146" height="262">
         </td> <!ROW 4, COL 1>
         
+        <td width="788/3" height="262">
+        </td>
+        <td width="788/3" height="262">
+        </td>
+        <td width="788/3" height="262">
+        </td>
+
 		<td width="788" height="262"> <!THE 5 COLUMN LAYOUT WILL HAVE 3 COLUMNS INSIDE THIS CELL>
 	      <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; padding: 15px 5px; width: 788px; height: 262px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/User_Instructions\" value="/User_Instructions\">
 	      <center> Place coconut in green circle <br> and press here to start </center>
