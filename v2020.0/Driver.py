@@ -4,7 +4,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-02-24"
+__date__ =    "Late Updated: 2020-03-08"
 __doc__ =     "Logic to run Tapomatic back-end services (i.e. not GUI)"
 
 # Useful standard Python system jazz
@@ -18,9 +18,9 @@ import pynput.keyboard
 from pynput.keyboard import Key, Controller
 
 # Custom Robotic Beverage Technologies Inc code
-import Drink            			# Store valid CoCoTaps drink configurations
-import Actuator         			# Modular plug and play control of motors, servos, and relays
-import Debug 						# Configure datalogging parameters and debug printing control
+from CoCoDrink import *         	# Store valid CoCoTaps drink configurations
+from Actuator import *         	# Modular plug and play control of motors, servos, and relays
+from Debug import *		    	# Configure datalogging parameters and debug printing control
 
 # Create a command line parser
 parser = argparse.ArgumentParser(prog = "Tapomatic v2020.0", description = __doc__, add_help=True)
@@ -45,6 +45,7 @@ TORQUE_EXIT_CASE = -1
 DEPTH_EXIT_CASE  = -2
 TIME_EXIT_CASE   = -3
 
+LINODE_MYSQL_IP = "45.79.104.3?"
 GUI_PI_IP = "127.168.1.69"
 VEND_PI_IP = "127.168.1.42"
 
@@ -55,7 +56,7 @@ PRODUCT_MODE = "PRODUCT"        		# Final product configuration
 FIELD_MODE   = "FIELD"					# Non-Techanical repair person configuration
 TESTING_MODE = "TESTING"				# Internal developer configuration
 
-# Raspberry Pi B+ refernce pin constants as defined in ???rc.local script???
+# Raspberry Pi 4B refernce pin constants as defined in ???rc.local script???
 NUM_PI_GPIO_PINS = 8              		# Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
 MAX_NUM_PI_A_OR_B_PLUS_GPIO_PINS = 40 	# Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
 MAX_NUM_PI_A_OR_B_GPIO_PINS = 26      	# Pins 1 to 26 on Raspberry Pi A or B
@@ -80,32 +81,26 @@ TAPPING_SOCKET_TOOL = -2
 DULL_KNIVE_FORCE = 100	# Units are Newtons
 
 ###
-# TODO Does this work? or do I need to call actuatoObjects[i].???
-#
-###
-def __init__(actuatorObjects):
-	ROTATIONTAL_TOOL_MOTOR = actuatorObjects[0]
-	Z_LINEAR_TOOL_MOTOR = actuatorObjects[1]
-	X_LINEAR_TOOL_MOTOR = actuatorObjects[2]
-	Y_LINEAR_TOOL_MOTOR  = actuatorObjects[3]
-	Z1_LINEAR_LIFT_MOTOR = actuatorObjects[4]
-	Z2_LINEAR_LIFT_MOTOR = actuatorObjects[5]
-
-	currentTool = NO_TOOL
-
-###
-# Actuate N number of actuators to LIFT & LOWER coconuts into the drilling, tapping, and toping off system
+# Actuate N number of actuators to LIFT coconuts into the drilling, tapping, and toping off system
 #
 # @actuatorObjects - Array of linear actuators() objects to control
 #
 # return NOTHING
 ###
-def MoveCoconut(actuatorObjects):
+def LiftCoconut(actuatorObjects):
 	for i in actuatorObjects:			# Move ALL actuators to LIFT cocoonut to max position at the same time
 		actuatorObjects[i].max()		# OLD WAY cupSeparatorServo1.min()
 
-	time.sleep(MAX_DRILLING_TIME + MAX_TAPPING_TIME + MAX_TOPPING_OFF_TIME) #TODO REAL LIFE TESTING ~30 seconds
+	#time.sleep(MAX_DRILLING_TIME + MAX_TAPPING_TIME + MAX_TOPPING_OFF_TIME) #TODO REAL LIFE TESTING ~30 seconds
 
+###
+# Actuate N number of actuators to LOWER coconuts into the drilling, tapping, and toping off system
+#
+# @actuatorObjects - Array of linear actuators() objects to control
+#
+# return NOTHING
+###
+def LowerCoconut(actuatorObjects):
 	for j in actuatorObjects:			# Move ALL actuators to LOWER coconut to min position at the same time
 		actuatorObjects[j].min()		# OLD WAY cupSeparatorServo1.min()
 
@@ -113,12 +108,12 @@ def MoveCoconut(actuatorObjects):
 ###
 # Turn ON rotational motor to spin drill bit at high speed until a stopSignal is given
 #
-# @actuatorObjects - Array of linear actuators() objects to control
 # @stopSignal - Input signal that can cause drill to stop OTHERWISW MAX_DRILLING_TIME causes drill to stop
+# @actuatorObjects - Array of linear actuators() objects to control
 #
 # return Exit case CONSTANT describing why drill stopped
 ###
-def RunDrill(actuatorObjects, stopSignal):
+def RunDrill(stopSignal, actuatorObjects):
 	torqueBelowLimit = True
 	drillDepthNotAtMax = True
 	timeDelta = 0.0
@@ -140,10 +135,9 @@ def RunDrill(actuatorObjects, stopSignal):
 #
 # return NOTHING
 ###
-def StopDrill():
+def StopDrill(actuatorObjects):
 	actuatorObjects[0].min()			# Turn off ONE rotational motor (TODO Is min == off?)
 	actuatorObjects[1].min()			# Pull linear Z axis motor back to start position
-
 
 
 ###
@@ -168,11 +162,20 @@ def SwapTool(newTool):
 		Debug.Dprint("ERROR: You attempted to use a tool not supported by Tapomatic v" + VERSION)
 
 ###
+# Top off coconut by cutting striaght across with horizontal knive
 #
+# @direction - Plus or minus X axis direction to cut towards.
+# @actuatorObjects - Array of linear actuators() objects to control
 #
-# retutn false if top off knive is dull and needs service
+# return false if top off knive is dull and needs service
 ###
-def AcutateDoubleSidedKnive(direction):
+def AcutateDoubleSidedKnive(direction, actuatorObjects):
+
+    if(direction == PLUS):
+    
+    elif(direction == MINUS):
+
+    else:
 
 	if(GetForce() > DULL_KNIVE_FORCE):
 		isKniveSharp = false
@@ -257,8 +260,15 @@ def moveConveyor(actuatorObjects, direction, numOfPositions):
 
 if __name__ == "__main__":
 
+    # TODO Does this work? or do I need to call actuatoObjects[i].???
+    ROTATIONTAL_TOOL_MOTOR = actuatorObjects[0]
+    Z_LINEAR_TOOL_MOTOR = actuatorObjects[1]
+    X_LINEAR_TOOL_MOTOR = actuatorObjects[2]
+    Y_LINEAR_TOOL_MOTOR  = actuatorObjects[3]
+    Z1_LINEAR_LIFT_MOTOR = actuatorObjects[4]
+    Z2_LINEAR_LIFT_MOTOR = actuatorObjects[5]
 
-	__init__()
+	currentTool = NO_TOOL
 
 
 
