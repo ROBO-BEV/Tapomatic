@@ -17,13 +17,14 @@
  -->
 <html lang="en">
   <head>
-    <title> Would you like to tap of top off your coconut? </title>
+    <title> Tap or Cut </title>
 
     <!--TODO CSS STUFF HERE-->
     <style type="text/css">
       
       table {
       	font-family: Arial, Courier New, Source Sans Pro; /* Try using Arial typeface first and Source Sans Pro last */ 
+	border: 1px solid black
       }
       
       button {
@@ -38,18 +39,19 @@
 	  var fontSize = 60;
     </script>
 
-    <table> <!9 row x 3 AND 5 column table layout in portrait mode 1080 wide x 1980 tall>
-			<!Heigth = 1980 pixels = 40.0 cm on digital ruler thus (6.60 cm * 48) == 316 pixels>
-			<!Width  = 1080 pixels = 22.5 cm on digital ruler thus (3.05 cm * 48) == 146 pixels>
+    <table style="width:100%"> 
+    <!9 row x 3 AND 5 column table layout in portrait mode 1080 wide x 1980 tall>
+    <!Heigth = 1980 pixels = 40.0 cm on digital ruler thus (6.60 cm * 48) == 316 pixels>
+    <!Width  = 1080 pixels = 22.5 cm on digital ruler thus (3.05 cm * 48) == 146 pixels>
 
-      <tr>  <!ALL BLANK WHITE ROW> 
-        <td width="146" height="266"> <!3.05 cm x 6.60 cm = 316 - 50 pixels to adjust for Pi 1920 ti 1870>
+      <tr width="1010" height="266">  <!ALL BLANK WHITE ROW> 
+        <td width="146", height="266"> <!3.05 cm x 6.60 cm = 316 - 50 pixels to adjust for Pi 1920 ti 1870>
         </td> <!ROW 1, COL 1>
 
-        <td width="788" height="266">
+        <td width="788", height="266">
         </td> <!ROW 1, COL 2>
 
-        <td width="146" height="266">
+        <td width="146", height="266">
         </td> <!ROW 1, COL 3>
 	  </tr> <!END ROW #1> 
 
@@ -69,34 +71,27 @@
       <tr>  <!ALL BLANK WHITE ROW> 
         <td width="146" height="222"> <!3.05 cm x 5.45 cm>
         </td> <!ROW 3, COL 1>
-        <td width="788" height="222">
+        <td width="788" height="222"> 
         </td> <!ROW 3, COL 2>
         <td width="146" height="222">
         </td> <!ROW 3, COL 3>
 	  </tr> <!END ROW #3>
 
-	  <tr> <!TWO BUTTONS>
-        <td width="146" height="262">
-            <!BLANK SPACE>
-        </td> <!ROW 4, COL 1>
-        
-        <td width="316" height="262">
-	      <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; padding: 15px 5px; width: 316px; height: 262px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Cut_Top_Off\" value="/Press_To_Cut_Top_Off\">
-	      <center> Press to <br> cut top off </center>
-        </td>
-        <td width="156" height="262">
-            <!BLANK SPACE>
-        </td>
-        <td width="316" height="262">
-	      <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; padding: 15px 5px; width: 316px; height: 262px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Tap_Coco\" value="/Press_To_Tap_Coco\">
-	      <center> Press to <br> tap coco </center>
-        </td>
-
-        <td width="146" height="262">
-            <!BLANK SPACE>
-        </td> <!ROW 4, COL 3>
-      </tr> <!END ROW #4>
-
+      <tr>
+	<td width="146" height="262">
+	  I
+	</td>
+	
+	<td width="106" height="262">
+	  LOVE
+	</td>
+	
+	<td width="146" height="262">
+	  YOU
+	</td>
+	
+      </tr>
+      
       <tr> <!TWO GREEN ARROWS>
         <td width="146" height="222">
             <!BLANK SPACE>
@@ -123,13 +118,15 @@
         </td> <!ROW 6, COL 1>
 
         <td width="316" height="262">
-	  	  <center> <img src="../static/images/CoCoTapsCoconutTopped.png" / width="300" height="153" alt="Down Green Arrow"> </center> 
+          <!Full resolution CoCoTapsCoconutTopped.jpg is 2700 x 1326>
+	  	  <center> <img src="../static/images/CoCoTapsCoconutTopped.png" / width="300" height="153" alt="Topped Cococnut"> </center> 
         </td>
         <td width="156" height="262">
             <!BLANK SPACE>
         </td>
         <td width="316" height="262">
-	  	  <center> <img src="../static/images/CoCoTapsCoconut.png" / width="300" height="153" alt="Down Green Arrow"> </center> 
+          <!Full resolution CoCoTapsCoconut.jpg is 2700 x 2025>
+	  	  <center> <img src="../static/images/CoCoTapsCoconut.png" / width="300" height="153" alt="Tapped Coconut"> </center> 
         </td>
 
         <td width="146" height="153">
