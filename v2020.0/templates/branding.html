@@ -1,11 +1,11 @@
 <!--
- * @file welcome.html
+ * @file branding.html
  * @author Blaze Sanders Robotic Beverage Technologies Inc
- * @date 2020-03-11
+ * @date 2020-03-12
  * @link https://aryaboudaie.com/python/technical/educational/web/flask/2018/10/17/flask.html
  * @version 0.0
  *
- * @brief HTML code to render highest level screen for the CoCoTaps food service system
+ * @brief HTML code to render fourth screen for the CoCoTaps food service system
  *	
  * @section DESCRIPTION
  *
@@ -14,15 +14,10 @@
  * Apple White (0xFDFDFD), White (0xFFFFFF),
  * Apple Black (0x010306), Logo Black (0x2A3627)
  * 
- * HTML Help:
- * https://www.brunildo.org/test/space-chars.html [　] ideographic space U+3000
- * https://htmldog.com/guides/html/beginner/forms/
- * sudo lsof -i :5000
- * kill -9 <PID>
  -->
 <html lang="en">
   <head>
-    <title> Tapomatic v0 </title>
+    <title> Add Brand </title>
 
     <!--TODO CSS STUFF HERE-->
     <!Try using Arial typeface first and Source Sans Pro last> 
@@ -43,7 +38,8 @@
  	  var drinkID = new Array();
 	  drinkID[0] = RumCoConut;
 
-	  var fontSize = 60;
+	  var fontSize = 60; /*Units are pixels*/
+	  var timeLeft = 10; /*Units are seconds*/
     </script>
 
     <table> 
@@ -90,64 +86,75 @@
         </td> <!ROW 3, COL 3>
       </tr> <!END ROW #3>
 
-      <tr> <!START BUTTON ROW>
+      <tr> <!BRAND PREVIEW VIDEO ROW>
         <td width="146" height="262">
 	  <!BLANK CELL>
         </td> <!ROW 4, COL 1>
         <td width="788" height="262"> 
-	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 788px; height: 262px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/User_Instructions\" value="/User_Instructions\">
-	  <center> Place coconut in green circle <br> and press here to start </center>
-	</td> <!ROW 4, COL 2>
+	  <!TODO ADD 36 SECOND VIMEO VIDEO LOOP SHOWING EACH IMAGE FOR TWO SECONDS>
+	  <iframe src="https://player.vimeo.com/video/64059860" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+<p><a href="https://vimeo.com/64059860">Coconut: Nose to Tail</a> from <a href="https://vimeo.com/theperennialplate">The Perennial Plate</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+	    </td> <!ROW 4, COL 2>
         <td width="146" height="262">
 	  <!BLANK CELL>
         </td> <!ROW 4, COL 3>
       </tr> <!END ROW #4>
 
-      <tr> <!ALL BLANK WHITE ROW>
-        <td width="146" height="222">
+      <tr>  <!TEXT INSTRUCTION ROW> 
+        <td width="146" height="144"> 
 	  <!BLANK CELL>
         </td> <!ROW 5, COL 1>
-        <td width="788" height="222">
-	  <!BLANK CELL> 
-	</td> <!ROW 5, COL 2>
-        <td width="146" height="222">
-	  <!BLANK CELL> 
+        <td width="788" height="144">
+          <center> <p style="font-size:50px; color: #086D38;"> Select brand for the side of the <br> coconut from the list below </center>
+        </td> <!ROW 5, COL 2>
+        <td width="146" height="144">
+	  <!BLANK CELL>
         </td> <!ROW 5, COL 3>
       </tr> <!END ROW #5>
 
-      <tr> <!GREEN ARROW ROW>
+      <tr> <!FIRST TWO BUTTON ROW>
         <td width="146" height="153">
 	  <!BLANK CELL> 
         </td> <!ROW 6, COL 1>
         <td width="788" height="153"> 
-	  <!GREEN ARROW IMAGE IS 3003x1527 AT FULL RESOLUTION>
-	  <center> <img src="../static/images/DownGreenArrow.png" / width="300" height="153" alt="Down Green Arrow"> </center> 
+	  <center>
+	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Cut_Top_Off\" value="/Press_To_Cut_Top_Off\">
+	  <center> <img src="../static/images/CoCoTapsLogoV0.png" / width="788" height="357" alt="CoCoTaps Logo"> </center>
+	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Tap_Coco\" value="/Press_To_Tap_Coco\" >
+	  <center> ADD RED PIC  </center>
+	  </center>	
 	</td> <!ROW 6, COL 2>
         <td width="146" height="153">
 	  <!BLANK CELL> 
         </td> <!ROW 6, COL 3>
       </tr> <!END ROW #6>
 
-      <tr> <!GREEN ARROW ROW>
+      <tr> <!SECOND BUTTON ROW>
         <td width="146" height="153">
 	  <!BLANK CELL> 
         </td> <!ROW 7, COL 1>
         <td width="788" height="153"> 
-	  <!GREEN ARROW IMAGE IS 3003x1527 AT FULL RESOLUTION>
-	  <center> <img src="../static/images/DownGreenArrow.png" / width="300" height="153" alt="Down Green Arrow"> </center> 
+	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Cut_Top_Off\" value="/Press_To_Cut_Top_Off\">
+	  <center> ADD TI PIC </center>
+	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Tap_Coco\" value="/Press_To_Tap_Coco\" >
+	  <center> ADD CA PIC  </center>
+	  </center>
 	</td> <!ROW 7, COL 2>
         <td width="146" height="153">
 	  <!BLANK CELL> 
         </td> <!ROW 7, COL 3>
       </tr> <!END ROW #7>
 
-      <tr> <!GREEN ARROW ROW>
+      <tr> <!THIRD BUTTON ROW>
         <td width="146" height="153">
 	  <!BLANK CELL> 
         </td> <!ROW 8, COL 1>
         <td width="788" height="153"> 
-	  <!GREEN ARROW IMAGE IS 3003x1527 AT FULL RESOLUTION>
-	  <center> <img src="../static/images/DownGreenArrow.png" / width="300" height="153" alt="Down Green Arrow"> </center> 
+	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Cut_Top_Off\" value="/Press_To_Cut_Top_Off\">
+	  <center> ADD RIO PIC </center>
+	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Tap_Coco\" value="/Press_To_Tap_Coco\" >
+	  <center> ADD MGM  </center>
+	  </center>
 	</td> <!ROW 8, COL 2>
         <td width="146" height="153">
 	  <!BLANK CELL> 
