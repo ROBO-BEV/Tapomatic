@@ -185,42 +185,27 @@ def AcutateDoubleSidedKnive(direction, actuatorObjects):
 
 	return isKniveSharp
 
-
-###
-# Actuate powder container to dispense dry toppings
-# NOTE: POWDER TYPE IS HARD CODED TO ACTUATOROBJECTS ARRAY AND MUST MATCH __MAIN__ CONFIGURATION
+# Actuate peristaltic pump to dispense liquid milk into cup
 #
-# @actuatorObjects - Array of Actuator.py objects to control
 # @powderType - Product name of powder add-on to dispense (e.g. CINNAMON)
 # @powderLevel - Amount of powder units to dispense 1 unit = 0.1 oz
-#
-# return NOTHING
-###
-def actuatePowderServo(actuatorObjects, powderType, powderLevel):
-	print("TODO")
-
-###
-# Actuate peristaltic pump to dispense liquid milk into cup
-# NOTE: MILK TYPE IS HARD CODED TO ACTUATOROBJECTS ARRAY AND MUST MATCH __MAIN__ CONFIGURATION
-#
 # @actuatorObjects - Array of Actuator.py objects to control
-# @milkType - Product name of milk add-on to dispense (e.g. HALF_HALF)
-# @milkLevel - Amount of milk units to dispense 1 unit = 0.25 oz
 #
 # return NOTHING
 ###
-def actuateSugarMotor(actuatorObjects, sugarType, sugarLevel):
-	if(Drink.NONE < sugareLevel and sugarLevel <= Drink.MAX_SUGAR_LEVEL):
-		actuationTime = sugarLevel / Drink.SUGAR_FLOW_RATE  #Units of Seconds based on flow rate per second of pump
-		if(sugarType == Drink.SIMPLE_SYRUP):
+def actuateFlavorPump(flavorType, flavorLevel, actuatorObjects):
+
+	if(CoCoDrink.NONE < flavorLevel and flavorLevel <= CoCoDrink.MAX_FLAVOR_LEVEL):
+		actuationTime = flavorLevel / CoCoDrink.FLAVOR_FLOW_RATE  #Units of Seconds based on flow rate per second of pump
+		if(flavorType == CoCoDrink.RUM):
 			print("TODO")
 			actuatorObjects[0].run(actuationTime, Actuator.N_A, 0.5, Actuator.FORWARD) #PROBABLY CORRECT
 			#simpleSyrupSugarMotor.run(actuationTime, Actuator.N_A, 0.5, Actuator.FORWARD) #PROBABLY WRONG
-		elif(sugarType == Drink.CARMEL):
+		elif(flavorType == CoCoDrink.PINA_COLADA):
 			print("TODO")
 			#actuatorObjects[1].
 			self.run(actuationTime, Actuator.N_A, 0.5, Actuator.FORWARD) #PROBABLY WRONG
-		elif(sugarType == Drink.Vanilla):
+		elif(sugarType == Drink.???):
 			print("TODO")
 			#actuatorObjects[2].
 			#time.sleep(actuationTime)
