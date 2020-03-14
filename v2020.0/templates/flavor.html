@@ -27,8 +27,25 @@
       }
       
       button {
-      	outline: 0;  <!Turn off annoying blue highlight around button during click>
+      	outline: 1;  <!Turn ON  blue highlight around 
+button during click>
+	box-shadow: 
+	transition-duration: 0.20s;
       }
+
+      .button:after{
+	background: #86C042;
+	left-margin:
+	opacity: 
+	transition: all 0.4s;
+      }
+
+     .button:active:after {
+	padding: 0;
+	margin: 0;
+	opacity: 1;
+	transition: 0s;
+     }
     </style>
   </head>
 
@@ -115,7 +132,13 @@
 	  <!BLANK CELL> 
         </td> <!ROW 6, COL 1>
         <td width="788" height="153"> 
-	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 788px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/User_Instructions\" value="/User_Instructions\">
+	   * W3 Button with green shadow DDark Green 
+(0x086D38), Light Green (0x86C042)
+	  <button style="background-color: #FDFDFD; color: 
+#2A3627; ???-color: #086C042; display: inline-block; 
+margin: 
+20px; padding: 
+15px 5px; width: 788px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/User_Instructions\" value="/User_Instructions\">
 	  <center> Press for Rum </center>	
 	</td> <!ROW 6, COL 2>
         <td width="146" height="153">
