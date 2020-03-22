@@ -35,7 +35,5 @@ Download this FULL git repo onto a Raspberry Pi 4 B
 6. Enter terminal input as prompted and have fun
 
 Production Linode IP Addresses:
-45.79.104.34
-192.168.176.173
-2600:3c01::f03c:92ff:fee5:feab
+
 
