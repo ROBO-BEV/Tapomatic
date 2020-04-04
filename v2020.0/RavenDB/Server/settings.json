@@ -1,0 +1,6 @@
+﻿{
+    "ServerUrl": "http://192.168.1.56:8080",
+    "Setup.Mode": "Initial",
+    "Security.UnsecuredAccessAllowed": "PublicNetwork",
+    "DataDir": "RavenData"
+}

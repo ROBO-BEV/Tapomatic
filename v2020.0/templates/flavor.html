@@ -29,29 +29,17 @@
       	font-family: Arial, Courier New, Source Sans Pro; border: 1px solid black; 
       } 
       
-      button {
-        outline: 1;     <!--Turn ON  blue highlight around button during click-->
-	    transition-duration: 0.20s;
+      .button {
+        outline: 0;
+        background-color: #FDFDFD;
       }
 
-<!--      .button1:after{
+      .button:active{
+        background-color: #86C042;
         box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+        transform: translateY(4px);
       }
 
-      .button2:after{
-	    background: #86C042;
-	    left-margin: 0;
-        opacity: 1;
-        transition: all 0.4s;
-      }
-
-     .button2:active:after {
-	    padding: 0;
-	    margin: 0;
-	    opacity: 1;
-	    transition: 0s;
-     }
-  -->   
     </style>
   </head>
 
@@ -138,8 +126,7 @@
 	      <!BLANK CELL> 
         </td> <!ROW 6, COL 1>
         <td width="788" height="153"> 
-	      <button style="background-color: #FDFDFD; color: #2A3627; ???-color: #086C042; display: inline-block; margin: 20px; padding: 15px 5px; width: 788px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/User_Instructions\" value="/User_Instructions\">
-	      <center> Press for Rum </center>	
+          <button class="button" style="color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 788px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_For_Rum_Button\" value="/Press_For_Rum_Button\">  Press for Rum </button>
 	    </td> <!ROW 6, COL 2>
         <td width="146" height="153">
 	      <!BLANK CELL> 
@@ -151,8 +138,7 @@
 	      <!BLANK CELL> 
         </td> <!ROW 7, COL 1>
         <td width="788" height="153"> 
-	      <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 788px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/User_Instructions\" value="/User_Instructions\">
-	      <center> Press for Piña Colada </center>
+          <button class="button" style="color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 788px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_For_Pina_Colada_Button\" value="/Press_For_Pina_Colada_Button\">  Press for Piña Colada  </button>
 	    </td> <!ROW 7, COL 2>
         <td width="146" height="153">
 	      <!BLANK CELL> 
@@ -164,8 +150,7 @@
 	      <!BLANK CELL> 
         </td> <!ROW 8, COL 1>
         <td width="788" height="153"> 
-	      <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 788px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/User_Instructions\" value="/User_Instructions\">
-	      <center> Press for Cold Brew </center>
+          <button class="button" style="color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 788px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_For_CBD_Button\" value="/Press_For_CBD_Button\">  Press for CBD  </button>
 	    </td> <!ROW 8, COL 2>
         <td width="146" height="153">
 	      <!BLANK CELL> 

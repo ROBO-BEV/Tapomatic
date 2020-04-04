@@ -19,17 +19,27 @@
   <head>
     <title> Add Brand </title>
 
-    <!--TODO CSS STUFF HERE-->
-    <!Try using Arial typeface first and Source Sans Pro last> 
-    <style type="text/css">
-      table {
-      	font-family: Arial, Courier New, Source Sans Pro; border: 1px solid black; <!COMMENT OUT BORDER IN PRODUCTION CODE>
-      }
-      
-      button {
-      	outline: 0;  <!Turn off annoying blue highlight around button during click>
-      }
-    </style>
+     <!--
+      * CSS STUFF HERE
+      * Try using Arial typeface first and Source Sans Pro last
+      * REMOVE BORDER STYLING IN PRODUCTION CODE
+      -->
+     <style type="text/css">
+       table {
+         font-family: Arial, Courier New, Source Sans Pro; border: 1px solid black;
+       } 
+
+       .button {
+         outline: 0;
+         background-color: #FDFDFD;
+       }
+
+       .button:active {
+         background-color: #86C042;
+         box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+        transform: translateY(4px);
+       }
+     </style>
   </head>
 
   <body>
@@ -88,38 +98,37 @@
 
       <tr> <!BRAND PREVIEW VIDEO ROW>
         <td width="146" height="262">
-	  <!BLANK CELL>
+	      <!BLANK CELL>
         </td> <!ROW 4, COL 1>
         <td width="788" height="262"> 
-	  <!TODO ADD 36 SECOND VIMEO VIDEO LOOP SHOWING EACH IMAGE FOR TWO SECONDS>
-	  <iframe src="https://player.vimeo.com/video/64059860" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-<p><a href="https://vimeo.com/64059860">Coconut: Nose to Tail</a> from <a href="https://vimeo.com/theperennialplate">The Perennial Plate</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+          <iframe src="https://player.vimeo.com/video/400447919" width="640" height="480" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
 	    </td> <!ROW 4, COL 2>
         <td width="146" height="262">
-	  <!BLANK CELL>
+	      <!BLANK CELL>
         </td> <!ROW 4, COL 3>
       </tr> <!END ROW #4>
 
       <tr>  <!TEXT INSTRUCTION ROW> 
         <td width="146" height="144"> 
-	  <!BLANK CELL>
+	      <!BLANK CELL>
         </td> <!ROW 5, COL 1>
         <td width="788" height="144">
           <center> <p style="font-size:50px; color: #086D38;"> Select brand for the side of the <br> coconut from the list below </center>
         </td> <!ROW 5, COL 2>
         <td width="146" height="144">
-	  <!BLANK CELL>
+	      <!BLANK CELL>
         </td> <!ROW 5, COL 3>
       </tr> <!END ROW #5>
 
       <tr> <!FIRST TWO BUTTON ROW>
         <td width="146" height="153">
-	  <!BLANK CELL> 
+	      <!BLANK CELL> 
         </td> <!ROW 6, COL 1>
         <td width="788" height="153"> 
 	  <center>
+	  <!CoCoTaps Logo is 3155x1428 at full resolution, divide by 4 to get 788x357>
 	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Cut_Top_Off\" value="/Press_To_Cut_Top_Off\">
-	  <center> <img src="../static/images/CoCoTapsLogoV0.png" / width="788" height="357" alt="CoCoTaps Logo"> </center>
+	  <center> <img src="../static/images/CoCoTapsLogoV0.png" / width="788" height="140" alt="CoCoTaps Logo"> </center>
 	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Tap_Coco\" value="/Press_To_Tap_Coco\" >
 	  <center> ADD RED PIC  </center>
 	  </center>	
