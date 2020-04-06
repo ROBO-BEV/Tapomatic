@@ -37,3 +37,13 @@ Download this FULL git repo onto a Raspberry Pi 4 B
 Production Linode IP Addresses:
 
 
+***
+CompressedLibraryCode:
+
+RavenBD is a NoSQL Document Database that allows 1 million reads and 150000 writes per second.
+
+
+***
+Python imports:
+
+Flask is a microframework that does not require particular tools or libraries. It has no database abstraction layer and form validation. However, since it runs in any browser setting up a dev envirment is super simple.
