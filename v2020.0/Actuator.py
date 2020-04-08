@@ -19,28 +19,40 @@ __doc__ =     "Class to operate at least 8 servos, 4 relays, and 4 motors at onc
 # https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/circuitpython-raspi
 # https://learn.adafruit.com/adafruit-dc-and-stepper-motor-hat-for-raspberry-pi
 
-# CircuitPython library for the DC & Stepper Motor Pi Hat kits using I2C interface
-from adafruit_motorkit import MotorKit
+#TODO REMOVE? import datetime
+#TODO REMOVE? import time
 
-# Allow control of input devices such as Buttons
-from gpiozero import Button
+# Robotic Beverage Technologies code for custom data logging and terminal debugging output
+from Debug import *
 
-# Allow control of output devices such as Motors, Servos, LEDs, and Relays
-from gpiozero import Motor, Servo, LED, Energenie, OutputDevice
+try:
+	# The following imports do NOT work in a Mac oor PC dev enviroment (but are needed for Pi product) 
+	
+	# CircuitPython library for the DC & Stepper Motor Pi Hat kits using I2C interface
+	from adafruit_motorkit import MotorKit
 
-# Check status of network / new device IP addresses and Pi hardware
-from gpiozero import PingServer, pi_info
+	# Allow asynchrous event to occur in parallel and pause threads as needed
+	# Might work on Windows in the future https://github.com/vibora-io/vibora/issues/126
+	from signal import pause 
 
-# Useful pin status tools and math tools
-from gpiozero.tools import all_values, negated, sin_values
+	# Allow control of input devices such as Buttons
+	from gpiozero import Button
 
-# Useful for controlling devices based on date and time
-from gpiozero import TimeOfDay
-import datetime
-import time
+	# Allow control of output devices such as Motors, Servos, LEDs, and Relays
+	from gpiozero import Motor, Servo, LED, Energenie, OutputDevice
 
-# Allow asynchrous event to occur in parallel pause as needed
-from signal import pause
+	# Check status of network / new device IP addresses and Pi hardware
+	from gpiozero import PingServer, pi_info
+
+	# Useful pin status tools and math tools
+	from gpiozero.tools import all_values, negated, sin_values
+
+	# Useful for controlling devices based on date and time
+	from gpiozero import TimeOfDay
+
+except ImportError:
+	DebugObject = Debug(True)
+	Debug.Dprint(DebugObject, "WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
 
 
 class Actuator:
@@ -50,9 +62,6 @@ class Actuator:
 	MAX_NUM_OF_MOTORS = 2		# Circular motors
 	MAX_NUM_OF_LINEAR_ACT = 4  	# Linear actuators
 	N_A = 0				# Not Applicable
-
-	# Constant to use to toggle debug print statements ON and OFF
-	DEBUG_STATEMENTS_ON = True
 
 	# Actuator "forward" direction constants
 	CCW = -1  		# Counter-Clockwise
@@ -121,19 +130,7 @@ class Actuator:
 			#NOTE: The last wire in array is the relay control pin
 			self.actuatorObject = gpiozero.OutputDevice(wires[len(wires)-1])
 		else:
-			DebugPrint("INVALID Actutator Type in __init__ method, please use S, M, R as first parameter to Actuator() Object")
-
-	###
-	# Calls standard Python 3 print("X") statement if DEBUG global variable is TRUE
-	#
-	# return NOTHING
-	###
-	def debugPrint(stringToPrint):
-		if(DEBUG_STATEMENTS_ON):
-			print("Actuator.py DEBUG STATEMENT: " + stringToPrint)
-		else:
-			print("/n") # PRINT NEW LINE
-
+			Debug.DPrint("INVALID Actutator Type in __init__ method, please use S, M, R as first parameter to Actuator() Object")
 
 	###
 	# Run an actuator for a given number of milliseconds to a given position at percentage of max speed in FORWARD or BACKWARDS direction
@@ -147,7 +144,7 @@ class Actuator:
 	# return NOTHING
 	###
 	def run(self, duration, newPosition, speed, direction):
-		DebugPrint("Run function started!")
+		Debug.DPrint("Run function started!")
 
 		if(type == "S"):
 			currentPosition = self.value
@@ -159,7 +156,7 @@ class Actuator:
 				# NEAR to new position DO NOTHING
 				self.dettach()
 		elif(type == "M"):
-			DebugPrint("Write motor control code")
+			Debug.DPrint("Write motor control code")
 			self.enable()
 			currentPosition = self.value
 			while(currentPosition != newPosition):
@@ -177,9 +174,9 @@ class Actuator:
 			time.sleep(duration)
 			self.off()
 		else:
-			DebugPrint("INVALID Actutator Type sent to Run method, please use S, M, R as first parameter to Actuator() Object")
+			Debug.DPrint("INVALID Actutator Type sent to Run method, please use S, M, R as first parameter to Actuator() Object")
 
-		DebugPrint("Run function completed!")
+		Debug.DPrint("Run function completed!")
 
 	###
 	# Set the rotational position of a AngularServo() or Motor() object
@@ -197,7 +194,7 @@ class Actuator:
 		elif(actuatorType == "R"):
 			print("Relays do not have rotational positions. Are you sure you called the correct object?")
 		else:
-			DebugPrint("INVALID Actutator Type sent to SetAngularPosition method, please use S, M, R as first parameter to Actuator() Object")
+			Debug.DPrint("INVALID Actutator Type sent to SetAngularPosition method, please use S, M, R as first parameter to Actuator() Object")
 	###
 	# Read the linear or rotational positon on an actuator
 	#
@@ -221,26 +218,19 @@ class Actuator:
 
 
 	def setAngle(self, angle):
-		print("TEST")
-
-	###
-	# Calls standard Python 3 print("X") statement if DEBUG global variable is TRUE
-	#
-	# return String variable passed as input parameter
-	###
-	def debugPrint(stringToPrint):
-		if(DEBUG_STATEMENTS_ON):
-			print("Actuator.py DEBUG STATEMENT: " + stringToPrint)
-		else:
-			print("/n") # PRINT NEW LINE / DO NOTHING
+		print("TODO")
 
 
 if __name__ == "__main__":
-	#DELETE currentNumOfActuators = 0
-	#pins = [PWR, GND, 1, GND, SIG_1, SIG_2]
-	#cupSepServo1 = Actuator("S", pins, "MG996R", CW)
-	relay = gpiozero.OutputDevice(8) #BCM-8
-	relay.on()
-	time.sleep(20) #seconds of milliseconds?
-	relay.off()
-	print("END MAIN")
+	try:
+		#DELETE currentNumOfActuators = 0
+		#pins = [PWR, GND, 1, GND, SIG_1, SIG_2]
+		#cupSepServo1 = Actuator("S", pins, "MG996R", CW)
+		relay = gpiozero.OutputDevice(8) #BCM-8
+		relay.on()
+		time.sleep(20) #seconds of milliseconds?
+		relay.off()
+
+	except NameError:
+		Debug.Dprint(DebugObject, "WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
+		print("END ACTUATOR.PY MAIN")
