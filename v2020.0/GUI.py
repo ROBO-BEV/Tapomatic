@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-03-02"
+__date__    = "Late Updated: 2020-04-08"
 __doc__     = "Logic to run Flask based GUI front-end for CoCoTaps"
 
 # Useful system jazz
@@ -52,8 +52,8 @@ def CompleteScreen():
 	return render_template(HTMLtoDisplay)
 
 if __name__ == '__main__':
-    d = Debug(True)
-    if(d.GetMode == True):
+    DebugOject = Debug(True)
+    if(DebugOject.GetMode == True):
 	    # Allow URLs to be refreshed (F5) without restarting web server after code changes
 	    #app.run(debug=True)
 	    check_call("export FLASK_DEBUG=1", shell=True)
