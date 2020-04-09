@@ -66,7 +66,8 @@ if __name__ == "__main__":
 	# @link https://medium.com/@mahmudahsan/how-to-use-python-pipenv-in-mac-and-windows-1c6dc87b403e
 	# @link https://stackoverflow.com/questions/46041719/windows-reports-error-when-trying-to-install-package-using-pipenv
 	# You can use pipenv easily without issues by the following commands in Power Shell:
-	# pipenv install selenium # install a library
+	# pipenv install docutils # Install a documentation library
+	# pipenv install numpy # Install a numby library for array creation
 	# pipenv shell # activate pipenv
 	# pipenv run python GUI.py
 	# exit # deactivate and quit
