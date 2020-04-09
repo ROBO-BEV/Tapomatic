@@ -1,13 +1,16 @@
 <!--
  * @file branding.html
  * @author Blaze Sanders Robotic Beverage Technologies Inc
- * @date 2020-03-12
+ * @date 2020-04-09
  * @link https://aryaboudaie.com/python/technical/educational/web/flask/2018/10/17/flask.html
  * @version 0.0
  *
- * @brief HTML code to render fourth screen for the CoCoTaps food service system
+ * @brief HTML code to render TODO 4th TODO screen 
  *	
  * @section DESCRIPTION
+ * 
+ * Let user select which custom image will be LASER etched on their coconut in the CoCoTaps 
+ * Tapomatic Commercial Powered Food Preparation Equipment (aka Tapo kiosk).
  *
  * Brand colors: 
  * Dark Green (0x086D38), Light Green (0x86C042), 
@@ -53,134 +56,133 @@
     </script>
 
     <table> 
-      <!9 row x 3 column table layout in portrait mode 1080 wide x 1980 tall>
-      <!Heigth = 1980 pixels = 40.0 cm on digital ruler thus (6.60 cm * 48) == 316 pixels>
-      <!Width  = 1080 pixels = 22.5 cm on digital ruler thus (3.05 cm * 48) == 146 pixels>
-      <!3.05 cm x 6.60 cm = 316 - 50 pixels to adjust for Pi 1920 ti 1870>
+      <!-- 
+       * 9 row x 3 column table layout in portrait mode 1080 wide x 1980 tall
+       * Heigth = 1980 pixels = 40.0 cm on digital ruler thus (6.60 cm * 48) == 316 pixels
+       * Width  = 1080 pixels = 22.5 cm on digital ruler thus (3.05 cm * 48) == 146 pixels
+       * 3.05 cm x 6.60 cm = 316 - 50 pixels to adjust for Pi 1920 ti 1870
+      -->
       
-      <tr>  <!ALL BLANK WHITE ROW> 
+      <tr>  <!--ALL BLANK WHITE ROW--> 
         <td width="146" height="266"> 
-	  <!BLANK CELL>
-        </td> <!ROW 1, COL 1>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 1, COL 1-->
         <td width="788" height="266">
-	  <!BLANK CELL>
-        </td> <!ROW 1, COL 2>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 1, COL 2-->
         <td width="146" height="266">
-	  <!BLANK CELL>
-        </td> <!ROW 1, COL 3>
-      </tr> <!END ROW #1> 
+	        <!--BLANK CELL-->
+        </td> <!--ROW 1, COL 3-->
+      </tr> <!--END ROW #1--> 
       
-      <tr>  <!COCOTAPS LOGO ROW>
+      <tr>  <!--BRAND PREVIEW VIDEO ROW-->
         <td width="146" height="357"> 
-	  <!BLANK CELL>
-        </td> <!ROW 2, COL 1>
-
+	        <!--BLANK CELL-->
+        </td> <!--ROW 2, COL 1-->
         <td width="788" height="357"> 
-	  <!CoCoTaps Logo is 3155x1428 at full resolution, divide by 4 to get 788x357>
-	  <center> <img src="../static/images/CoCoTapsLogoV0.png" / width="788" height="357" alt="CoCoTaps Logo"> </center> 
+	        <!--Loop of brand logos cycled twice each lasting 2 seconds-->
+	        <center> <iframe src="https://player.vimeo.com/video/400447919" width="640" height="480" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe> </center> 
         </td> <!ROW 2, COL 2>
         <td width="146" height="357">
-	  <!BLANK CELL>        
-        </td> <!ROW 2, COL 3>
-      </tr> <!END ROW #2> <!1080 x 702>
+	        <!--BLANK CELL-->      
+        </td> <!--ROW 2, COL 3-->
+      </tr> <!--END ROW #2 1080 x 702-->
 
-      <tr>  <!ALL BLANK WHITE ROW> 
+      <tr>  <!--ALL BLANK WHITE ROW--> 
         <td width="146" height="222"> 
-	  <!BLANK CELL>
-        </td> <!ROW 3, COL 1>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 3, COL 1-->
         <td width="788" height="222">
-	  <!BLANK CELL>
-        </td> <!ROW 3, COL 2>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 3, COL 2-->
         <td width="146" height="222">
-	  <!BLANK CELL>
-        </td> <!ROW 3, COL 3>
-      </tr> <!END ROW #3>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 3, COL 3-->
+      </tr> <!--END ROW #3-->
 
-      <tr> <!BRAND PREVIEW VIDEO ROW>
+      <tr> <!--TEXT INSTRUCTION ROW--> 
         <td width="146" height="262">
-	      <!BLANK CELL>
-        </td> <!ROW 4, COL 1>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 4, COL 1-->
         <td width="788" height="262"> 
-          <iframe src="https://player.vimeo.com/video/400447919" width="640" height="480" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-	    </td> <!ROW 4, COL 2>
-        <td width="146" height="262">
-	      <!BLANK CELL>
-        </td> <!ROW 4, COL 3>
-      </tr> <!END ROW #4>
-
-      <tr>  <!TEXT INSTRUCTION ROW> 
-        <td width="146" height="144"> 
-	      <!BLANK CELL>
-        </td> <!ROW 5, COL 1>
-        <td width="788" height="144">
           <center> <p style="font-size:50px; color: #086D38;"> Select brand for the side of the <br> coconut from the list below </center>
-        </td> <!ROW 5, COL 2>
+	    </td> <!--ROW 4, COL 2-->
+        <td width="146" height="262">
+		        <!--BLANK CELL-->
+        </td> <!--ROW 4, COL 3-->
+      </tr> <!--END ROW #4-->
+
+      <tr> <!--FIRST TWO BUTTON ROW-->
+        <td width="146" height="144"> 
+	        <!--BLANK CELL-->
+        </td> <!--ROW 5, COL 1-->
+        <td width="788" height="144">
+	        <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 30; border-radius: 40px;" type="/CocoTaps_Logo\" value="/CocoTaps_Logo\">
+            <center> Add CocoTaps Logo  </center>
+            <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 30; border-radius: 40px;" type="/RedBull_Logo\" value="/RedBull_Logo\" >
+            <center> Add Red Bull Logo  </center>
+  
+        </td> <!--ROW 5, COL 2-->
         <td width="146" height="144">
-	      <!BLANK CELL>
-        </td> <!ROW 5, COL 3>
-      </tr> <!END ROW #5>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 5, COL 3-->
+      </tr> <!--END ROW #5-->
 
-      <tr> <!FIRST TWO BUTTON ROW>
+      <tr> <!--SECOND TWO BUTTON ROW-->
         <td width="146" height="153">
-	      <!BLANK CELL> 
-        </td> <!ROW 6, COL 1>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 6, COL 1-->
         <td width="788" height="153"> 
-	  <center>
-	  <!CoCoTaps Logo is 3155x1428 at full resolution, divide by 4 to get 788x357>
-	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Cut_Top_Off\" value="/Press_To_Cut_Top_Off\">
-	  <center> <img src="../static/images/CoCoTapsLogoV0.png" / width="788" height="140" alt="CoCoTaps Logo"> </center>
-	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Tap_Coco\" value="/Press_To_Tap_Coco\" >
-	  <center> ADD RED PIC  </center>
-	  </center>	
-	</td> <!ROW 6, COL 2>
+          <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 30; border-radius: 40px;" type="/TreasureIsland_Logo\" value="/TreasureIsland_Logo\">
+            <center> Add Treasure Logo </center>
+            <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 30; border-radius: 40px;" type="/CaesarsPalace_Logo\" value="/CaesarsPalace_Logo\" >
+            <center> Add Caesars Logo   </center>
+            </center>          
+      	</td> <!--ROW 6, COL 2-->
         <td width="146" height="153">
-	  <!BLANK CELL> 
-        </td> <!ROW 6, COL 3>
-      </tr> <!END ROW #6>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 6, COL 3-->
+      </tr> <!--END ROW #6-->
 
-      <tr> <!SECOND BUTTON ROW>
+      <tr> <!--THIRD TWO BUTTON ROW-->
         <td width="146" height="153">
-	  <!BLANK CELL> 
-        </td> <!ROW 7, COL 1>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 7, COL 1-->
         <td width="788" height="153"> 
-	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Cut_Top_Off\" value="/Press_To_Cut_Top_Off\">
-	  <center> ADD TI PIC </center>
-	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Tap_Coco\" value="/Press_To_Tap_Coco\" >
-	  <center> ADD CA PIC  </center>
-	  </center>
-	</td> <!ROW 7, COL 2>
+          <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 30; border-radius: 40px;" type="/RioGrande_Logo\" value="/RioGrande_Logo\">
+            <center> Add Rio Grande Logo </center>
+            <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 30; border-radius: 40px;" type="/MGM_Logo\" value="/MGM_Logo\" >
+            <center> Add MGM Logo </center>
+            </center>
+	      </td> <!--ROW 7, COL 2-->
         <td width="146" height="153">
-	  <!BLANK CELL> 
-        </td> <!ROW 7, COL 3>
-      </tr> <!END ROW #7>
+	        <!--BLANK CELL--> 
+        </td> <!--ROW 7, COL 3-->
+      </tr> <!--END ROW #7-->
 
-      <tr> <!THIRD BUTTON ROW>
+      <tr> <!--ALL BLANK WHITE ROW--> 
         <td width="146" height="153">
-	  <!BLANK CELL> 
-        </td> <!ROW 8, COL 1>
+	        <!--BLANK CELL--> 
+        </td> <!--ROW 8, COL 1-->
         <td width="788" height="153"> 
-	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Cut_Top_Off\" value="/Press_To_Cut_Top_Off\">
-	  <center> ADD RIO PIC </center>
-	  <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 354px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_To_Tap_Coco\" value="/Press_To_Tap_Coco\" >
-	  <center> ADD MGM  </center>
-	  </center>
-	</td> <!ROW 8, COL 2>
+        </td> <!--ROW 8, COL 2-->
+	        <!--BLANK CELL-->         
         <td width="146" height="153">
-	  <!BLANK CELL> 
-        </td> <!ROW 8, COL 3>
-      </tr> <!END ROW #8>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 8, COL 3-->
+      </tr> <!--END ROW #8-->
 
-      <tr> <!ALL BLANK WHITE ROW>
+      <tr> <!--ALL BLANK WHITE ROW-->
         <td width="146" height="043"> <!1920 - 89 for margins = 1831>
-	  <!BLANK CELL> 
-        </td> <!ROW 9, COL 1>
+	        <!--BLANK CELL-->
+        </td> <!--ROW 9, COL 1-->
         <td width="788" height="043">
-	  <!BLANK CELL> 
-	</td> <!ROW 9, COL 2>
+	        <!--BLANK CELL-->
+	      </td> <!--ROW 9, COL 2-->
         <td width="146" height="043">
-	  <!BLANK CELL> 
-        </td> <!ROW 9, COL 3>
-      </tr> <!END ROW #9>
+	        <!--BLANK CELL--> 
+        </td> <!--ROW 9, COL 3-->
+      </tr> <!--END ROW #9-->
 
     </table>
   </body>
