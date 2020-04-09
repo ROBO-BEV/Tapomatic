@@ -105,13 +105,6 @@ class Actuator:
 	HIGH_PWR_12V = -12					# 12.0 Volts @ upto 5.0 Amps = 70.0 Watts to power linear actuators 
 	HIGH_PWR_30V = -30					# TODO (30 or 36) Volts @ upto 5 Amps = 150 Watts to power Stepper Motors
 
-	# Raspberry Pi B+ refernce pin CONSTANTS as defined in ???rc.local script???
-	NUM_GPIO_PINS = 15                       # Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
-	MAX_NUM_A_OR_B_PLUS_GPIO_PINS = 40      # Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
-	MAX_NUM_A_OR_B_GPIO_PINS = 26           # Pins 1 to 26 on Raspberry Pi A or B
-	NUM_OUTPUT_PINS = 8                     # This software instance of Raspberry Pi can have up to eight output pins
-	NUM_INPUT_PINS = 7                      # This software instance of Raspberry Pi can have up to seven input pins
-
 	# Class variables
 	currentNumOfActuators = 0
 
@@ -122,7 +115,7 @@ class Actuator:
 	#
 	# @self - Newly created object
 	# @wires[] - Array to document wires / pins being used by Raspberry Pi to control an actuator
-	# @type - Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
+	# @aType - Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
 	# @currentNumOfActuators - Global Class variable holding the number of actuators in a system
 	# @actuatorID - Auto-incremented interger bassed off the number of actuator currently in system
 	# @partNumber - Vendor part number string variable (e.g. Seamuing MG996R)
@@ -130,11 +123,11 @@ class Actuator:
 	#
 	# return NOTHING
 	###
-	def __init__(self, currentNumOfActuators, Atype, pins, partNumber, direction):
+	def __init__(self, currentNumOfActuators, aType, pins, partNumber, direction):
 		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 		for i in pins:
 			self.wires[i] = pins[i]
-		self.actuatorType = Atype
+		self.actuatorType = aType
 		currentNumOfActuators += 1
 		self.actuatorID = currentNumOfActuators	# Auto-incremented interger class variable
 		self.partNumber = partNumber

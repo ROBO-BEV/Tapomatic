@@ -33,6 +33,13 @@ parser.add_argument("-f", "--filename", type=str, default="Update.py", help="Loc
 parser.add_argument("-l", "--loop", type=int, default=0, help="Set to 1 to loop this driver program.")
 args = parser.parse_args()
 
+	# Raspberry Pi B+ refernce pin CONSTANTS as defined in ???rc.local script???
+	NUM_GPIO_PINS = 15                       # Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
+	MAX_NUM_A_OR_B_PLUS_GPIO_PINS = 40      # Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
+	MAX_NUM_A_OR_B_GPIO_PINS = 26           # Pins 1 to 26 on Raspberry Pi A or B
+	NUM_OUTPUT_PINS = 8                     # This software instance of Raspberry Pi can have up to eight output pins
+	NUM_INPUT_PINS = 7                      # This software instance of Raspberry Pi can have up to seven input pins
+
 # External WWW IP addresses
 LINODE_MYSQL_IP = "45.79.104.3?"
 RAVEN_DB_IP = "TODO"
