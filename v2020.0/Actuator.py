@@ -22,8 +22,14 @@ __doc__ =     "Class to operate at least 8 servos, 4 relays, and 4 motors at onc
 #TODO REMOVE? import datetime
 #TODO REMOVE? import time
 
+# Allow program to pause operation and create local timestamps
+from time import sleep
+
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
+
+# Create an array of specific length to restrict resizing and appending (like Pythom list) and to improve performance
+from numpy import ndarray, empty #TODO Pick the one that is faster
 
 try:
 	# The following imports do NOT work in a Mac oor PC dev enviroment (but are needed for Pi product) 
@@ -58,36 +64,53 @@ except ImportError:
 class Actuator:
 
 	# Class attributes that can be accessed using ActuatorControl.X (not actuatorcontrol.X)
-	MAX_NUM_OF_SERVOS = 8		# Circular servos
-	MAX_NUM_OF_MOTORS = 2		# Circular motors
-	MAX_NUM_OF_LINEAR_ACT = 4  	# Linear actuators
-	N_A = 0				# Not Applicable
+	MAX_NUM_OF_SERVOS = 0		# Circular servos
+	MAX_NUM_OF_MOTORS = 12		# Circular stepper or brushless DC motors
+	MAX_NUM_OF_LINEAR_ACT = 5 	# Linear actuators
+	N_A = 0						# Not Applicable
 
-	# Actuator "forward" direction constants
-	CCW = -1  		# Counter-Clockwise
-	CW = 1    		# Clockwise
+	# Actuator direction v
+	CCW = -1  			# Counter-Clockwise
+	CW = 1    			# Clockwise
 	SERVO_SLACK = 0.2	# Positional accuaracy slack for servo so that control system does not go crazy
 	FORWARD = 1
 	BACKWARD = -1
 
-	# Pin value constants
+	# Pin value CONSTANTS
 	LOW =  0
 	HIGH = 1
 
-	# Wire value constants (interger values don't really matter, but are easy to loop thru)
-	NO_PIN = 0  #TODO This constant may not be needed :)
-	NO_WIRE = -1
-	VCC_5V = "BOARD2"        # 5 Volts @ upto ??? Amps = ??? Watts
-	VCC_3_3V = "BOARD1"      # 3.3 Volts @ upto ??? Amps =  ??? Watts
-	GND = "BOARD6&9&14&20&25&30&34&39"
-	PWR_12V = -4
+	# Wire value CONTSTANTS 
+	# Raspberry Pi 4 Pin Layout https://pinout.xyz/pinout/pin1_3v3_power
+	NO_PIN = -1  						#TODO This constant may not be needed :)
+	NO_WIRE = 0
+	VCC_3_3V = 1
+	VCC_3_3V_NAME = "BOARD1"     		# 3.3 Volts @ upto 0.050 Amps = 0.165 Watts https://pinout.xyz/pinout/pin1_3v3_power
+	VCC_5V = 2
+	VCC_5V_NAME = "BOARD2"        		# 5 Volts @ upto ~1.5 Amps (Power Adapter - Pi usgae) = 7.5 Watts https://pinout.xyz/pinout/pin2_5v_power
+	I2C_SDA = 3					
+	I2C_SDA_NAME = "BOARD3"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin3_gpio2
+	I2C_SCL = 5
+	I2C_SDA_NAME = "BOARD5"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin5_gpio3
+	TXD = 8
+	TXD_NAME = "BOARD8" 				# UART transmit pin / Serial Port https://pinout.xyz/pinout/pin8_gpio14 
+	RXD = 10	
+	RXD_NAME = "BOARD10" 				# UART recieve pin / Serial Port https://pinout.xyz/pinout/pin10_gpio15					
+	GND = "BOARD6&9&14&20&25&30&34&39"	# Digital Ground (0 Volts) https://pinout.xyz/pinout/ground
+	PWM0 = 12
+	PWM0_NAME = "BOARD12"				#Pulse Width Modulation https://pinout.xyz/pinout/pin12_gpio18
 
-	# Raspberry Pi B+ refernce pin constants as defined in ???rc.local script???
-	NUM_GPIO_PINS = 8                       # Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
+	# Negative to NOT confuse it with Pi BOARD 12 https://pinout.xyz/pinout/pin12_gpio18
+	HIGH_PWR_5V = -5					# 5.00 Volts @ upto 5.0 Amps = 25.0 Watts to power Pi, force / load cell sensor and servos
+	HIGH_PWR_12V = -12					# 12.0 Volts @ upto 5.0 Amps = 70.0 Watts to power linear actuators 
+	HIGH_PWR_30V = -30					# TODO (30 or 36) Volts @ upto 5 Amps = 150 Watts to power Stepper Motors
+
+	# Raspberry Pi B+ refernce pin CONSTANTS as defined in ???rc.local script???
+	NUM_GPIO_PINS = 15                       # Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
 	MAX_NUM_A_OR_B_PLUS_GPIO_PINS = 40      # Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
 	MAX_NUM_A_OR_B_GPIO_PINS = 26           # Pins 1 to 26 on Raspberry Pi A or B
-	NUM_OUTPUT_PINS = 4                     # This software instance of Raspberry Pi can have up to four output pins
-	NUM_INPUT_PINS = 4                      # This software instance of Raspberry Pi can have up to four input pins
+	NUM_OUTPUT_PINS = 8                     # This software instance of Raspberry Pi can have up to eight output pins
+	NUM_INPUT_PINS = 7                      # This software instance of Raspberry Pi can have up to seven input pins
 
 	# Class variables
 	currentNumOfActuators = 0
@@ -98,21 +121,25 @@ class Actuator:
 	# Constructor to initialize an Actutator object, which can be a Servo(), Motor(), or Relay()
 	#
 	# @self - Newly created object
+	# @wires[] - Array to document wires / pins being used by Raspberry Pi to control an actuator
 	# @type - Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
-	# @wires[] - Array to document wires / pins being used by Pi 3 to control an actuator
+	# @currentNumOfActuators - Global Class variable holding the number of actuators in a system
+	# @actuatorID - Auto-incremented interger bassed off the number of actuator currently in system
 	# @partNumber - Vendor part number string variable (e.g. Seamuing MG996R)
 	# @forwardDirection - Set counter-clockwise (CCW) or clockwise (CW) as the forward direction
 	#
 	# return NOTHING
 	###
-	def __init__(self, type, pins, partNumber, direction):
+	def __init__(self, currentNumOfActuators, type, pins, partNumber, direction):
+		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 		for i in pins:
 			self.wires[i] = pins[i]
 		self.type = type
-		self.actuatorID = currentNumOfActuators	# Auto-incremented interger Class variable
+		currentNumOfActuators += 1
+		self.actuatorID = currentNumOfActuators	# Auto-incremented interger class variable
 		self.partNumber = partNumber
 		self.forwardDirection = direction
-		self.currentNumOfActuators += 1
+		
 
 		#https://gist.github.com/johnwargo/ea5edc8516b24e0658784ae116628277
 		# https://gpiozero.readthedocs.io/en/stable/api_output.html
@@ -120,7 +147,7 @@ class Actuator:
 		if(type == "S"):
 			#self.actuatorType = Servo(wires[0], initial_value=0, min_pulse_width=1/1000, max_pulse_width=2/1000, frame_width=20/1000, pin_factory=None)
 			#NOTE: The last wire in array is the PWM control pin
-			self.actuatorObject = AngularServo(wires[len(wires)-1])
+			self.actuatorObject = Servo.AngularServo(wires[len(wires)-1])
 		elif(type == "M"):
 			#self.actuatorType = Motor(wires[0], wires[1], pwm=true, pin_factory=None)
 			#NOTE: The last two wires in array are the INPUT control pins
@@ -130,7 +157,7 @@ class Actuator:
 			#NOTE: The last wire in array is the relay control pin
 			self.actuatorObject = gpiozero.OutputDevice(wires[len(wires)-1])
 		else:
-			Debug.DPrint("INVALID Actutator Type in __init__ method, please use S, M, R as first parameter to Actuator() Object")
+			Debug.Dprint(DebugObject, "INVALID Actutator Type in __init__ method, please use S, M, R as first parameter to Actuator() Object")
 
 	###
 	# Run an actuator for a given number of milliseconds to a given position at percentage of max speed in FORWARD or BACKWARDS direction
@@ -143,20 +170,20 @@ class Actuator:
 	#
 	# return NOTHING
 	###
-	def run(self, duration, newPosition, speed, direction):
-		Debug.DPrint("Run function started!")
+	def Run(self, duration, newPosition, speed, direction):
+		Debug.Dprint(DebugObject, "Actuator.py Run() function started!")
 
 		if(type == "S"):
-			currentPosition = self.value
-			if(currentPosition < (newPosition - SERVO_SLACK)):
+			currentPosition = servo.value
+			if(currentPosition < (newPosition - Actuator.SERVO_SLACK)):
 				self.max() #TODO THIS MAY NOT STOP AND GO ALL THE WAY TO MAX POS
-			elif(currentPosition > (newPosition - SERVO_SLACK)):
+			elif(currentPosition > (newPosition - Actuator.SERVO_SLACK)):
 				self.min() #TODO THIS MAY NOT STOP AND GO ALL THE WAY TO MIN POS
 			else:
 				# NEAR to new position DO NOTHING
 				self.dettach()
 		elif(type == "M"):
-			Debug.DPrint("Write motor control code")
+			Debug.Dprint(DebugObject, "Write motor control code")
 			self.enable()
 			currentPosition = self.value
 			while(currentPosition != newPosition):
@@ -170,13 +197,13 @@ class Actuator:
 			self.disable()
 
 		elif(type == "R"):
-			self.on()
+			relay.on()
 			time.sleep(duration)
-			self.off()
+			relay.off()
 		else:
-			Debug.DPrint("INVALID Actutator Type sent to Run method, please use S, M, R as first parameter to Actuator() Object")
+			Debug.Dprint(DebugObject, "INVALID Actutator Type sent to Run method, please use S, M, R as first parameter to Actuator() Object")
 
-		Debug.DPrint("Run function completed!")
+		Debug.Dprint(DebugObject, "Run function completed!")
 
 	###
 	# Set the rotational position of a AngularServo() or Motor() object
@@ -194,7 +221,7 @@ class Actuator:
 		elif(actuatorType == "R"):
 			print("Relays do not have rotational positions. Are you sure you called the correct object?")
 		else:
-			Debug.DPrint("INVALID Actutator Type sent to SetAngularPosition method, please use S, M, R as first parameter to Actuator() Object")
+			Debug.Dprint(DebugObject, "INVALID Actutator Type sent to SetAngularPosition method, please use S, M, R as first parameter to Actuator() Object")
 	###
 	# Read the linear or rotational positon on an actuator
 	#
@@ -223,9 +250,9 @@ class Actuator:
 
 if __name__ == "__main__":
 	try:
-		#DELETE currentNumOfActuators = 0
-		#pins = [PWR, GND, 1, GND, SIG_1, SIG_2]
-		#cupSepServo1 = Actuator("S", pins, "MG996R", CW)
+		currentNumOfActuators = 0
+		#TODO pins = [PWR, GND, 1, GND, SIG_1, SIG_2]
+		#TODO CoconutLiftingLinearMotor1 = Actuator(currentNumOfActuators, "L", pins, "???", CW)
 		relay = gpiozero.OutputDevice(8) #BCM-8
 		relay.on()
 		time.sleep(20) #seconds of milliseconds?

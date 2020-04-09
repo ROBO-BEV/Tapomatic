@@ -20,6 +20,8 @@ Where the ? in sd? can be determined by using the "lsblk" command to find your m
 
 We plan to use ***pipenv*** Virtual Enviroment software for v2020.1: https://realpython.com/pipenv-guide
 
+All documentation is self generated using https://www.python.org/dev/peps/pep-0257/
+See examples at https://blog.finxter.com/what-is-__-doc-__-in-python/ https://www.python.org/dev/peps/pep-0257/
 
 ***
 v2020.0:
