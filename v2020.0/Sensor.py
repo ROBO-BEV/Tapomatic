@@ -1,46 +1,78 @@
 import time
 
+from MissionControl import *
 
-class Sensor():
+class Sensor():	
 
-	# Wire value CONTSTANTS 
-	# Raspberry Pi 4 Pin Layout https://pinout.xyz/pinout/pin1_3v3_power
-	NO_PIN = -1  						#TODO This constant may not be needed :)
-	NO_WIRE = 0
-	VCC_3_3V = 1
-	VCC_3_3V_NAME = "BOARD1"     		# 3.3 Volts @ upto 0.050 Amps = 0.165 Watts https://pinout.xyz/pinout/pin1_3v3_power
-	VCC_5V = 2
-	VCC_5V_NAME = "BOARD2"        		# 5 Volts @ upto ~1.5 Amps (Power Adapter - Pi usgae) = 7.5 Watts https://pinout.xyz/pinout/pin2_5v_power
-	I2C_SDA = 3					
-	I2C_SDA_NAME = "BOARD3"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin3_gpio2
-	I2C_SCL = 5
-	I2C_SDA_NAME = "BOARD5"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin5_gpio3
-	TXD = 8
-	TXD_NAME = "BOARD8" 				# UART transmit pin / Serial Port https://pinout.xyz/pinout/pin8_gpio14 
-	RXD = 10	
-	RXD_NAME = "BOARD10" 				# UART recieve pin / Serial Port https://pinout.xyz/pinout/pin10_gpio15					
-	GND = "BOARD6&9&14&20&25&30&34&39"	# Digital Ground (0 Volts) https://pinout.xyz/pinout/ground
-	PWM0 = 12
-	PWM0_NAME = "BOARD12"				#Pulse Width Modulation https://pinout.xyz/pinout/pin12_gpio18 
+	FORCE_SENSOR_1 = 1
+	FORCE_SENSOR_2 = 2
+	FORCE_SENSOR_3 = 3
+	FORCE_SENSOR_4 = 4
+	FORCE_SENSOR_5 = 5
+	FORCE_SENSOR_6 = 6
 
-def __init__(self, currentNumOfSensors, sType, pins, partNumber):
-		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
-		for i in pins:
-			self.wires[i] = pins[i]
-		self.sensorType = sType
-		currentNumOfActuators += 1
-		self.sensorID = currentNumOfSensors# Auto-incremented interger class variable
-		self.partNumber = partNumber
+
+	def __init__(self, currentNumOfSensors, sType, pins, partNumber):
+			wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
+			for i in pins:
+				self.wires[i] = pins[i]
+			self.sensorType = sType
+			currentNumOfActuators += 1
+			self.sensorID = currentNumOfSensors# Auto-incremented interger class variable
+			self.partNumber = partNumber
 		
-		
+	def GetLevel(self, lType):
+		"""
+		Determine level / percentage of liquid left in a 750 ml glass bottle to notify service employee refill needed at 10%
+
+		@self - Instance of object being called
+		@lType - Type of liquid being measured as defined in CocoDrink.py (Weight of liquid and bottle is define in Sensor.py)
+
+		return percentage - The amount of liquid left as percentage
+		"""
+
+		if(lType == CocoDrink.CBD):
+  			liquidWeightAt100percent = 2.2 #TODO Get Density of CBD Units are Newtons
+		elif(lType == CocoDrink.IMMUNITY_BOOST):
+			liquidWeightAt100percent = 2.2 #TODO Get Density of IMMUNITY_BOOST Units are Newtons
+		elif(lType == CocoDrink.DAILY_VITAMINS):
+			liquidWeightAt100percent = 2.2 #TODO Get Density of DAILY_VITAMINS Units are Newtons
+		elif(lType == CocoDrink.RUM):
+			liquidWeightAt100percent = 2.2 #TODO Get Density of RUM Units are Newtons
+		elif(lType == CocoDrink.PINA_COLADA):
+			liquidWeightAt100percent = 2.2 #TODO Get Density of PINA_COLADA Units are Newtons
+		elif(lType == CocoDrink.ORANGE_JUICE):
+			liquidWeightAt100percent = 2.2 #TODO Get Density of ORANGE_JUICE Units are Newtons		
 	
+		percentage = GetForce(lType)/liquidWeightAt100percent
 
+		if(percentage < 10):
+			MissionControl.SendLiquidLevelMessage(lType,  MissionControl.MESSAGE_1)
+    
+		return percentage
 
-def GetLevel(lType):
-if(lType == CocoDrink.ORANGE_JUICE):
-  liquidWeightAt100percent = #Units are Newtons
-GetForce/liquidWeightAt100percent
-    return percentage
+	def GetForce(lType):
+		"""
+		Get force as measured by hx711 connected to a 5 kg analog strain gauge. Most Sign Bit first amd 25 (to 27) pulses 
+
+		@lType - Type of liquid being measured as defined in CocoDrink.py 
+
+		@link https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf
+		 
+		return forceInNewtons - The weight of liquid in Newtons
+		"""
+		forceSensorID = FindLiquidForceSensor(lType)
+
+		SCK = 
+		DT = 
+
+		forceInlbs = DT 
+		forceInNewtons = forceInlbs * 0.2248
+		
+
+    	return forceInNewtons
+
+	def FindLiquidForceSensor(lType):
 
 
 Degraw 5kg Load Cell and HX711 Combo Pack Kit - Load Cell Amplifier ADC Weight Sensor for Arduino Scale - Everything Needed for Accurate Force Measurement https://www.amazon.com/dp/B075317R45/ref=cm_sw_r_cp_api_i_Ph7JEb5A1F12M
@@ -52,14 +84,26 @@ https://www.youtube.com/watch?v=nGUpzwEa4vg
 def GetForce():
 SCK
 DT
+		if(lType == CocoDrink.CBD):
+			ID = FORCE_SENSOR_1
+		elif(lType == CocoDrink.IMMUNITY_BOOST):
+			ID = FORCE_SENSOR_2
+		elif(lType == CocoDrink.IMMUNITY_BOOST):
+			ID = FORCE_SENSOR_3
+		elif(lType == CocoDrink.IMMUNITY_BOOST):
+			ID = FORCE_SENSOR_4
+		elif(lType == CocoDrink.IMMUNITY_BOOST):
+			ID = FORCE_SENSOR_5
+		elif(lType == CocoDrink.IMMUNITY_BOOST):
+			ID = FORCE_SENSOR_6
 
-    return forceInNewtons
+		return ID
 
-def IsLaserSafetyGridSafe():
-    status = false
 
-    #TODO 
+	def IsLaserSafetyGridSafe():
+    	status = false
+		print("TODO") 
 
-    return status
+    	return status
 
 
