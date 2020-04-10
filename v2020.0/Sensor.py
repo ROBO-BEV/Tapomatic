@@ -10,8 +10,16 @@ class Sensor():
 	FORCE_SENSOR_4 = 4
 	FORCE_SENSOR_5 = 5
 	FORCE_SENSOR_6 = 6
-
-
+	
+	
+	# TODO Define all pins in schematic
+	PING1_Pin = 12
+	PING1_Pin_Name = "Board12"
+    PING1_Pin = 13
+	PING1_Pin_Name = "Board13"
+    PING1_Pin = 14
+	PING1_Pin_Name = "Board14"
+	
 	def __init__(self, currentNumOfSensors, sType, pins, partNumber):
 			wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 			for i in pins:
@@ -46,7 +54,7 @@ class Sensor():
 	
 		percentage = GetForce(lType)/liquidWeightAt100percent
 
-		if(percentage < 10):
+		if(percentage < 10.0):
 			MissionControl.SendLiquidLevelMessage(lType,  MissionControl.MESSAGE_1)
     
 		return percentage
@@ -101,9 +109,16 @@ DT
 
 
 	def IsLaserSafetyGridSafe():
-    	status = false
-		print("TODO") 
+    	    status = False
+    	    if(GetLASERpingDistance() >= OBJECT_IN_THE_WAY):
+    	        status = True 
 
-    	return status
+    	    return status
+    	
+    	def GetLASERpingDistance():
+    	    range := Ping.Millimeters(PING_Pin) 
+    	    
+    	    return range 
+    	
 
 
