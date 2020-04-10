@@ -42,6 +42,13 @@ if(lType == CocoDrink.ORANGE_JUICE):
 GetForce/liquidWeightAt100percent
     return percentage
 
+
+Degraw 5kg Load Cell and HX711 Combo Pack Kit - Load Cell Amplifier ADC Weight Sensor for Arduino Scale - Everything Needed for Accurate Force Measurement https://www.amazon.com/dp/B075317R45/ref=cm_sw_r_cp_api_i_Ph7JEb5A1F12M
+
+https://github.com/aguegu/ardulibs/
+HX711 datasheet: https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf
+https://www.youtube.com/watch?v=nGUpzwEa4vg
+
 def GetForce():
 SCK
 DT
