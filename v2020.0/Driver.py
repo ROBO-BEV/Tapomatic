@@ -76,6 +76,26 @@ NUM_PI_OUTPUT_PINS = 4                	# This software instance of Raspberry Pi 
 NUM_PI_INPUT_PINS = 4                 	# This software instance of Raspberry Pi can have up to four input pins
 #UART pins in BCM mode are: 14, 15 /dev/ttyAMA0
 
+	# Wire value CONTSTANTS 
+	# Raspberry Pi 4 Pin Layout https://pinout.xyz/pinout/pin1_3v3_power
+	NO_PIN = -1  						#TODO This constant may not be needed :)
+	NO_WIRE = 0
+	VCC_3_3V = 1
+	VCC_3_3V_NAME = "BOARD1"     		# 3.3 Volts @ upto 0.050 Amps = 0.165 Watts https://pinout.xyz/pinout/pin1_3v3_power
+	VCC_5V = 2
+	VCC_5V_NAME = "BOARD2"        		# 5 Volts @ upto ~1.5 Amps (Power Adapter - Pi usgae) = 7.5 Watts https://pinout.xyz/pinout/pin2_5v_power
+	I2C_SDA = 3					
+	I2C_SDA_NAME = "BOARD3"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin3_gpio2
+	I2C_SCL = 5
+	I2C_SDA_NAME = "BOARD5"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin5_gpio3
+	TXD = 8
+	TXD_NAME = "BOARD8" 				# UART transmit pin / Serial Port https://pinout.xyz/pinout/pin8_gpio14 
+	RXD = 10	
+	RXD_NAME = "BOARD10" 				# UART recieve pin / Serial Port https://pinout.xyz/pinout/pin10_gpio15					
+	GND = "BOARD6&9&14&20&25&30&34&39"	# Digital Ground (0 Volts) https://pinout.xyz/pinout/ground
+	PWM0 = 12
+	PWM0_NAME = "BOARD12"				#Pulse Width Modulation https://pinout.xyz/pinout/pin12_gpio18 
+
 #The TODO?17? actuators CONSTANTS
 ROTATIONTAL_TOOL_MOTOR = 0
 Z_LINEAR_TOOL_MOTOR    = -1
