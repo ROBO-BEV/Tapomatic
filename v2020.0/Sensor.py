@@ -4,6 +4,7 @@ from MissionControl import *
 
 class Sensor():	
 
+	# TODO Define all pins in schematic
 	FORCE_SENSOR_1 = 1
 	FORCE_SENSOR_2 = 2
 	FORCE_SENSOR_3 = 3
@@ -11,14 +12,13 @@ class Sensor():
 	FORCE_SENSOR_5 = 5
 	FORCE_SENSOR_6 = 6
 	
-	
 	# TODO Define all pins in schematic
-	PING1_Pin = 12
-	PING1_Pin_Name = "Board12"
-    PING1_Pin = 13
-	PING1_Pin_Name = "Board13"
-    PING1_Pin = 14
-	PING1_Pin_Name = "Board14"
+	PING_Xaxis_Pin = 12
+	PING_Xaxis_Pin_Name = "Board12"
+    PING_Yaxis_Pin = 13
+	PING_Yaxis_Pin_Name = "Board13"
+    PING_Zaxis_Pin = 14
+	PING_Zaxis_Pin_Name = "Board14"
 	
 	def __init__(self, currentNumOfSensors, sType, pins, partNumber):
 			wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
@@ -29,6 +29,19 @@ class Sensor():
 			self.sensorID = currentNumOfSensors# Auto-incremented interger class variable
 			self.partNumber = partNumber
 		
+	def StartFullDuplexSerial():
+		Serial.
+		
+	def SendSerialCommand():
+	
+	def ReceiveSerialCommand():
+		
+	def StartI2C():
+		gpio. 
+		
+	def SendI2C():
+
+	
 	def GetLevel(self, lType):
 		"""
 		Determine level / percentage of liquid left in a 750 ml glass bottle to notify service employee refill needed at 10%
@@ -49,7 +62,7 @@ class Sensor():
 			liquidWeightAt100percent = 2.2 #TODO Get Density of RUM Units are Newtons
 		elif(lType == CocoDrink.PINA_COLADA):
 			liquidWeightAt100percent = 2.2 #TODO Get Density of PINA_COLADA Units are Newtons
-		elif(lType == CocoDrink.ORANGE_JUICE):
+		elif(lType == CocoDrink.ORANGE_FLAVOR):
 			liquidWeightAt100percent = 2.2 #TODO Get Density of ORANGE_JUICE Units are Newtons		
 	
 		percentage = GetForce(lType)/liquidWeightAt100percent
@@ -66,6 +79,11 @@ class Sensor():
 		@lType - Type of liquid being measured as defined in CocoDrink.py 
 
 		@link https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf
+		
+		Degraw 5kg Load Cell and HX711 Combo Pack Kit - Load Cell Amplifier ADC Weight Sensor for Arduino Scale - Everything Needed for Accurate Force Measurement https://www.amazon.com/dp/B075317R45/ref=cm_sw_r_cp_api_i_Ph7JEb5A1F12M
+
+https://github.com/aguegu/ardulibs/
+		
 		 
 		return forceInNewtons - The weight of liquid in Newtons
 		"""
@@ -81,28 +99,18 @@ class Sensor():
     	return forceInNewtons
 
 	def FindLiquidForceSensor(lType):
-
-
-Degraw 5kg Load Cell and HX711 Combo Pack Kit - Load Cell Amplifier ADC Weight Sensor for Arduino Scale - Everything Needed for Accurate Force Measurement https://www.amazon.com/dp/B075317R45/ref=cm_sw_r_cp_api_i_Ph7JEb5A1F12M
-
-https://github.com/aguegu/ardulibs/
-HX711 datasheet: https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf
-https://www.youtube.com/watch?v=nGUpzwEa4vg
-
-def GetForce():
-SCK
-DT
+		
 		if(lType == CocoDrink.CBD):
 			ID = FORCE_SENSOR_1
 		elif(lType == CocoDrink.IMMUNITY_BOOST):
 			ID = FORCE_SENSOR_2
-		elif(lType == CocoDrink.IMMUNITY_BOOST):
+		elif(lType == CocoDrink.DAILY_VITAMINS):
 			ID = FORCE_SENSOR_3
-		elif(lType == CocoDrink.IMMUNITY_BOOST):
+		elif(lType == CocoDrink.RUM):
 			ID = FORCE_SENSOR_4
-		elif(lType == CocoDrink.IMMUNITY_BOOST):
-			ID = FORCE_SENSOR_5
-		elif(lType == CocoDrink.IMMUNITY_BOOST):
+		elif(lType == CocoDrink.PINA_COLADA):
+			ID = FORCE_SENSOR_5 
+		elif(lType == CocoDrink.ORANGE):
 			ID = FORCE_SENSOR_6
 
 		return ID
@@ -110,15 +118,14 @@ DT
 
 	def IsLaserSafetyGridSafe():
     	    status = False
-    	    if(GetLASERpingDistance() >= OBJECT_IN_THE_WAY):
-    	        status = True 
+    	    for pin in range(PING_Xaxis_Pin, PING_Zaxis_Pin+1):
+    	    	if(GetLASERpingDistance(pin) >= OBJECT_IN_THE_WAY):
+    	        	status = True 
 
     	    return status
     	
-    	def GetLASERpingDistance():
-    	    range := Ping.Millimeters(PING_Pin) 
+    def GetLASERpingDistance(pingPinNumber):
+    	range := Ping.GetMillimeters(pingPinNumber) 
     	    
-    	    return range 
-    	
-
-
+    	return range 
+   

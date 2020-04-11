@@ -19,7 +19,7 @@ class CocoDrink:
     RUM = 3
     PINA_COLADA = 4
     ORANGE_JUICE = 5
-    PINEAPPLE_JUICE = 6
+    PINEAPPLE_FLAVOR = 6
     VANILLA = 7
     ENERGY_BOOST = 8
     ORGINAL_RED_BULL = 9
