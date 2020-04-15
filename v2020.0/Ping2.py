@@ -9,11 +9,9 @@ GPIO.setmode(GPIO.BCM)
 GPIO_TRIGGER = 18
 GPIO_ECHO = 18
  
-#set GPIO direction (IN / OUT)
-GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
- 
 def distance():
     # set Trigger to HIGH
+    GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
     GPIO.output(GPIO_TRIGGER, True)
  
     # set Trigger after 0.01ms to LOW
