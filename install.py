@@ -62,10 +62,12 @@ if __name__ == "__main__":
 	check_call("pip install pipenv", shell=True)
 	filepath = 'c:\\users\\' + args.PC_username + '\\appdata\\local\\programs\\python\\python36-32\\Scripts'
 	check_call("set PATH=%PATH%;set PATH=%PATH%;'" + filepath +"'", shell=True)
+
 	# @link https://pipenv.readthedocs.io/en/latest/basics/
 	# @link https://medium.com/@mahmudahsan/how-to-use-python-pipenv-in-mac-and-windows-1c6dc87b403e
 	# @link https://stackoverflow.com/questions/46041719/windows-reports-error-when-trying-to-install-package-using-pipenv
 	# You can use pipenv easily without issues by the following commands in Power Shell:
+	# pipenv install pyserial 
 	# pipenv install docutils # Install a documentation library
 	# pipenv install numpy # Install a numby library for array creation
 	# pipenv shell # activate pipenv
