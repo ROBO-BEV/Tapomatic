@@ -1,27 +1,32 @@
 #!/usr/bin/env python
 
-__author__ =  “Blaze Sanders”
-__email__ =   “blaze.d.a.sanders@gmail.com”
-__company__ = “Robotic Beverage Technologies Inc”
-__status__ =  “Development”
-__date__ =    “Late Updated: 2020-04-10”
-__doc__ =     “Class to operate up to 8 PING LASER Or Ultrasonic rangefinders from Parallax Inc”
+__author__  = "Blaze Sanders"
+__email__   = "blaze.d.a.sanders@gmail.com"
+__company__ = "Robotic Beverage Technologies Inc"
+__status__  = "Development"
+__date__    = "Late Updated: 2020-04-10"
+__doc__     = "Class to operate up to 8 PING LASER Or Ultrasonic rangefinders from Parallax Inc"
 
 # Useful documentation:
 # https://gpiozero.readthedocs.io/en/stable/installing.html
 # https://gpiozero.readthedocs.io/en/stable/api_output.html
 # https://gpiozero.readthedocs.io/en/stable/api_input.html
 
-import Serial 
-
 # Allow program to pause operation and create local timestamps
-from time import sleep
+import time 
 
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
 
+# Set GPIO Pin for ALL Ping sensors (Only one is powered at a time to reduce LASER cross talk)
+PING_GPIO_TRIGGER = 18
+PING_GPIO_ECHO = 18
+
 try:
 	# The following imports do NOT work in a Mac oor PC dev enviroment (but are needed for Pi product) 
+
+	# Allow control of low level General Purpose Input/Output pins on Rapsberry Pi
+	import RPi.GPIO as GPIO
 
 	# Allow asynchrous event to occur in parallel and pause threads as needed
 	# Might work on Windows in the future https://github.com/vibora-io/vibora/issues/126
@@ -41,7 +46,7 @@ try:
 
 except ImportError:
 	DebugObject = Debug(True)
-	Debug.Dprint(DebugObject, “WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.”)
+	Debug.Dprint(DebugObject, "WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
 
 
 def GetMillimeters(pin):
@@ -66,3 +71,49 @@ def GetInches(pin):
     range = 25.4 * millimeters(pin) 
     
     return range
+
+
+ 
+def distance():
+    #GPIO Mode (BOARD / BCM)
+    GPIO.setmode(GPIO.BCM)
+
+    # set Trigger to HIGH
+    GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
+    GPIO.output(GPIO_TRIGGER, True)
+ 
+    # set Trigger after 0.01ms to LOW
+    time.sleep(0.00001)
+    GPIO.output(GPIO_TRIGGER, False)
+    GPIO.setup(GPIO_ECHO, GPIO.IN)
+ 
+    StartTime = time.time()
+    StopTime = time.time()
+ 
+    # save StartTime
+    while GPIO.input(GPIO_ECHO) == 0:
+        StartTime = time.time()
+ 
+    # save time of arrival
+    while GPIO.input(GPIO_ECHO) == 1:
+        StopTime = time.time()
+ 
+    # time difference between start and arrival
+    TimeElapsed = StopTime - StartTime
+    # multiply with the sonic speed (34300 cm/s)
+    # and divide by 2, because there and back
+    distance = (TimeElapsed * 34300) / 2
+ 
+    return distance
+ 
+if __name__ == '__main__':
+    try:
+        while True:
+            dist = distance()
+            print ("Measured Distance = %.1f cm" % dist)
+            time.sleep(1)
+ 
+        # Reset by pressing CTRL + C
+    except KeyboardInterrupt:
+        print("Measurement stopped by User")
+        GPIO.cleanup()

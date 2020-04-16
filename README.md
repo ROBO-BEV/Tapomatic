@@ -30,12 +30,12 @@ To run the code in v2020.0 directory complete the following steps:
 
 Download this FULL git repo onto a Raspberry Pi 4 B
 1. Use "cd Tapomatics" Linux terminal command to navigate to the highest level directory
-2. Use "python install.py" command to auto install on the necessary libraries
+2. Use "python3 install.py YOUR_PC_USERNAME" command to install all the necessary libraries
 3. Use "cd Tapomatics/v2020.0" command to navigate to the main code directory
 4. Finally run the command "python3 GUI.py" to start kiosk software running
 5. NOTE: Use "python3" and NOT "python", in step 5 or you will get run time errors!!!
 6. Open Google Chrome (best GUI compatibility) and type http://127.0.0.1:5000/ into URL textbox. 
-7. Hit enter and then type terminal input as prompted. Have fun nerd!
+7. Type terminal input as prompted when in debug mode. Have fun nerd!
 
 Production Linode IP Addresses:
 
