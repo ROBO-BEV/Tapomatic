@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-
+"""
 __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-04-10"
+__date__    = "Late Updated: 2020-04-17"
 __doc__     = "Class to operate up to 8 PING LASER Or Ultrasonic rangefinders from Parallax Inc"
+"""
 
 # Useful documentation:
 # https://gpiozero.readthedocs.io/en/stable/installing.html
@@ -18,9 +19,9 @@ import time
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
 
-# Set GPIO Pin for ALL Ping sensors (Only one is powered at a time to reduce LASER cross talk)
-PING_GPIO_TRIGGER = 18
-PING_GPIO_ECHO = 18
+# Set GPIO Pin for ALL PING sensors (Only one is powered at a time to reduce LASER cross talk)
+GPIO_TRIGGER = Sensor.PING_GPIO_TRIGGER
+GPIO_ECHO = Sensor.PING_GPIO_ECHO
 
 try:
 	# The following imports do NOT work in a Mac oor PC dev enviroment (but are needed for Pi product) 
