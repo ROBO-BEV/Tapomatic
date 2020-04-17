@@ -24,6 +24,7 @@ import sys, time, traceback, argparse, string
 # Create a command line parser
 parser = argparse.ArgumentParser(prog = "Tapomatic v2020.0", description = __doc__, add_help=True)
 parser.add_argument("PC_username", type=str, default="Admin", help="Windows 10 username for account you are logged into.")
+parser.add_argument("Computer_Type", type=str, default="Admin", help="Please type (PC, Mac, or Pi).")
 parser.add_argument("-r", "--rx_Socket", type=int, default=30000, help="UDP port / socket number for connected Ethernet device.")
 parser.add_argument("-s", "--tx_Socket", type=int, default=30100, help="UDP port / socket number for connected Ethernet device.")
 parser.add_argument("-t", "--trace", type=int, default=0, help="Program trace level.")
@@ -59,41 +60,46 @@ if __name__ == "__main__":
 
 	# Use Python Virtual Environment packaging tool PIPENV 
 	# When using Windows 10
-	check_call("pip install pipenv", shell=True)
-	filepath = 'c:\\users\\' + args.PC_username + '\\appdata\\local\\programs\\python\\python36-32\\Scripts'
-	check_call("set PATH=%PATH%;set PATH=%PATH%;'" + filepath +"'", shell=True)
+	if(args.Computer_Type == "PC" or args.Computer_Type == "pc"):
+		check_call("pip install pipenv", shell=True)
+		filepath = 'c:\\users\\' + args.PC_username + '\\appdata\\local\\programs\\python\\python36-32\\Scripts'
+		check_call("set PATH=%PATH%;set PATH=%PATH%;'" + filepath +"'", shell=True)
+
+		
+
+
+
+	# When using Linux / Rapsberry Pi 
+	if(args.Computer_Type == "Pi" or args.Computer_Type == "pi"):
+		print("TODO")
+
+	# When using Mac install homebrew on Linux
+	if(args.Computer_Type == "Mac" or args.Computer_Type == "mac" or args.Computer_Type == "MAC"):
+		check_call("brew install pipenv", shell=True)
+		check_call("git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew", shell=True)
+		check_call("mkdir ~/.linuxbrew/bin", shell=True)
+		check_call("vn -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin", shell=True)
+		check_call("eval $(~/.linuxbrew/bin/brew shellenv)", shell=True)
+		check_call("brew install pipenv", shell=True)
 
 	# @link https://pipenv.readthedocs.io/en/latest/basics/
 	# @link https://medium.com/@mahmudahsan/how-to-use-python-pipenv-in-mac-and-windows-1c6dc87b403e
 	# @link https://stackoverflow.com/questions/46041719/windows-reports-error-when-trying-to-install-package-using-pipenv
 	# You can use pipenv easily without issues by the following commands in Power Shell:
-	# pipenv install pyserial 
-	# pipenv install docutils # Install a documentation library
-	# pipenv install numpy # Install a numby library for array creation
-	# pipenv shell # activate pipenv
-	# pipenv run python GUI.py
-	# exit # deactivate and quit
+	# TODO STILL NEEDED pipenv install pyserial 
+	check_call("pipenv install flask", shell=True)
+	check_call("pipenv install docutils", shell=True) # Install a documentation library
+	check_call("pipenv install numpy", shell=True)# Install a numby library for array creation
+	check_call("pipenv shell", shell=True) # activate pipenv
+	check_call("pipenv run python GUI.py", shell=True)
+		# exit # deactivate and quit
 
-
-
-
-	# When using Linux / Rapsberry Pi 
-
-
-	# When using Mac install homebrew on Linux
-
-	#TODO check_call("brew install pipenv", shell=True)
-	#TODO check_call("git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew", shell=True)
-	#TODO check_call("mkdir ~/.linuxbrew/bin", shell=True)
-	#TODO lcheck_call("vn -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin", shell=True)
-	#TODO check_call("eval $(~/.linuxbrew/bin/brew shellenv)", shell=True)
-	#TODO check_call("brew install pipenv", shell=True)
 
 	# Flask is the GUI front-end to that runs in parallel with python back-end controlling pumps
 	# Remember to run flask with "python3" NOT "python" command, or you will get weird errors :)
 	# @link https://aryaboudaie.com/python/technical/educational/web/flask/2018/10/17/flask.html
-	check_call("pip3 install flask", shell=True)
-	#TODO check_call("pipenv install flask", shell=True)
+	#check_call("pip3 install flask", shell=True)
+	
 
 	# Set enviroment variable to select GUI.py file as the Flask application
 	check_call("export FLASK_APP=GUI.py", shell=True)
