@@ -19,9 +19,12 @@ import time
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
 
-# Set GPIO Pin for ALL PING sensors (Only one is powered at a time to reduce LASER cross talk)
-GPIO_TRIGGER = Sensor.PING_GPIO_TRIGGER
-GPIO_ECHO = Sensor.PING_GPIO_ECHO
+# PING type Global CONSTANTS
+LASER = 0
+ULTRASONIC = 1
+
+# PING type Global Variable 
+pingType = -1
 
 try:
 	# The following imports do NOT work in a Mac oor PC dev enviroment (but are needed for Pi product) 
@@ -52,12 +55,15 @@ except ImportError:
 
 def GetMillimeters(pin):
     """
-    Measure distance to closest object in direct line of sight for PING LASER rangefinder
+    Get distance to closest object in direct line of sight for PING LASER rangefinder
     
-    @pin - GPIO pin PING sensor is connected to
+    Key arguments:
+    pin -- GPIO pin PING sensor is connected to
     
-    Return range - Distance in mm to closest object 
+    Return value:
+    range -- Distance in mm to closest object 
     """
+    range = distance(pin)
     
     return range
 
@@ -66,16 +72,35 @@ def GetInches(pin):
     """
     Calculate distance to closet object using Get Millimeters() function above. Metric FTW!
     
-    Return range - Distance is gross imperial units to closest object
+    Key arguments:
+    pin -- GPIO pin PING sensor is connected to
+    
+    Return value:
+    range - Distance in gross imperial units to closest object
     """
     
-    range = 25.4 * millimeters(pin) 
+    range = 25.4 * GetMillimeters(pin) 
     
     return range
 
 
  
-def distance():
+def distance(pin):
+    """
+    Measure distance to the closest object using the time of flight of a LASER or ULTRASONIC pulse 
+    
+    Key arguments:
+    pin -- GPIO pin PING sensor is connected to
+    pingType -- Either LASER or ULTRASONIC
+    
+    Return value:
+    distance -- 
+    """
+
+    # Set GPIO Pin for PING sensors (Only one of three axis is powered at a time to reduce LASER and ultrasonic cross talk)
+    GPIO_TRIGGER = pin
+    GPIO_ECHO = pin
+
     #GPIO Mode (BOARD / BCM)
     GPIO.setmode(GPIO.BCM)
 
@@ -101,11 +126,20 @@ def distance():
  
     # time difference between start and arrival
     TimeElapsed = StopTime - StartTime
-    # multiply with the sonic speed (34300 cm/s)
+    # multiply with the sonic speed (34300 cm/s) or TODO light speed (30000000000 cm/s)
     # and divide by 2, because there and back
-    distance = (TimeElapsed * 34300) / 2
+    if(pingType == LASER):
+        distance = (TimeElapsed * 30000000000) / 2
+    else:
+        distance = (TimeElapsed * 34300) / 2
  
     return distance
+    
+    def SetPingType(type):
+        pingType = type
+        
+    def GetPingType():
+        return pingType
  
 if __name__ == '__main__':
     try:

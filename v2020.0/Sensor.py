@@ -28,6 +28,10 @@ try:
 	# Allow control of  HC-SR04 ultrasonic distance sensor (See CamJam #3 EduKit)
 	# http://camjam.me/?page_id=1035
 	from gpiozero import DistanceSensor
+	
+	# Library to scan and create custom QR codes 
+	from MyQR.terminal import main
+
 
 except ImportError:
 	
@@ -61,12 +65,17 @@ class Sensor():
 	PINA_COLADA_FORCE_SENSOR = 3
 	PINA_COLADA_DENSITY = 1.5      	# Units grams/mL
 	ORANGE_FORCE_SENSOR = 4	
-	ORANGE_DENSITY = 1.01      	# Units grams/mL
+	ORANGE_DENSITY = 1.01      		# Units grams/mL
 	PINEAPPLE_FORCE_SENSOR = 5
 	PINEAPPLE_DENSITY = 1.12      	# Units grams/mL
 	LIFTING_PLATFORM_FORCE_SENSOR = 6
 	
+	LOW_LEVEL = 10.0 				# 10.0% 
+	
 	# TODO Define all pins in schematic
+	NUM_X_AXIS_PING_SENSORS = 6
+	NUM_Y_AXIS_PING_SENSORS = 4
+	NUM_Z_AXIS_PING_SENSORS = 14
 	PING_Xaxis_Pin = 12
 	PING_Xaxis_Pin_Name = "Board12"
 	PING_Yaxis_Pin = 13
@@ -76,7 +85,7 @@ class Sensor():
 	PING_GPIO_TRIGGER = -1
 	PING_GPIO_ECHO = -1
 	
-	def __init__(self, currentNumOfSensors, sType, pins, partNumber):
+	def __init__(self, currentNumOfSensors, sType, pins, partNumber, currentCount):
 		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 		for i in pins:
 			self.wires[i] = pins[i]
@@ -84,6 +93,7 @@ class Sensor():
 		currentNumOfActuators += 1
 		self.sensorID = currentNumOfSensors# Auto-incremented interger class variable
 		self.partNumber = partNumber
+		self.currentCount = 0
 		
 	def StartFullDuplexSerial():
 		print("TODO")
@@ -101,7 +111,50 @@ class Sensor():
 		
 	def SendI2C():
 		print("TODO")
+		
+	def GetLiftPlatformCount(self):
+		"""
+		
+		Key arguments:
+		self --
+		
+		Return value:
+		currentCount -- Number of times coconuts have been lifted into the Tapomatic 
+		"""
+		return self.currentCount = self.currentCount + 1
 
+	def ScanQRcode():
+		print("TODO")
+		"""
+		Use camera with white LED to scan a QR
+		
+		Return value:
+		id -- Interger CONSTANT of liquid type as defined in CocoDrinks.py (e.g. TODO ORANGE_FLAVOR, IMMUNITY_) 
+		"""
+		
+		
+		id = 
+		
+		return id
+		
+	def CreateQRcode(bottleID):
+		"""
+		Create PNG QR code file for print
+		
+		Key arguments:
+		bottleID --
+		
+		Return vale:
+		filemane -- fileName.png of custom QR code
+		"""
+		#MyQR.
+		print("TODO")
+		
+	def PrintQRcode(png):
+		"""
+		https://smallbusiness.chron.com/sending-things-printer-python-58655.html
+		"""
+		print("TODO")
 	
 	def GetLevel(self, lType):
 		"""
@@ -130,9 +183,12 @@ class Sensor():
 	
 		percentage = GetForce(lType)/liquidWeightAt100percent
 
-		if(percentage < 10.0):
-			print("TODO")
-			#MissionControl.SendLiquidLevelMessage(lType,  MissionControl.MESSAGE_1)
+		bottleLocation = FindLiquidForceSensor(lType)
+		
+		#TODO MissionControl.ReportLiquidLevel(lType, percentage, MissionControl.KIOSK_ID)
+		
+		if(percentage < LOW_LEVEL):
+			#TODO MissionControl.ReportLowLiquidLevel(lType, bottleLocation, MissionControl.KIOSK_ID)
     
 		return percentage
 
@@ -200,46 +256,40 @@ class Sensor():
 	0 25cm 50cm 75cm (x-axis)
 	|    |    |    |
 	_----_----_----_   - 0 cm
-	|  SDS	  SDS  | S - 5 cm
-    |  DDD    DDD  |   - 10 cm
-	|  DSD    DSD  | S - 15 cm
-	|  DDDDSSDDDD  |   - 20 cm
-	|  SDSDDDDSDS  | S - 25 cm
+	|  SDSDSSDSDS  | S - 5 cm
+    |  DDDDDDDDDD  |   - 10 cm
+	|  DSDDSSDDSD  | S - 15 cm
+	|  DDDDDDDDDD  |   - 20 cm
+	|  SDSDSSDSDS  | S - 25 cm
 	|  DDDDSSDDDD  | S - 30 cm (y-axis)
 
 	Keyword arguments:
 	None
 
 	Return value:
-	status -- True if danger zones are clear; Otherwise False
+	safe -- True if danger zones are clear; Otherwise False
 	"""		
-    	    status = False
-    	    #TODO Zone 1 (15,0) to (30,-30) cm 
+    	    safe = True
+    	    # Zone (15,0) to (60,-29) cm 
 			# Flip between X-axis S#1 and S#2
 			# Check (ZS#1, YS#1) then (ZS#2, YS#1) 
 			# Check (ZS#5, YS#2) 
 			# Check (ZS#9, YS#3) then (ZS#10, YS#3) 
-
-			#TODO Zone 2 (30,-20) to (50,-30) cm 
-			# Flip between X-axis S#3 and S#4
-			# Check (ZS#7) then (ZS#8) 
-			# Check (ZS#13, YS#4) then (ZS#14, YS#4)
-			
-			#TODO Zone 3 (50,0) to (65,-30) cm
-			# Flip between X-axis S#5 and S#6
-			# Check (ZS#3, YS#1) then (ZS#4, YS#1) 
-			# Check (ZS#6, YS#2) 
-			# Check (ZS#11, YS#3) then (ZS#12, YS#3) 
-
- 
-			for pin in range(PING_Xaxis_Pin, PING_Zaxis_Pin+1):
-				Debug.Dprint(DebugObject, "LASER pin: " + pin) 
-				PING_GPIO_TRIGGER = pin
-				PING_GPIO_ECHO = pin
-    	    	if(GetLASERpingDistance(pin) >= OBJECT_IN_THE_WAY):
-    	        	status = True 
-
-    	    return status
+			for xAxisSensor in range(0, NUM_X_AXIS_PING_SENSORS): 
+				for yAxix in range(0, NUM_Y_AXIS_PING_SENSORS):
+					xDist = GetLASERpingDistance(PING_Xaxis_Pin)
+					yDist = GetLASERpingDistance(PING_Yaxis_Pin)
+					zDist = GetLASERpingDistance(PING_Zaxis_Pin)
+					if(xDist <= 29): # 29 cm
+						if(15 <= yDist and yDisy <= 60):
+							if(zDist <= 22):
+								safe = False 
+											
+																Debug.Dprint(DebugObject, "X-Axis LASER pin: " + PING_Xaxis_Pin) 
+			Debug.Dprint(DebugObject, "Y-Axis LASER pin: " + PING_Yaxis_Pin) 
+			Debug.Dprint(DebugObject, "Z-Axis LASER pin: " + PING_Zaxis_Pin) 
+					
+    	    return safe
     	
 	def GetLASERpingDistance(pingPinNumber, units):
 	"""
