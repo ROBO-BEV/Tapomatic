@@ -23,6 +23,8 @@ We used ***pipenv*** Virtual Enviroment software for v2020.1: https://realpython
 All documentation is self generated using https://www.python.org/dev/peps/pep-0257/
 See examples and usage at https://docutils.sourceforge.io/README.html#quick-start
 
+Static type checking was done using http://mypy-lang.org/
+
 ***
 v2020.0:
 
