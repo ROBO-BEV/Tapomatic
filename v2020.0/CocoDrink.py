@@ -13,6 +13,7 @@ from Debug import *
 class CocoDrink:
 
     # Drink Name CONSTANTS
+    NONE = -1
     CBD = 0
     IMMUNITY_BOOST = 1
     DAILY_VITAMINS = 2
@@ -27,7 +28,7 @@ class CocoDrink:
 
     ##
 
-	def __init__(self, drinkName, addOnTypes, addOnLevels):
+	def __init__(self, drinkName, addOnFlavor, addOnFlavorLevels, addOnHealthAdditive, addOnHealthAdditiveLevels):
         """
         Constructor to initialize an Drink object
         

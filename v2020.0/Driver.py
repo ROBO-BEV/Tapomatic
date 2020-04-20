@@ -18,13 +18,13 @@ import pynput.keyboard
 from pynput.keyboard import Key, Controller
 
 # Custom Robotic Beverage Technologies Inc code
-from CoCoDrink import *         	# Store valid CoCoTaps drink configurations
+from CocoDrink import *         	# Store valid CoCoTaps drink configurations
 from Actuator import *         	# Modular plug and play control of motors, servos, and relays
 from Debug import *		    	# Configure datalogging parameters and debug printing control
 
 # Create a command line parser
 parser = argparse.ArgumentParser(prog = "Tapomatic v2020.0", description = __doc__, add_help=True)
-parser.add_argument("-i", "--piIP_Address", type=str, default="192.168.1.135", help="IPv4 address of the Tapomatic V0 ID0 backend Raspberry Pi 4.")
+parser.add_argument("-i", "--piIP_Address", type=str, default="127.168.1.42", help="IPv4 address of the Tapomatic V0 ID0 backend Raspberry Pi 4.")
 parser.add_argument("-r", "--rx_Socket", type=int, default=30000, help="UDP port / socket number for connected Ethernet device.")
 parser.add_argument("-s", "--tx_Socket", type=int, default=30100, help="UDP port / socket number for connected Ethernet device.")
 parser.add_argument("-u", "--unit", type=str, default= FIELD_MODE, choices=[TESTING_MODE, FIELD_MODE, PRODUCT_MODE], help="Select boot up mode for BARISTO kiosk.")
@@ -33,15 +33,15 @@ parser.add_argument("-f", "--filename", type=str, default="Update.py", help="Loc
 parser.add_argument("-l", "--loop", type=int, default=0, help="Set to 1 to loop this driver program.")
 args = parser.parse_args()
 
-	# Raspberry Pi B+ refernce pin CONSTANTS as defined in ???rc.local script???
-	NUM_GPIO_PINS = 15                       # Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
-	MAX_NUM_A_OR_B_PLUS_GPIO_PINS = 40      # Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
-	MAX_NUM_A_OR_B_GPIO_PINS = 26           # Pins 1 to 26 on Raspberry Pi A or B
-	NUM_OUTPUT_PINS = 8                     # This software instance of Raspberry Pi can have up to eight output pins
-	NUM_INPUT_PINS = 7                      # This software instance of Raspberry Pi can have up to seven input pins
+# Raspberry Pi B+ refernce pin CONSTANTS as defined in ???rc.local script???
+NUM_GPIO_PINS = 15                       # Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
+MAX_NUM_A_OR_B_PLUS_GPIO_PINS = 40      # Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
+MAX_NUM_A_OR_B_GPIO_PINS = 26           # Pins 1 to 26 on Raspberry Pi A or B
+NUM_OUTPUT_PINS = 8                     # This software instance of Raspberry Pi can have up to eight output pins
+NUM_INPUT_PINS = 7                      # This software instance of Raspberry Pi can have up to seven input pins
 
 # External WWW IP addresses
-LINODE_MYSQL_IP = "45.79.104.3?"
+LINODE_MYSQL_IP = "45.79.104.34"
 RAVEN_DB_IP = "TODO"
 
 # Internal local network IP addresses and ports
@@ -76,25 +76,25 @@ NUM_PI_OUTPUT_PINS = 4                	# This software instance of Raspberry Pi 
 NUM_PI_INPUT_PINS = 4                 	# This software instance of Raspberry Pi can have up to four input pins
 #UART pins in BCM mode are: 14, 15 /dev/ttyAMA0
 
-	# Wire value CONTSTANTS 
-	# Raspberry Pi 4 Pin Layout https://pinout.xyz/pinout/pin1_3v3_power
-	NO_PIN = -1  						#TODO This constant may not be needed :)
-	NO_WIRE = 0
-	VCC_3_3V = 1
-	VCC_3_3V_NAME = "BOARD1"     		# 3.3 Volts @ upto 0.050 Amps = 0.165 Watts https://pinout.xyz/pinout/pin1_3v3_power
-	VCC_5V = 2
-	VCC_5V_NAME = "BOARD2"        		# 5 Volts @ upto ~1.5 Amps (Power Adapter - Pi usgae) = 7.5 Watts https://pinout.xyz/pinout/pin2_5v_power
-	I2C_SDA = 3					
-	I2C_SDA_NAME = "BOARD3"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin3_gpio2
-	I2C_SCL = 5
-	I2C_SDA_NAME = "BOARD5"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin5_gpio3
-	TXD = 8
-	TXD_NAME = "BOARD8" 				# UART transmit pin / Serial Port https://pinout.xyz/pinout/pin8_gpio14 
-	RXD = 10	
-	RXD_NAME = "BOARD10" 				# UART recieve pin / Serial Port https://pinout.xyz/pinout/pin10_gpio15					
-	GND = "BOARD6&9&14&20&25&30&34&39"	# Digital Ground (0 Volts) https://pinout.xyz/pinout/ground
-	PWM0 = 12
-	PWM0_NAME = "BOARD12"				#Pulse Width Modulation https://pinout.xyz/pinout/pin12_gpio18 
+# Wire value CONTSTANTS 
+# Raspberry Pi 4 Pin Layout https://pinout.xyz/pinout/pin1_3v3_power
+NO_PIN = -1  						#TODO This constant may not be needed :)
+NO_WIRE = 0
+VCC_3_3V = 1
+VCC_3_3V_NAME = "BOARD1"     		# 3.3 Volts @ upto 0.050 Amps = 0.165 Watts https://pinout.xyz/pinout/pin1_3v3_power
+VCC_5V = 2
+VCC_5V_NAME = "BOARD2"        		# 5 Volts @ upto ~1.5 Amps (Power Adapter - Pi usgae) = 7.5 Watts https://pinout.xyz/pinout/pin2_5v_power
+I2C_SDA = 3					
+I2C_SDA_NAME = "BOARD3"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin3_gpio2
+I2C_SCL = 5
+I2C_SDA_NAME = "BOARD5"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin5_gpio3
+TXD = 8
+TXD_NAME = "BOARD8" 				# UART transmit pin / Serial Port https://pinout.xyz/pinout/pin8_gpio14 
+RXD = 10	
+RXD_NAME = "BOARD10" 				# UART recieve pin / Serial Port https://pinout.xyz/pinout/pin10_gpio15					
+GND = "BOARD6&9&14&20&25&30&34&39"	# Digital Ground (0 Volts) https://pinout.xyz/pinout/ground
+PWM0 = 12
+PWM0_NAME = "BOARD12"				#Pulse Width Modulation https://pinout.xyz/pinout/pin12_gpio18 
 
 #The TODO?17? actuators CONSTANTS
 ROTATIONTAL_TOOL_MOTOR = 0
@@ -103,7 +103,7 @@ X_LINEAR_TOOL_MOTOR    = -2
 Y_LINEAR_TOOL_MOTOR    = -3
 Z1_LINEAR_LIFT_MOTOR   = -4
 Z2_LINEAR_LIFT_MOTOR   = -5
-TODO
+#TODO
 
 # Tool change CONSTANTS
 NO_TOOL = 0
@@ -327,12 +327,41 @@ if __name__ == "__main__":
     currentKnifeSectionInUse = 0    # Always attempt to used section 0 when code restarts
 
     currentNumberOfOrders = 0
-    numOfOrdersInProgress = 1
+    numOfOrdersInProgress = 0
 
-    tempDrink = Drink(Drink.NONE, Drink.NONE, Drink.NONE)
+    tempDrink = CocoDrink(CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE)
     vendQueue[MAX_VEND_QUEUE_SIZE] =  [tempDrink, tempDrink, tempDrink]
 
     # DEFINE ALL ACTUATORS INSIDE TAPOMATIC ATTACH TO ADAFRUIT DC & STEPPER MOTOR HAT 2348
+	# https://upverter.com/design/blazesandersinc/tapomatic-v2020-1/
+	cbdHealthAdditivePins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
+	cbdHealthAdditiveMotor = Actuator("R", cbdHealthAdditivePins, "CBD Motor: Zjchao 202", Actuator.CW)
+	immunityHealthAdditivePins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
+	immunityHealthAdditiveMotor = Actuator("R", ImmunityHealthAdditivePins, "Immunity Boost Motor: Zjchao 202", Actuator.CW)
+	vitaminsHealthAdditivePins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
+	vitaminsHealthAdditiveMotor = Actuator("R", vitaminsHealthAdditivePins, "Daily Vitamins Motor: Zjchao 202", Actuator.CW)
+
+	rumFlavorPins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
+	rumFlavorMotor = Actuator("R", rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)
+	pinaColadaFlavorPins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
+	pinaColadaFlavorMotor = Actuator("R", pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW)
+	orangeFlavorPins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
+	orangeFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)
+
+
+
+	CBD = 0
+    IMMUNITY_BOOST = 1
+    DAILY_VITAMINS = 2
+    RUM = 3
+    PINA_COLADA = 4
+    ORANGE_JUICE = 5
+    PINEAPPLE_FLAVOR = 6
+    VANILLA = 7
+    ENERGY_BOOST = 8
+    ORGINAL_RED_BULL = 9
+
+
     cupSepServo1Pins = [VCC_5V, GND, 5]  		# GPIO5 = BOARD29 = DC_STEPPER_HAT???
     cupSeparatorServo1 = Actuator("S", cupSepServo1Pins, "Cup Separator Servo 1: Seamuing MG996R", Actuator.CW)
     cupSepServo2Pins = [VCC_5V, GND, 6]  		# GPIO6 = BOARD31 = DC_STEPPER_HAT???
