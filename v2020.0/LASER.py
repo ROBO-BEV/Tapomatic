@@ -11,7 +11,16 @@ class LASER:
 	HIGH_POWER = 16
 	STANDARD_POWER = 8
 	LOW_POWER = 4
-
+	
+	
+	# LASER branding PNG filename CONSTANTS
+    RESORT_WORLD_LOGO = "ResortWorldLogoV0.png"
+    COCOTAPS_LOGO = "CocoTapsLogoV0.png"
+    WYNN_HOTEL_LOGO = "WynnHotelLogoV0.png"
+    RED_BULL_LOGO = "RedBullLogoV0.png"
+    BACARDI_LOGO = "BacardiLogoV0.png"
+    ROYAL_CARRIBBEAN_LOGO = "RoyalCarribbeanLogoV0.png"
+        
 	LASER_CONSTANT = 0.05264472  	#TODO Adjust this until LASER branding looks good
 
 	def __init__(self, powerLevel):

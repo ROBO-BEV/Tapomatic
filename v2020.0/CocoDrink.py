@@ -11,8 +11,11 @@ __doc__ =     "Class to define flavors and health additivies in a CocoDrink"
 from Debug import *
 
 
-# Robotic Beverage Technologies code for controlling many different types of motors, servos, relays, amd LEDS
+# Robotic Beverage Technologies code for controlling many different types of motors, servos, and relays
 from Actuator import *
+
+# Robotic Beverage Technologies code for controlling the physical movement and power output of a LASER
+from LASER import *
 
 class CocoDrink:
 
@@ -31,8 +34,10 @@ class CocoDrink:
     ENERGY_BOOST = 8
     ORGINAL_RED_BULL = 9
     
+    # Add-On level CONSTANTS 
     MAX_ADD_ON_LEVEL = 5
     MIN_ADD_ON_LEVEL = 0
+    
 
 	def __init__(self, drinkName, addOnFlavor, addOnFlavorLevel, addOnHealthAdditive, addOnHealthAdditiveLevels, brandingArt):
         """
