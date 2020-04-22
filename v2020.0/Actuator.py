@@ -151,7 +151,7 @@ class Actuator:
 		else:
 			Debug.Dprint(DebugObject, "INVALID Actutator Type in __init__ method, please use S, M, R as first parameter to Actuator() Object")
 
-	def Run(act = actuatorObject(), duration, newPosition, speed, direction):
+	def Run(self, duration, newPosition, speed, direction):
 		#TODO https://www.google.com/search?q=pass+object+to+python+function&rlz=1C1GCEA_enUS892US892&oq=pass+object+to+python+function&aqs=chrome..69i57.5686j0j7&sourceid=chrome&ie=UTF-8
 		#TODO https://stackoverflow.com/questions/20725699/how-do-i-pass-instance-of-an-object-as-an-argument-in-a-function-in-python
 		"""

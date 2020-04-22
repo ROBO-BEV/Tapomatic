@@ -4,11 +4,22 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-03-02"
+__date__    = "Late Updated: 2020-04-21"
 __doc__     = "Code to make print() debuggging and data logging easier"
 
 # Allow program to create GMT and local timestamps
 from time import gmtime, strftime
+
+# Error code global CONSTANTS
+OBJECT_CREATION_ERROR = 0
+GLOBAL_CONSTANT_USAGE_ERROR = 1
+PUMP_CONFIGURATION_ERROR = 2
+LINEAR_ACTUATOR_CONFIGURATION_ERROR = 3
+DISPLAY_CONFIGURATION_ERROR = 4
+
+# TODO Create more error codes
+API_ERROR = 5
+USER_ERROR = 6
 
 class Debug:
 

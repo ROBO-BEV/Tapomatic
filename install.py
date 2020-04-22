@@ -74,6 +74,8 @@ if __name__ == "__main__":
 		# Flask requires Python 3 to work
 		check_call("brew install python3-pip", shell=True)   	
 		check_call("brew install pipenv", shell=True)
+		check_call("brew install docutils", shell=True)
+		check_call("brew install numpy", shell=True) 
 
 	# Start PIPENV Python Virtual Environment packaging tool installs 
 	# @link https://pipenv.readthedocs.io/en/latest/basics/
