@@ -21,16 +21,10 @@
     <title> Tapping complete enjoy </title>
 
     <!--TODO CSS STUFF HERE-->
-    <style type="text/css">
-      
-      table {
-      	font-family: Arial, Courier New, Source Sans Pro; /* Try using Arial typeface first and Source Sans Pro last */ 
-      }
-      
-      button {
-      	outline: 0;  /* Turn off annoying blue highlight around button during click> */ 
-      }
-    </style>
+    <!-- custom styles -->
+    <link rel="stylesheet" href="./static/assets/styles/main.css">
+    <!-- normalize -->
+    <link rel="stylesheet" href="./static/assets/styles/normalize.css">
   </head>
 
   <body>
@@ -38,65 +32,31 @@
     <script language ="JavaScript">
  	  var drinkID = new Array();
 	  drinkID[0] = RumCoConut;
-
 	  var fontSize = 60;
     </script>
+    <main>
+        <div class="container flex-column flex-container justify-space-between">
+            <div class="text-center">
+                <img class="tap-your-thirst-img" src="../static/images/short-cut-top.png" alt="coco taps logo">
+            </div>
+            <div class="text-center">
+                <h1 class="final-text">Time to Tap your Thirst</h1>
+            </div>
+            <div class="flex-container justify-center">
+                <div class="cursor-pointer flex-container flex-column align-center">
+                    <h1 class="final-text">Come back to cut top off</h1>
+                    <img class="down-arrow" src="../static/images/stretched-down-arrow.png" alt="down arrow">
+                    <img class="down-arrow" src="../static/images/stretched-down-arrow.png" alt="down arrow">
+                    <img class="down-arrow" src="../static/images/stretched-down-arrow.png" alt="down arrow">
+                </div>
+            </div>
+            <div>
+                <a href="{{ url_for('WelcomeScreen', userselection='Welcome') }}", method="GET" >
+                      <p>Home</p>
+                </a>
+            </div>
+        </div>
+    </main>
 
-    <table> <!Table layout for portrait mode 1080 wide x 1980 tall>
-      <tr>
-        <td width="90" height="100">
-        </td> <!ROW 1, COL 1>
-
-        <td width="900" height="100">
-        </td> <!ROW 1, COL 2>
-
-        <td width="90" height="100">
-        </td> <!ROW 1, COL 3>
-	
-        <!TODO REMOVE THIS RIGHT SIDE OF SCREEN PIXL MARKER> 
-	    <td width="1" height="210" >
-	      <h1 style="color: #2A3627"> I </h1>
-        </td>
-      </tr> <!END ROW #1>
-
-      <tr>
-        <td width="90" height="860">
-        </td> <!ROW 2, COL 1>
-
-        <td width="900" height="800">
-	  <!CoCoTaps Logo is 3155x1428 at full resolution>
-	  <center> <img src="../static/images/CoCoTapsCoconut.png" / width="864" height="402" alt="CoCoTaps Logo"> </center> 
-        </td> <!ROW 2, COL 2>
-    
-        <td width="90" height="860">        
-        </td> <!ROW 2, COL 3>
-      </tr> <!END ROW #2>
-
-      <tr>
-        <td width="90" height="330">
-        </td> <!ROW 3, COL 1>
-
-        <td width="900" height="330">
-	      <button style="background-color: #FDFDFD; color: #2A3627; display: inline-block; padding: 15px 5px; width: 900px; height: 220px; font-weight: bold; font-size: 60; border-radius: 40px;" type="/User_Instructions\" value="/User_Instructions\">
-	      <center> Place coconut in circle <br> and press here to start </center>
-	    </td> <!ROW 3, COL 2>
-
-        <td width="90" height="330">
-        </td> <!ROW 3, COL 3>
-      </tr> <!END ROW #3>
-
-      <tr>
-        <td width="90" height="630">
-        </td> <!ROW 4, COL 1>
-
-        <td width="900" height="630">
-	      <!TODO ADD GREEN UP ARROWS HERE>
-	    </td> <!ROW 4, COL 2>
-
-        <td width="90" height="630">
-        </td> <!ROW 4, COL 3>
-      </tr> <!END ROW #4>
-
-    </table>
   </body>
 </html>
