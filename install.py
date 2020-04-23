@@ -76,6 +76,7 @@ if __name__ == "__main__":
 		check_call("brew install pipenv", shell=True)
 		check_call("brew install docutils", shell=True)
 		check_call("brew install numpy", shell=True) 
+		check_call("brew install opencv-python", shell=True) 
 
 	# Start PIPENV Python Virtual Environment packaging tool installs 
 	# @link https://pipenv.readthedocs.io/en/latest/basics/
@@ -93,6 +94,9 @@ if __name__ == "__main__":
 	
 	# Install a numby library for array creation
 	check_call("pipenv install numpy", shell=True)		
+
+	# Install computer vision library to wrap images around coconuts and load photos
+	check_call("pip install opencv-python", shell=True)
 	
 	# Activate PIPENV
 	check_call("pipenv shell", shell=True) 				

@@ -29,7 +29,7 @@ from time import sleep
 from Debug import *
 
 # Create an array of specific length to restrict resizing and appending (like Pythom list) and to improve performance
-from numpy import ndarray, empty #TODO Pick the one that is faster
+# TODO from numpy import ndarray, empty Pick the one that is faster
 
 try:
 	# The following imports do NOT work in a Mac oor PC dev enviroment (but are needed for Pi product) 

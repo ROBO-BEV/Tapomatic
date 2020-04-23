@@ -14,18 +14,19 @@ from Debug import *
 from Actuator import *
 
 # Robotic Beverage Technologies code for controlling the physical movement and power output of a LASER
-from LASER import *
+#TODO from LASER import *
 
 class CocoDrink:
 
     # Drink Name CONSTANTS
-	NO_DRINK = -1
-	IMMUNITY_BOOST = 0
-	DAILY_VITAMINS = 1
-	RUM_FLAVOR = 2
-	PINA_COLADA = 3
-	PINEAPPLE_FLAVOR = 4
-	ORANGE_FLAVOR = 5
+	NONE = 0
+	NO_DRINK = 0
+	IMMUNITY_BOOST = 1
+	DAILY_VITAMINS = 2
+	RUM_FLAVOR = 3
+	PINA_COLADA = 4
+	PINEAPPLE_FLAVOR = 5
+	ORANGE_FLAVOR = 6
 	MAX_DRINK_NAME = ORANGE_FLAVOR
     
     # Extra add-ons for v2021.0

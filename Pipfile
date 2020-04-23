@@ -11,6 +11,7 @@ flask = "*"
 rpi = "*"
 rpi-gpio = "*"
 numpy = "*"
+opencv-python = "*"
 
 [requires]
 python_version = "3.7"
