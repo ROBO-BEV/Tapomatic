@@ -19,17 +19,10 @@
   <head>
     <title> Drilling and tapping coconuts </title>
 
-    <!--TODO CSS STUFF HERE-->
-    <style type="text/css">
-      
-      table {
-      	font-family: Arial, Courier New, Source Sans Pro; /* Try using Arial typeface first and Source Sans Pro last */ 
-      }
-      
-      button {
-      	outline: 0;  /* Turn off annoying blue highlight around button during click> */ 
-      }
-    </style>
+    <!-- custom styles -->
+    <link rel="stylesheet" href="./static/assets/styles/main.css">
+    <!-- normalize -->
+    <link rel="stylesheet" href="./static/assets/styles/normalize.css">
   </head>
 
   <body>
@@ -40,64 +33,32 @@
       var fontSize = 60;
 
     </script>
+<main>
 
-    <table> <!Table layout for portrait mode 1080 wide x 1980 tall>
-      <tr>
-        <td width="90" height="100">
-        </td> <!ROW 1, COL 1>
+        <div class="container flex-column flex-container justify-space-between">
 
-        <td width="900" height="100">
-        </td> <!ROW 1, COL 2>
+            <div>
+                <img class="logo-img" src="../static/images/coco-taps.jpeg" alt="coco taps logo">
+            </div>
 
-        <td width="90" height="100">
-        </td> <!ROW 1, COL 3>
-
-        <!TODO REMOVE THIS RIGHT SIDE OF SCREEN PIXL MARKER>
-        <td width="1" height="210" >
-          <h1 style="color: #2A3627"> I </h1>
-        </td>
-      </tr> <!END ROW #1>
-
-
-      <tr>
-        <td width="90" height="860">
-        </td> <!ROW 2, COL 1>
-
-        <td width="900" height="800">
-      <!CoCoTaps Logo is 3155x1428 at full resolution>
-	  <center> <iframe src="https://player.vimeo.com/video/397678826" width="640" height="362" frameborder="0" allow="autoplay"> </iframe> </center> 
-      	  <center> <img src="../static/images/CoCoTapsLogoV0.png" / width="864" height="402" alt="CoCoTaps Logo"> </center>
-        </td> <!ROW 2, COL 2>
-
-        <td width="90" height="860">
-        </td> <!ROW 2, COL 3>
-      </tr> <!END ROW #2>
-
-      <tr>
-        <td width="90" height="330">
-        </td> <!ROW 3, COL 1>
-
-        <td width="900" height="330">
-	      <button style="background-color: #FDFDFD; color: #000; display: inline-block; padding: 15px 5px; width: 900px; height: 120px; font-weight: bold; font-size: 42; border-radius: 10px;" type="/User_Instructions\" value="/User_Instructions\">
-	      <center> {{ timeLeft }} s </center>
-        </td> <!ROW 3, COL 2>
-
-        <td width="90" height="330">
-        </td> <!ROW 3, COL 3>
-      </tr> <!END ROW #3>
-
-      <tr>
-        <td width="90" height="630">
-        </td> <!ROW 4, COL 1>
-
-        <td width="900" height="630">
-          <!TODO ADD GREEN DOWN ARROWS HERE>
-        </td> <!ROW 4, COL 2>
-
-        <td width="90" height="630">
-        </td> <!ROW 4, COL 3>
-      </tr> <!END ROW #4>
-
-    </table>
+             <div>
+                <iframe src="https://player.vimeo.com/video/397678826" width="640" height="362" frameborder="0" allow="autoplay"></iframe>
+             </div>
+            </div>
+            <div class="text-center">
+                <a href="{{ url_for('CompleteScreen', userselection='Complete') }}", method="GET" >
+                      <p>PRESS</p>
+                    </a>
+                <h1 class="count-down">09s</h1>
+            </div>
+            <div class="flex-container justify-center">
+                <div class="cursor-pointer flex-container flex-column">
+                    <img class="down-arrow" src="../static/images/stretched-up-arrow.png" alt="down arrow">
+                    <img class="down-arrow" src="../static/images/stretched-up-arrow.png" alt="down arrow">
+                    <img class="down-arrow" src="../static/images/stretched-up-arrow.png" alt="down arrow">
+                </div>
+            </div>
+        </div>
+    </main>
   </body>
 </html>

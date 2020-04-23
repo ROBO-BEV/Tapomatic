@@ -6,14 +6,14 @@
  * @version 0.0
  *
  * @brief Code to render infuse flavor (3rd screen) for Tapomatic food service system
- *	
+ *
  * @section DESCRIPTION
  *
- * Brand colors: 
- * Dark Green (0x086D38), Light Green (0x86C042), 
+ * Brand colors:
+ * Dark Green (0x086D38), Light Green (0x86C042),
  * Apple White (0xFDFDFD), White (0xFFFFFF),
  * Apple Black (0x010306), Logo Black (0x2A3627)
- * 
+ *
  -->
 <html lang="en">
   <head>
@@ -23,24 +23,11 @@
      * CSS STUFF HERE
      * Try using Arial typeface first and Source Sans Pro last
      * REMOVE BORDER STYLING IN PRODUCTION CODE
-     --> 
-    <style type="text/css">
-      table {
-      	font-family: Arial, Courier New, Source Sans Pro; border: 1px solid black; 
-      } 
-      
-      .button {
-        outline: 0;
-        background-color: #FDFDFD;
-      }
-
-      .button:active{
-        background-color: #86C042;
-        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-        transform: translateY(4px);
-      }
-
-    </style>
+     -->
+ <!-- custom styles -->
+    <link rel="stylesheet" href="./static/assets/styles/main.css">
+    <!-- normalize -->
+    <link rel="stylesheet" href="./static/assets/styles/normalize.css">
   </head>
 
   <body>
@@ -48,127 +35,40 @@
     <script language ="JavaScript">
  	  var drinkID = new Array();
 	  drinkID[0] = RumCoConut;
-
 	  var fontSize = 60; /*Units are pixels*/
 	  var timeLeft = 30; /*Units are seconds*/
     </script>
 
-    <table> 
-      <!9 row x 3 column table layout in portrait mode 1080 wide x 1980 tall>
-      <!Heigth = 1980 pixels = 40.0 cm on digital ruler thus (6.60 cm * 48) == 316 pixels>
-      <!Width  = 1080 pixels = 22.5 cm on digital ruler thus (3.05 cm * 48) == 146 pixels>
-      <!3.05 cm x 6.60 cm = 316 - 50 pixels to adjust for Pi 1920 ti 1870>
-      
-      <tr>  <!ALL BLANK WHITE ROW> 
-        <td width="146" height="266"> 
-	      <!BLANK CELL>
-        </td> <!ROW 1, COL 1>
-        <td width="788" height="266">
-	      <!BLANK CELL>
-        </td> <!ROW 1, COL 2>
-        <td width="146" height="266">
-	      <!BLANK CELL>
-        </td> <!ROW 1, COL 3>
-      </tr> <!END ROW #1> 
-      
-      <tr>  <!COCOTAPS LOGO ROW>
-        <td width="146" height="357"> 
-	      <!BLANK CELL>
-        </td> <!ROW 2, COL 1>
+   <main>
+        <div class="container flex-column flex-container justify-space-between">
+            <div>
+                <img class="logo-img" src="../static/images/coco-taps.jpeg" alt="coco taps logo">
+            </div>
+            <div class="text-center">
+                <h1 class="count-down">19s</h1>
+            </div>
+            <div class="text-center">
+                <div class="add-option border-box cursor-pointer">
+                    <h1>Add CBD Supplement for Health Benefits </h1>
+                    <a href="{{ url_for('Waiting', userselection='CBD') }}", method="GET" >
+                         <p>Select</p>
+                    </a>
+                </div>
+                <div class="add-option border-box cursor-pointer">
+                    <h1>Add Immunity Boost Supplement for Health Benefits</h1>
+                    <a href="{{ url_for('Waiting', userselection='ImmunityBoost') }}", method="GET" >
+                         <p>Select</p>
+                    </a>
+                </div>
+                <div class="add-option border-box cursor-pointer">
+                    <h1>Add Daily Vitamins Supplement for Health Benefits</h1>
+                     <a href="{{ url_for('Waiting', userselection='DailyVitamins') }}", method="GET" >
+                         <p>Select</p>
+                    </a>
+                </div>
+            </div>
 
-        <td width="788" height="357"> 
-	      <!--CoCoTaps Logo is 3155x1428 at full resolution, divide by 4 to get 788x357-->
-	      <center> <img src="../static/images/CoCoTapsLogoV0.png" / width="788" height="357" alt="CoCoTaps Logo"> </center> 
-        </td> <!ROW 2, COL 2>
-        <td width="146" height="357">
-	      <!BLANK CELL>        
-        </td> <!ROW 2, COL 3>
-      </tr> <!END ROW #2> <!1080 x 702>
-
-      <tr>  <!ALL BLANK WHITE ROW> 
-        <td width="146" height="222"> 
-	      <!BLANK CELL>
-        </td> <!ROW 3, COL 1>
-        <td width="788" height="222">
-	      <!BLANK CELL>
-        </td> <!ROW 3, COL 2>
-        <td width="146" height="222">
-	      <!BLANK CELL>
-        </td> <!ROW 3, COL 3>
-      </tr> <!END ROW #3>
-
-      <tr> <!COUNTDOWN CLOCK ROW>
-        <td width="146" height="262">
-	      <!BLANK CELL>
-        </td> <!ROW 4, COL 1>
-        <td width="788" height="262"> 
-	      <center> <p style="font-size:100px; color: #086D38;"> {{ timeLeft }} s </center>
-	    </td> <!ROW 4, COL 2>
-        <td width="146" height="262">
-	      <!BLANK CELL>
-        </td> <!ROW 4, COL 3>
-      </tr> <!END ROW #4>
-
-      <tr>  <!ALL BLANK WHITE ROW> 
-        <td width="146" height="144"> 
-	      <!BLANK CELL>
-        </td> <!ROW 5, COL 1>
-        <td width="788" height="144">
-	      <!BLANK CELL>
-        </td> <!ROW 5, COL 2>
-        <td width="146" height="144">
-	      <!BLANK CELL>
-        </td> <!ROW 5, COL 3>
-      </tr> <!END ROW #5>
-
-      <tr> <!FIRST BUTTON ROW>
-        <td width="146" height="153">
-	      <!BLANK CELL> 
-        </td> <!ROW 6, COL 1>
-        <td width="788" height="153"> 
-          <button class="button" style="color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 788px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_For_Rum_Button\" value="/Press_For_Rum_Button\">  Press for Rum </button>
-	    </td> <!ROW 6, COL 2>
-        <td width="146" height="153">
-	      <!BLANK CELL> 
-        </td> <!ROW 6, COL 3>
-      </tr> <!END ROW #6>
-
-      <tr> <!SECOND BUTTON ROW>
-        <td width="146" height="153">
-	      <!BLANK CELL> 
-        </td> <!ROW 7, COL 1>
-        <td width="788" height="153"> 
-          <button class="button" style="color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 788px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_For_Pina_Colada_Button\" value="/Press_For_Pina_Colada_Button\">  Press for Piña Colada  </button>
-	    </td> <!ROW 7, COL 2>
-        <td width="146" height="153">
-	      <!BLANK CELL> 
-        </td> <!ROW 7, COL 3>
-      </tr> <!END ROW #7>
-
-      <tr> <!THIRD BUTTON ROW>
-        <td width="146" height="153">
-	      <!BLANK CELL> 
-        </td> <!ROW 8, COL 1>
-        <td width="788" height="153"> 
-          <button class="button" style="color: #2A3627; display: inline-block; margin: 20px; padding: 15px 5px; width: 788px; height: 153px; font-weight: bold; font-size: 50; border-radius: 40px;" type="/Press_For_CBD_Button\" value="/Press_For_CBD_Button\">  Press for Orange Juice  </button>
-	    </td> <!ROW 8, COL 2>
-        <td width="146" height="153">
-	      <!BLANK CELL> 
-        </td> <!ROW 8, COL 3>
-      </tr> <!END ROW #8>
-
-      <tr> <!ALL BLANK WHITE ROW>
-        <td width="146" height="043"> <!1920 - 89 for margins = 1831>
-	      <!BLANK CELL> 
-        </td> <!ROW 9, COL 1>
-        <td width="788" height="043">
-	      <!BLANK CELL> 
-	    </td> <!ROW 9, COL 2>
-        <td width="146" height="043">
-	      <!BLANK CELL> 
-        </td> <!ROW 9, COL 3>
-      </tr> <!END ROW #9>
-
-    </table>
+        </div>
+    </main>
   </body>
 </html>
