@@ -48,27 +48,23 @@
             <div class="text-center">
                 <h1 class="count-down">29s</h1>
             </div>
-            <div class="text-center">
-                <div class="add-option border-box cursor-pointer">
-                    <h1>Add Rum (21+ required)</h1>
-                    <a href="{{ url_for('Flavor', userselection='RUM') }}", method="GET" >
-                         <p>Select</p>
-                    </a>
-                </div>
-                <div class="add-option border-box cursor-pointer">
-                    <h1>Add Piña Colada Flavoring</h1>
-                    <a href="{{ url_for('Flavor', userselection='PinaColado') }}", method="GET" >
-                         <p>Select</p>
-                    </a>
-                </div>
-                <div class="add-option border-box cursor-pointer">
-                    <h1>Add Orange Flavoring</h1>
-                    <a href="{{ url_for('Flavor', userselection='Orange') }}", method="GET" >
-                         <p>Select</p>
-                    </a>
-                </div>
+             <div class="flex-container flex-column align-center">
+                 <a href="{{ url_for('Flavor', userselection='RUM') }}", method="GET" >
+                    <button class="add-option sm-option-button border-box cursor-pointer">
+                        <h1>Add Rum (21+ required)</h1>
+                    </button>
+                 </a>
+                 <a href="{{ url_for('Flavor', userselection='PinaColado') }}", method="GET" >
+                    <button class="add-option sm-option-button border-box cursor-pointer">
+                        <h1>Add Piña Colada Flavoring</h1>
+                    </button>
+                 </a>
+                 <a href="{{ url_for('Flavor', userselection='Orange') }}", method="GET" >
+                    <button class="add-option sm-option-button border-box cursor-pointer">
+                        <h1>Add Orange Flavoring</h1>
+                    </button>
+                 </a>
             </div>
-
         </div>
     </main>
   </body>

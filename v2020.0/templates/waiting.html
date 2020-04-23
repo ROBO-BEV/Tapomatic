@@ -34,21 +34,11 @@
 
     </script>
 <main>
-
         <div class="container flex-column flex-container justify-space-between">
-
-            <div>
-                <img class="logo-img" src="../static/images/coco-taps.jpeg" alt="coco taps logo">
-            </div>
-
-             <div>
+            <div class="flex-container justify-center">
                 <iframe src="https://player.vimeo.com/video/397678826" width="640" height="362" frameborder="0" allow="autoplay"></iframe>
-             </div>
             </div>
             <div class="text-center">
-                <a href="{{ url_for('CompleteScreen', userselection='Complete') }}", method="GET" >
-                      <p>PRESS</p>
-                    </a>
                 <h1 class="count-down">09s</h1>
             </div>
             <div class="flex-container justify-center">
@@ -59,6 +49,7 @@
                 </div>
             </div>
         </div>
+      <a href="{{ url_for('CompleteScreen', userselection='Complete') }}", method="GET" ><p>PRESS</p></a>
     </main>
   </body>
 </html>

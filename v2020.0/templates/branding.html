@@ -52,35 +52,47 @@
                 <h1 class="option-title">Select image for the side of our coconut from list below</h1>
             </div>
             <div class="flex-container justify-space-between flex-wrap">
-                <div class="side-option border-box">
+                <div class="side-option border-box text-center">
                     <a href="{{ url_for('Health', userselection='coco_taps') }}", method="GET" >
-                        <img class="side-option-img" src="../static/images/coco-taps.jpeg" alt="coco taps option">
-                     </a>
-                </div>
-                <div class="side-option border-box">
-                    <a href="{{ url_for('Health', userselection='red_bull') }}", method="GET" >
-                    <img class="side-option-img" src="../static/images/red-bull.jpeg" alt="red bull option">
+                    <button >
+                            <img class="side-option-img" src="../static/images/coco-taps.jpeg" alt="coco taps option">
+                    </button>
                     </a>
                 </div>
-                <div class="side-option border-box">
-                    <a href="{{ url_for('Health', userselection='island') }}", method="GET" >
-                    <img class="side-option-img" src="../static/images/tresaure-island.PNG" alt="treasure island option">
-                    </a>
+                <div class="side-option border-box text-center">
+                <a href="{{ url_for('Health', userselection='red_bull') }}", method="GET" >
+                    <button>
+                        <img class="side-option-img" src="../static/images/red-bull.jpeg" alt="red bull option">
+                    </button>
+                </a>
                 </div>
-                <div class="side-option border-box">
-                    <a href="{{ url_for('Health', userselection='caesars_palace') }}", method="GET" >
-                    <img class="side-option-img" src="../static/images/caesars-palace.jpeg" alt="caesars palace option">
-                    </a>
+                <div class="side-option border-box text-center">
+                <a href="{{ url_for('Health', userselection='island') }}", method="GET" >
+                    <button>
+                     <img class="side-option-img" src="../static/images/tresaure-island.PNG" alt="treasure island option">
+                    </button>
+                </a>
                 </div>
-                <div class="side-option border-box">
-                    <a href="{{ url_for('Health', userselection='rio_side') }}", method="GET" >
-                    <img class="side-option-img" src="../static/images/rio.jpeg" alt="rio side option">
-                    </a>
+                <div class="side-option border-box text-center">
+                <a href="{{ url_for('Health', userselection='caesars_palace') }}", method="GET" >
+                    <button>
+                        <img class="side-option-img" src="../static/images/caesars-palace.jpeg" alt="caesars palace option">
+                    </button>
+                </a>
                 </div>
-                <div class="side-option border-box">
-                    <a href="{{ url_for('Health', userselection='mgm_grand') }}", method="GET" >
-                    <img class="side-option-img" src="../static/images/mgm-grand.jpeg" alt="mgm grand option">
-                    </a>
+                <div class="side-option border-box text-center">
+                <a href="{{ url_for('Health', userselection='rio_side') }}", method="GET" >
+                    <button>
+                        <img class="side-option-img" src="../static/images/rio.jpeg" alt="rio side option">
+                    </button>
+                </a>
+                </div>
+                <div class="side-option border-box text-center">
+                <a href="{{ url_for('Health', userselection='mgm_grand') }}", method="GET" >
+                    <button>
+                        <img class="side-option-img" src="../static/images/mgm-grand.jpeg" alt="mgm grand option">
+                    </button>
+                </a>
                 </div>
             </div>
         </div>
