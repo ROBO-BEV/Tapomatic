@@ -35,9 +35,9 @@ VCC_3_3V_NAME = "BOARD1"     		# 3.3 Volts @ upto 0.050 Amps = 0.165 Watts https
 VCC_5V = 2
 VCC_5V_NAME = "BOARD2"        		# 5 Volts @ upto ~1.5 Amps (Power Adapter - Pi usgae) = 7.5 Watts https://pinout.xyz/pinout/pin2_5v_power
 I2C_SDA0 = 3					
-PI0_I2C_SDA1_NAME  = "BOARD3"		# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin3_gpio2
+I2C_SDA1_NAME  = "BOARD3"		# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin3_gpio2
 I2C_SCL0 = 5
-PI0I2C_SCL1_NAME = "BOARD5"			# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin5_gpio3
+I2C_SCL1_NAME = "BOARD5"			# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin5_gpio3
 TXD = 8
 TXD_NAME = "BOARD8" 				# UART transmit pin / Serial Port https://pinout.xyz/pinout/pin8_gpio14 
 RXD = 10	

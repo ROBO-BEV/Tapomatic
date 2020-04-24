@@ -125,6 +125,8 @@ class Actuator:
 	# return NOTHING
 	###
 	def __init__(self, currentNumOfActuators, aType, pins, partNumber, direction):
+		self.DebugObject = Debug(True)
+		
 		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 		for i in pins:
 			self.wires[i] = pins[i]

@@ -38,7 +38,9 @@ class LASER:
 	LASER_CONSTANT = 0.05264472  	#TODO Adjust this until LASER branding looks good
 
 	def __init__(self, powerLevel):
-		self.powerLevel = 8.0 				# Initialize to 8.0 Watts
+		self.DebugObject = Debug(True)
+		
+		elf.powerLevel = 8.0 				# Initialize to 8.0 Watts
 		self.brandingArt = COCOTAPS_LOGO	# Initialize to standard CocoTaps logo
 
 	def LoadLImage(fileName):
