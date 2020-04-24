@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
+"""
 __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-04-06"
+__date__ =    "Late Updated: 2020-04-24"
 __doc__ =     "Logic to run Tapomatic back-end services (i.e. not GUI)"
+"""
 
 # Useful standard Python system jazz
 import sys, time, traceback, argparse, string
@@ -17,10 +19,12 @@ import socket
 import pynput.keyboard
 from pynput.keyboard import Key, Controller
 
-# Custom Robotic Beverage Technologies Inc code
-from CocoDrink import *         	# Store valid CoCoTaps drink configurations
+# Custom CocoTaps and Robotic Beverage Technologies Inc code
+from CocoDrink import *         # Store valid CoCoTaps drink configurations
 from Actuator import *         	# Modular plug and play control of motors, servos, and relays
 from Debug import *		    	# Configure datalogging parameters and debug printing control
+from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
+#from LASER import *		    # Enables LASER movement and image warping around coconut
 
 # Create a command line parser
 parser = argparse.ArgumentParser(prog = "Tapomatic v2020.0", description = __doc__, add_help=True)
@@ -33,22 +37,6 @@ parser.add_argument("-f", "--filename", type=str, default="Update.py", help="Loc
 parser.add_argument("-l", "--loop", type=int, default=0, help="Set to 1 to loop this driver program.")
 args = parser.parse_args()
 
-# Raspberry Pi B+ refernce pin CONSTANTS as defined in ???rc.local script???
-NUM_GPIO_PINS = 15                       # Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
-MAX_NUM_A_OR_B_PLUS_GPIO_PINS = 40      # Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
-MAX_NUM_A_OR_B_GPIO_PINS = 26           # Pins 1 to 26 on Raspberry Pi A or B
-NUM_OUTPUT_PINS = 8                     # This software instance of Raspberry Pi can have up to eight output pins
-NUM_INPUT_PINS = 7                      # This software instance of Raspberry Pi can have up to seven input pins
-
-# External WWW IP addresses
-LINODE_MYSQL_IP = "45.79.104.34"
-RAVEN_DB_IP = "TODO"
-
-# Internal local network IP addresses and ports
-GUI_PI_IP = "127.168.1.69"
-VEND_PI_IP = "127.168.1.42"
-UDP_PORT = 5005
-
 # Over The Air (OTA) Updating Configurations
 VERSION = "2020.0"
 PRODUCT_MODE = "PRODUCT"        		# Final product configuration
@@ -56,45 +44,13 @@ FIELD_MODE   = "FIELD"					# Non-Techanical repair person configuration
 TESTING_MODE = "TESTING"				# Internal developer configuration
 
 # Tapomatic v2020.0 kiosk can process upto 2 coconuts in parallel
-MAX_VEND_QUEUE_SIZE = 2
+MAX_VEND_QUEUE_SIZE = 1
 
 # Max time (in seconds) each of the three processes (Drilling, Tapping, Top Off) takes
 MAX_DRILLING_TIME    = 15
 MAX_TAPPING_TIME     = 10
 MAX_TOPPING_OFF_TIME = 5
-
-# Exit case CONSTANTS for debug logs
-TORQUE_EXIT_CASE = -1
-DEPTH_EXIT_CASE  = -2
-TIME_EXIT_CASE   = -3
-
-# Raspberry Pi 4B refernce pin constants as defined in ???rc.local script???
-NUM_PI_GPIO_PINS = 8              		# Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
-MAX_NUM_PI_A_OR_B_PLUS_GPIO_PINS = 40 	# Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
-MAX_NUM_PI_A_OR_B_GPIO_PINS = 26      	# Pins 1 to 26 on Raspberry Pi A or B
-NUM_PI_OUTPUT_PINS = 4                	# This software instance of Raspberry Pi can have up to four output pins
-NUM_PI_INPUT_PINS = 4                 	# This software instance of Raspberry Pi can have up to four input pins
-#UART pins in BCM mode are: 14, 15 /dev/ttyAMA0
-
-# Wire value CONTSTANTS 
-# Raspberry Pi 4 Pin Layout https://pinout.xyz/pinout/pin1_3v3_power
-NO_PIN = -1  						#TODO This constant may not be needed :)
-NO_WIRE = 0
-VCC_3_3V = 1
-VCC_3_3V_NAME = "BOARD1"     		# 3.3 Volts @ upto 0.050 Amps = 0.165 Watts https://pinout.xyz/pinout/pin1_3v3_power
-VCC_5V = 2
-VCC_5V_NAME = "BOARD2"        		# 5 Volts @ upto ~1.5 Amps (Power Adapter - Pi usgae) = 7.5 Watts https://pinout.xyz/pinout/pin2_5v_power
-I2C_SDA = 3					
-I2C_SDA_NAME = "BOARD3"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin3_gpio2
-I2C_SCL = 5
-I2C_SDA_NAME = "BOARD5"				# Fixed, 1.8 kohms pull-up to 3.3v https://pinout.xyz/pinout/pin5_gpio3
-TXD = 8
-TXD_NAME = "BOARD8" 				# UART transmit pin / Serial Port https://pinout.xyz/pinout/pin8_gpio14 
-RXD = 10	
-RXD_NAME = "BOARD10" 				# UART recieve pin / Serial Port https://pinout.xyz/pinout/pin10_gpio15					
-GND = "BOARD6&9&14&20&25&30&34&39"	# Digital Ground (0 Volts) https://pinout.xyz/pinout/ground
-PWM0 = 12
-PWM0_NAME = "BOARD12"				#Pulse Width Modulation https://pinout.xyz/pinout/pin12_gpio18 
+MAX_LASER_TIME = MAX_DRILLING_TIME + MAX_TAPPING_TIME + MAX_TOPPING_OFF_TIME
 
 #The TODO?17? actuators CONSTANTS
 ROTATIONTAL_TOOL_MOTOR = 0
@@ -198,7 +154,7 @@ def StopDrill(actuatorObjects):
 ###
 def SwapTool(newTool):
     if(currentTool == newTool):
-        Debug.Dprint("DO NOTHING")
+        Debug.Dprint(Debug(True), "DO NOTHING")
     elif(newTool == DRILL_BIT_TOOL):
         GoToToolHome()
         LockOldTool()
@@ -208,7 +164,7 @@ def SwapTool(newTool):
         LockOldTool()
         UnlockNewTool()
     else:
-        Debug.Dprint("ERROR: You attempted to use a tool not supported by Tapomatic v" + VERSION)
+        Debug.Dprint(Debug(True), "ERROR: You attempted to use a tool not supported by Tapomatic v" + VERSION)
 
 ###
 # Top off coconut by cutting striaght across with horizontal knive
@@ -295,6 +251,8 @@ def moveConveyor(actuatorObjects, direction, numOfPositions):
 
 if __name__ == "__main__":
 
+    DebugObject = Debug(True)  #https://github.com/ROBO-BEV/Tapomatic/issues/8
+
     # TODO Does this work? or do I need to call actuatoObjects[i].???
     ROTATIONTAL_TOOL_MOTOR = actuatorObjects[0]
 
@@ -307,90 +265,51 @@ if __name__ == "__main__":
 
     Y1_LINEAR_CUT_MOTOR = actuatorObjects[6]
     Y2_LINEAR_CUT_MOTOR = actuatorObjects[7]
-    X1_LINEAR_POSITION_MOTOR = actuatorObjects[8]
+    X1_LINEAR_KNIFE_POSITION_MOTOR = actuatorObjects[8]
 
     Y1_LINEAR_COVER_MOTOR = actuatorObjects[9]
     Y2_LINEAR_COVER_MOTOR = actuatorObjects[10]
 
-    FLAVOR1_PERISTALTIC_PUMP = actuatorObjects[11]
-    FLAVOR2_PERISTALTIC_PUMP = actuatorObjects[12]
-    FLAVOR3_PERISTALTIC_PUMP = actuatorObjects[13]
-    FLAVOR4_PERISTALTIC_PUMP = actuatorObjects[14] # TODO REMOVE AND RENUMBER? 
+    LIQ_1_PERISTALTIC_PUMP = actuatorObjects[11]
+    LIQ_2_PERISTALTIC_PUMP = actuatorObjects[12]
+    LIQ_3_PERISTALTIC_PUMP = actuatorObjects[13]
+    LIQ_4_PERISTALTIC_PUMP = actuatorObjects[14] 
+    LIQ_5_PERISTALTIC_PUMP = actuatorObjects[14]
+    LIQ_6_PERISTALTIC_PUMP = actuatorObjects[15] 
 
-    Z_LINEAR_LASER_STEPPER_MOTOR = actuatorObjects[15]
-    X_LINEAR_LASER_STEPPER_MOTOR = actuatorObjects[16]
-    Y_LINEAR_LASER_STEPPER_MOTOR  = actuatorObjects[17]
+    Z_LINEAR_LASER_STEPPER_MOTOR = actuatorObjects[16]
+    X_LINEAR_LASER_STEPPER_MOTOR = actuatorObjects[17]
+    Y_LINEAR_LASER_STEPPER_MOTOR  = actuatorObjects[18]
 
-    ROTATIONAL_DISK_STEPPER_MOTOR = actuatorObjects[18]
+    ROTATIONAL_DISK_STEPPER_MOTOR = actuatorObjects[19]
 
     currentTool = NO_TOOL           # Default is having no tool attached to 3-axis system
     currentKnifeSectionInUse = 0    # Always attempt to used section 0 when code restarts
 
-    currentNumberOfOrders = 0
-    numOfOrdersInProgress = 0
+    numberOfOrdersCompleted = 0
+    numberOfOrdersInProgress = 0
 
-    tempDrink = CocoDrink(CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE)
-    vendQueue[MAX_VEND_QUEUE_SIZE] =  [tempDrink, tempDrink, tempDrink]
+    TempDrink = CocoDrink(CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE)
+    vendQueue[MAX_VEND_QUEUE_SIZE] =  [tempDrink]
+
+    GuiPi = RaspPi()
+    BackendPi = RaspPi()
 
     # DEFINE ALL ACTUATORS INSIDE TAPOMATIC ATTACH TO ADAFRUIT DC & STEPPER MOTOR HAT 2348
 	# https://upverter.com/design/blazesandersinc/tapomatic-v2020-1/
-	cbdHealthAdditivePins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
-	cbdHealthAdditiveMotor = Actuator("R", cbdHealthAdditivePins, "CBD Motor: Zjchao 202", Actuator.CW)
-	immunityHealthAdditivePins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
-	immunityHealthAdditiveMotor = Actuator("R", ImmunityHealthAdditivePins, "Immunity Boost Motor: Zjchao 202", Actuator.CW)
-	vitaminsHealthAdditivePins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
-	vitaminsHealthAdditiveMotor = Actuator("R", vitaminsHealthAdditivePins, "Daily Vitamins Motor: Zjchao 202", Actuator.CW)
+    immunityHealthAdditivePins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]	
+    immunityHealthAdditiveMotor = Actuator("R", ImmunityHealthAdditivePins, "Immunity Boost Motor: Zjchao 202", Actuator.CW)
+    vitaminsHealthAdditivePins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    vitaminsHealthAdditiveMotor = Actuator("R", vitaminsHealthAdditivePins, "Daily Vitamins Motor: Zjchao 202", Actuator.CW)
 
-	rumFlavorPins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
-	rumFlavorMotor = Actuator("R", rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)
-	pinaColadaFlavorPins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
-	pinaColadaFlavorMotor = Actuator("R", pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW)
-	orangeFlavorPins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
-	orangeFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)
-
-
-
-	CBD = 0
-    IMMUNITY_BOOST = 1
-    DAILY_VITAMINS = 2
-    RUM = 3
-    PINA_COLADA = 4
-    ORANGE_JUICE = 5
-    PINEAPPLE_FLAVOR = 6
-    VANILLA = 7
-    ENERGY_BOOST = 8
-    ORGINAL_RED_BULL = 9
-
-
-    cupSepServo1Pins = [VCC_5V, GND, 5]  		# GPIO5 = BOARD29 = DC_STEPPER_HAT???
-    cupSeparatorServo1 = Actuator("S", cupSepServo1Pins, "Cup Separator Servo 1: Seamuing MG996R", Actuator.CW)
-    cupSepServo2Pins = [VCC_5V, GND, 6]  		# GPIO6 = BOARD31 = DC_STEPPER_HAT???
-    cupSeparatorServo2 = Actuator("S", cupSepServo2Pins, "Cup Separator Servo 2: Seamuing MG996R", Actuator.CCW)
-
-    coldBrewCoffeePins = [PWR_12V, GND, ??]	#TODO GPIO?? = BOARD?? = DC_STEPPER_HAT???
-    coldBrewCoffeeMotor1 =  Actuator("R", coldBrewCoffeePins, "Cold Brew Coffee Motor: Zjchao 202", Actuator.CW)
-
-    simpleSyrupSugarPins = [PWR_12V, GND, 4]	#TODO GPIO4 = BOARD7 = DC_STEPPER_HAT???
-    simpleSyrupSugarMotor =  Actuator("R", simpleSyrupSugarPins, "Simple Syrup Sugar Motor: Zjchao 202", Actuator.CW)
-    carmelSugarPins = [PWR_12V, GND, 17]		#TODO GPIO17 = BOARD11 = DC_STEPPER_HAT???
-    carmelSugarMotor =  Actuator("R", carmelSugarPins, "Carmel Sugar Motor: Zjchao 202", Actuator.CW)
-    vanillaSugarPins = [PWR_12V, GND, 27]		#TODO GPIO27 = BOARD? = DC_STEPPER_HAT???
-    vanillaSugarMotor = Actuator("R", vanillaSugarPins, "Vanilla Sugar Motor: Zjchao 202", Actuator.CW)
-    chocolateSugarPins = [PWR_12V, GND, 22]		#TODO GPIO22 =
-    chocolateSugarMotor =  Actuator("R", chocolateSugarPins, "Chocolate Sugar Motor: Zjchao 202", Actuator.CW)
-
-    halfHalfMilkPin = [PWR_12V, GND, 18]		#TODO GPIO18 =
-    halfHalfMilkMotor = Actuator("R", halfHalfMilkPin, "Half & Half Milk Motor: Zjchao 202", Actator.CW)
-    almondMilkPin = [PWR_12V, GND, 23]		#TODO GPIO23 =
-    almondMilkMotor = Actuator("R", almondMilkPin, "Almond Milk Motor: Zjchao 202", Actator.CW)
-    oatlyMilkPin = [PWR_12V, GND, 24]		#TODO GPIO24 =
-    oatlyMilkMotor = Actuator("R", oatlyMilkPin, "Oatly Milk Motor: Zjchao 202", Actator.CW)
-
-    #TODO GPIO12 = BOARD? = DC_STEPPER_HAT???   / GPIO16 = BOARD? = DC_STEPPER_HAT???
-    conveyorMotor1Pins = [PWR_12V, GND, VCC_5V, GND, NO_PIN, NO_PIN, 12, 16]
-    conveyorMotor1 = Actuator("M", conveyorMotor1Pins, "Conveyor Motor 1: Mountain ARK Mini T100 Tank SR-Series")
-    conveyorMotor2Pins = [PWR_12V, GND, VCC_5V, GND, NO_PIN, NO_PIN, 12, 16]
-    conveyorMotor2 = Actuator("M", conveyorMotor2Pins, "Conveyor Motor 1: Mountain ARK Mini T100 Tank SR-Series")
+    rumFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    rumFlavorMotor = Actuator("R", rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)
+    pinaColadaFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    pinaColadaFlavorMotor = Actuator("R", pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW)
+    pineappleFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    pineappleFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)	
+    orangeFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    orangeFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)
 
     #TODO GPIO20 = BOARD? = DC_STEPPER_HAT?   / GPIO21 = BOARD? = DC_STEPPER_HAT?
     liftMotor1Pins = [PWR_12V, GND, 20, 21]
@@ -402,8 +321,6 @@ if __name__ == "__main__":
     powderServo1 = Actuator("S", powderServo1Pins, "Powder Servo 1: Seamuing MG996R")
     powderServo2Pins = [VCC_5V, GND, 19]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
     powderServo2 = Actuator("S", powderServo2Pins, "Powder Servo 2: Seamuing MG996R")
-    powderServo3Pins = [VCC_5V, GND, 26]		#TODO GPIO26 = BOARD? = DC_STEPPER_HAT?
-    powderServo3 = Actuator("S", powderServo3Pins, "Powder Servo 3: Seamuing MG996R")
 
     # SEPARATE FULL LIST OF ACTUATOR OBJECTS INTO MORE SPECIFIC ARRAY GROUPINGS
     actuatorObjects = [cupSeparatorServo1, cupSeparatorServo2, simpleSyrupSugarMotor, carmelSugarMotor, vanillaSugarMotor, chocolateSugarMotor, halfHalfMilkMotor, almondMilkMotor, oatlyMilkMotor, conveyorMotor1, conveyorMotor2, liftMotor1, lifeMotor2, powderServo1, powderServo2, powderServo3, coldBrewCoffeeMotor1]
@@ -415,12 +332,12 @@ if __name__ == "__main__":
     powderActuators = [actuatorObjects[13], actuatorObjects[14], actuatorObjects[15]]
     coffeeActuators = [actuatorObjects[16]]
 
-	while(True):
-		for drinkNum in range(0, MAX_VEND_QUEUE_SIZE-1):
-			vendQueue[drinkNum] = getOrder(UDP_FOR_OTHER_PI)
-			if(vendQueue[drinkNum] != Drink.NONE):
-				# VEND SUGAR ADD-ON
-				dropCup(dropCupActuators)
+    while(True):
+        for drinkNum in range(0, MAX_VEND_QUEUE_SIZE-1):
+            vendQueue[drinkNum] = getOrder(UDP_FOR_OTHER_PI)
+            if(vendQueue[drinkNum] != Drink.NONE):
+                # VEND SUGAR ADD-ON
+                dropCup(dropCupActuators)
 				moveConveyor(conveyorActuators, Actuator.FORWARD, 1)
 				actuateSugarMotor(sugarActuators, vendQueue[drinkNum].getSugarType, vendQueue[drinkNum].getSugarLevel)
 
