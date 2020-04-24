@@ -47,27 +47,23 @@
             <div class="text-center">
                 <h1 class="count-down">19s</h1>
             </div>
-            <div class="text-center">
-                <div class="add-option border-box cursor-pointer">
-                    <h1>Add CBD Supplement for Health Benefits </h1>
+            <div class="flex-container flex-column align-center">
                     <a href="{{ url_for('Waiting', userselection='CBD') }}", method="GET" >
-                         <p>Select</p>
+                        <button class="add-option border-box cursor-pointer md-option-button">
+                        <h1>Add CBD Supplement for Health Benefits </h1>
+                        </button>
                     </a>
-                </div>
-                <div class="add-option border-box cursor-pointer">
-                    <h1>Add Immunity Boost Supplement for Health Benefits</h1>
                     <a href="{{ url_for('Waiting', userselection='ImmunityBoost') }}", method="GET" >
-                         <p>Select</p>
+                        <button class="add-option border-box cursor-pointer md-option-button">
+                            <h1>Add Immunity Boost Supplement for Health Benefits</h1>
+                        </button>
                     </a>
-                </div>
-                <div class="add-option border-box cursor-pointer">
-                    <h1>Add Daily Vitamins Supplement for Health Benefits</h1>
                      <a href="{{ url_for('Waiting', userselection='DailyVitamins') }}", method="GET" >
-                         <p>Select</p>
-                    </a>
-                </div>
+                         <button class="add-option border-box cursor-pointer md-option-button">
+                             <h1>Add Daily Vitamins Supplement for Health Benefits</h1>
+                         </button>
+                     </a>
             </div>
-
         </div>
     </main>
   </body>

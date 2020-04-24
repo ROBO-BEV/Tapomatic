@@ -46,12 +46,11 @@
                 <img class="logo-img" src="../static/images/coco-taps.jpeg" alt="coco taps logo">
             </div>
             <div class="flex-container justify-center">
-                <div class="border-box text-center text-container">
-                    <h1>Place coconut in green circle and press here to start</h1>
-                    <a href="{{ url_for('TapOrCutScreen', userselection='TapOrCutScreen') }}", method="GET" >
-                      <p>PRESS</p>
+                    <a href="{{ url_for('TapOrCutScreen', userselection='TapOrCutScreen') }}", method="GET">
+                       <button class="border-box text-center text-container">
+                        <h1>Place coconut in green circle and press here to start</h1>
+                       </button>
                     </a>
-                </div>
             </div>
             <div class="flex-container justify-center">
                 <div class="cursor-pointer flex-container flex-column">

@@ -43,30 +43,27 @@
                         We are performing inreverseable actions in parallel with
                         your selections to speed up the vending process.
                     </p>
-                    <button class="cursor-pointer"><span class="button">CANCEL</span></button>
                     <a href="{{ url_for('WelcomeScreen', userselection='CANCEL') }}", method="GET" >
-                      <p>CANCEL</p>
+                        <button class="cursor-pointer border-box"><span class="button">CANCEL</span></button>
                     </a>
                 </div>
             </div>
             <div class="flex-container justify-space-between flex-wrap sm-justify-center">
                 <div class="option-box flex-container flex-column justify-center align-center cursor-pointer">
-                    <div class="border-box text-center">
-                        <h1>Press to cut top off</h1>
-                        <a href="{{ url_for('Branding', userselection='CutTopOff') }}", method="GET" >
-                         <p>PRESS</p>
-                        </a>
-                    </div>
+                    <a href="{{ url_for('Branding', userselection='CutTopOff') }}", method="GET" >
+                        <button class="border-box text-center">
+                            <h1>Press to cut top off</h1>
+                        </button>
+                    </a>
                     <img class="down-arrow" src="../static/images/stretched-down-arrow.png" alt="down arrow">
                     <img class="product-img" src="../static/images/cut-top.jpeg" alt="cut top coco tap">
                 </div>
                 <div class="option-box flex-container flex-column justify-center align-center cursor-pointer">
-                    <div class="border-box text-center">
-                        <h1>Press to tap coco</h1>
-                        <a href="{{ url_for('Branding', userselection='TapCoco') }}", method="GET" >
-                         <p>PRESS</p>
-                        </a>
-                    </div>
+                    <a href="{{ url_for('Branding', userselection='TapCoco') }}", method="GET" >
+                        <button class="border-box text-center">
+                            <h1>Press to cut top off</h1>
+                        </button>
+                    </a>
                     <img class="down-arrow" src="../static/images/stretched-down-arrow.png" alt="down arrow">
                     <img class="product-img" src="../static/images/top-tap.jpeg" alt="tap coco">
                 </div>
