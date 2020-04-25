@@ -4,7 +4,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-04-21"
+__date__ =    "Late Updated: 2020-04-25"
 __doc__ =     "Class to define flavors and health additivies in a CocoDrink"
 
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
@@ -29,7 +29,7 @@ class CocoDrink:
 	ORANGE_FLAVOR = 6
 	MAX_DRINK_NAME = ORANGE_FLAVOR
     
-    # Extra add-ons for v2021.0
+    # Extra add-ons for v2021.1 
 	CBD = 7
 	ENERGY_BOOST = 8
 	ORGINAL_RED_BULL = 9
@@ -38,8 +38,13 @@ class CocoDrink:
 	MAX_ADD_ON_LEVEL = 5
 	MIN_ADD_ON_LEVEL = 0
 	
+	# User GUI.py program flow selection CONSTANTS
+	TAPPED = 0
+	TOPPED_OFF = 1
+	FLAVOR = 2
+	HEALTH_ADDITTIVE = 3
 	
-	def __init__(self, drinkName, addOnFlavor, addOnFlavorLevel, addOnHealthAdditive, addOnHealthAdditiveLevels, brandingArt):
+	def __init__(self, drinkName, addOnFlavor, addOnFlavorLevel, addOnHealthAdditive, addOnHealthAdditiveLevels, tapOrCut, flavorOrAdditive, brandingArt):
 		"""
 		Constructor to initialize an CocoDrink object
 
@@ -65,6 +70,8 @@ class CocoDrink:
 		self.addOnFlavorLevel = addOnFlavorLevel
 		self.addOnHealthAdditive = addOnHeathAdditive
 		self.addOnHealthAdditiveLevel = addOnHealthAdditiveLevel
+		self.tapOrCutFlow = tapOrCutFlow
+		self.flavorOrAdditiveFlow = flavOrOrAdditive
 		self.brandingArt = brandingArt
         
 		if(addOnFlavorLevel > MAX_ADD_ON_LEVEL or addOnHealthAdditiveLevel > MAX_ADD_ON_LEVEL):
@@ -114,6 +121,24 @@ class CocoDrink:
 		
 		Debug.Dprint(self.DebugObject, "Cleaning up CocoDrink() object in __exit__ ")
 
+	
+	def GetAddOn(self, lType):
+		"""
+		Determine the type of add-on the user selected from GUI.py and branch code flow 
+		
+		Key arguments:
+		lType -- Type of liquid add-on to inject into thr coconut
+		
+		Return value:
+		addOn - CocoDrink CONSTANT based on user selection
+		
+		"""
+		if(lType == FLAVOR):
+			addOn = GetFlavorType(self)
+		elif(lType == HEALTH_ADDITTIVE):
+			addOn = GetHealthAdditiveType(self)
+			
+		return addOn
 	
 	def GetFlavorType(self):
 		"""
