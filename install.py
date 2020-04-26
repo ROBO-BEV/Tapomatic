@@ -67,12 +67,14 @@ if __name__ == "__main__":
 	# When using Mac code flows here 
 	if(args.Computer_Type == "Mac" or args.Computer_Type == "mac" or args.Computer_Type == "MAC"):
 		# Install a real package manager (Homebrew) on the Mac :) https://brew.sh
-		check_call("git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew", shell=True)
-		check_call("mkdir ~/.linuxbrew/bin", shell=True)
-		check_call("vn -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin", shell=True)
-		check_call("eval $(~/.linuxbrew/bin/brew shellenv)", shell=True)
+		check_call("/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+", shell=True)
+		#check_call("git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew", shell=True)
+		#check_call("mkdir ~/.linuxbrew/bin", shell=True)
+		#check_call("vn -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin", shell=True)
+		#check_call("eval $(~/.linuxbrew/bin/brew shellenv)", shell=True)
 		# Flask requires Python 3 to work
-		check_call("brew install python3-pip", shell=True)   	
+		check_call("brew install python3", shell=True)
 		check_call("brew install pipenv", shell=True)
 		check_call("brew install docutils", shell=True)
 		check_call("brew install numpy", shell=True) 
