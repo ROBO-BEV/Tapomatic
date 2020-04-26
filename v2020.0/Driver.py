@@ -249,6 +249,10 @@ def moveConveyor(actuatorObjects, direction, numOfPositions):
 	else:
 		print("INVALID CONVEYOR DIRECTION PASSED TO FUNCTION - TRY FORWARD OR BACKWARDS")
 
+
+	def GetOrder():
+		print("TODO UDP communications")
+		
 if __name__ == "__main__":
 
     DebugObject = Debug(True)  #https://github.com/ROBO-BEV/Tapomatic/issues/8
@@ -289,7 +293,7 @@ if __name__ == "__main__":
     numberOfOrdersCompleted = 0
     numberOfOrdersInProgress = 0
 
-    TempDrink = CocoDrink(CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE)
+    TempDrink = CocoDrink(CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE)
     vendQueue[MAX_VEND_QUEUE_SIZE] =  [tempDrink]
 
     GuiPi = RaspPi()
@@ -312,50 +316,70 @@ if __name__ == "__main__":
     orangeFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)
 
     #TODO GPIO20 = BOARD? = DC_STEPPER_HAT?   / GPIO21 = BOARD? = DC_STEPPER_HAT?
-    liftMotor1Pins = [PWR_12V, GND, 20, 21]
-    liftMotor1 = Actuator("M", liftMotor1Pins, "Lift Motor 1: ECO L11TGF900NB100-T1")
-    liftMotor2Pins = [PWR_12V, GND, 20, 21]
-    liftMotor2 = Actuator("M", liftMotor2Pins, "Lift Motor 2: ECO L11TGF900NB100-T1")
+    liftMotor1Pins = [PWR_12V, GND, BOARD4]
+    liftMotor1 = Actuator("M", liftMotor1Pins, "Lift Motor 1: TODO")
+    liftMotor2Pins = [PWR_12V, GND, BOARD4]
+    liftMotor2 = Actuator("M", liftMotor2Pins, "Lift Motor 2: TODO ECO L11TGF900NB100-T1")
 
-    powderServo1Pins = [VCC_5V, GND, 13]		#TODO GPIO13 = BOARD? = DC_STEPPER_HAT?
+    powderServo1Pins = [VCC_5V, GND, BOARD7]		#TODO GPIO13 = BOARD? = DC_STEPPER_HAT?
     powderServo1 = Actuator("S", powderServo1Pins, "Powder Servo 1: Seamuing MG996R")
-    powderServo2Pins = [VCC_5V, GND, 19]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
+    powderServo2Pins = [VCC_5V, GND, BOARD11]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
     powderServo2 = Actuator("S", powderServo2Pins, "Powder Servo 2: Seamuing MG996R")
-
+    powderMixingServo1Pins = [VCC_5V, GND, BOARD13]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
+    powderMixngServo1 = Actuator("S", powderServo2Pins, "Powder Servo 2: Seamuing MG996R")
+    
+	
     # SEPARATE FULL LIST OF ACTUATOR OBJECTS INTO MORE SPECIFIC ARRAY GROUPINGS
-    actuatorObjects = [cupSeparatorServo1, cupSeparatorServo2, simpleSyrupSugarMotor, carmelSugarMotor, vanillaSugarMotor, chocolateSugarMotor, halfHalfMilkMotor, almondMilkMotor, oatlyMilkMotor, conveyorMotor1, conveyorMotor2, liftMotor1, lifeMotor2, powderServo1, powderServo2, powderServo3, coldBrewCoffeeMotor1]
-    dropCupActuators = [actuatorObjects[0], actuatorObjects[1]]
-    sugarActuators = [actuatorObjects[2], actuatorObjects[3], actuatorObjects[4], actuatorObjects[5]]
-    milkActuators = [actuatorObjects[6], actuatorObjects[7], actuatorObjects[8]]
-    conveyorActuators = [actuatorObjects[9], actuatorObjects[10]]
-    liftActuators = [actuatorObjects[11], actuatorObjects[12]]
-    powderActuators = [actuatorObjects[13], actuatorObjects[14], actuatorObjects[15]]
-    coffeeActuators = [actuatorObjects[16]]
-
+    ActuatorObjects = []
+    fluidActuators = [actuatorObjects[0], actuatorObjects[1]]
+    powderActuators = [actuatorObjects[2], actuatorObjects[3], actuatorObjects[4], actuatorObjects[5]]
+    liftingActuators = [actuatorObjects[11], actuatorObjects[12]]
+    cuttingActuators = [3 items]
+    coverActuators = [2 items]
+    
+    LaserObject = LASER(LASER.HIGH_POWER)
+    guiReady = False 
     while(True):
-        for drinkNum in range(0, MAX_VEND_QUEUE_SIZE-1):
-            vendQueue[drinkNum] = getOrder(UDP_FOR_OTHER_PI)
-            if(vendQueue[drinkNum] != Drink.NONE):
-                # VEND SUGAR ADD-ON
-                dropCup(dropCupActuators)
-				moveConveyor(conveyorActuators, Actuator.FORWARD, 1)
-				actuateSugarMotor(sugarActuators, vendQueue[drinkNum].getSugarType, vendQueue[drinkNum].getSugarLevel)
+    	for drinkNum in range(0, MAX_VEND_QUEUE_SIZE-1):
+    		try:
+    			vendQueue[drinkNum] = GetOrder(UDP_GUI_PI)
+    			guiReady = True
+    		catch ???:
+    			guiReady = False
+    			
+    		
+    		if(guiReady == True and vendQueue[drinkNum] != Drink.NONE):
+    			artFilename = vendQueue[drinkNum].GetBrandingArt()
+    			LaserObject.LoadImage(artFilename)
+    						actuatePowder(vendQueue[drinkNum].GetAddOn())
+    		if(vendQueue[drinkNum].GetFlow() == CocoDrink.TAPPED):
+    			Run(tappingAcutors)
+    		else:
+    			Run(cuttingActuators)
+			
+			
+			
+			
+			else:
+				Debug.Dprint(Debug(True), "No orders in queue")
+				time.sleep(0.1) #Pause for 100 ms to slow down while loop and reduce CPU usage 
+				
+				
+			# VEND MILK ADD-ON
+			vendQueue[drinkNum+1] = getOrder(UDP_FOR_OTHER_PI)
+			dropCup(dropCupActuators)
+			moveConveyor(conveyorActuators, Actuator.FORWARD, 1)
+			actuateMilkMotor(milkActuators, vendQueue[drinkNum].getMilkType, vendQueue[drinkNum].getMilkLevel)
+			actuateSugarMotor(sugarActuators, vendQueue[drinkNum+1].getSugarType, vendQueue[drinkNum+1].getSugarLevel)
 
-				# VEND MILK ADD-ON
-				vendQueue[drinkNum+1] = getOrder(UDP_FOR_OTHER_PI)
-				dropCup(dropCupActuators)
-				moveConveyor(conveyorActuators, Actuator.FORWARD, 1)
-				actuateMilkMotor(milkActuators, vendQueue[drinkNum].getMilkType, vendQueue[drinkNum].getMilkLevel)
-				actuateSugarMotor(sugarActuators, vendQueue[drinkNum+1].getSugarType, vendQueue[drinkNum+1].getSugarLevel)
+			# VEND POWDER ADD-ON
+			vendQueue[drinkNum+2] = getOrder(UDP_FOR_OTHER_PI)
+			dropCup(dropCupActuators)
+			moveConveyor(conveyorActuators, Actuator.FORWARD, 1)
+			actuatePowderServo(powderActuators vendQueue[drinkNum].getPowderType)
+			actuateMilkMotor(milkActuators, vendQueue[drinkNum+1].getMilkType, vendQueue[drinkNum].getMilkLevel)
+			actuateSugarMotor(sugarActuators, vendQueue[drinkNum+2].getSugarType, vendQueue[drinkNum+1].getSugarLevel)
 
-				# VEND POWDER ADD-ON
-				vendQueue[drinkNum+2] = getOrder(UDP_FOR_OTHER_PI)
-				dropCup(dropCupActuators)
-				moveConveyor(conveyorActuators, Actuator.FORWARD, 1)
-				actuatePowderServo(powderActuators vendQueue[drinkNum].getPowderType)
-				actuateMilkMotor(milkActuators, vendQueue[drinkNum+1].getMilkType, vendQueue[drinkNum].getMilkLevel)
-				actuateSugarMotor(sugarActuators, vendQueue[drinkNum+2].getSugarType, vendQueue[drinkNum+1].getSugarLevel)
-
-				# LIFT CUP TO USER VEND PORT(S)
-				moveConveyor(conveyorActuators, Actuator.FORWARD, 1)
-				liftCup(liftActuator)
+			# LIFT CUP TO USER VEND PORT(S)
+			moveConveyor(conveyorActuators, Actuator.FORWARD, 1)
+			liftCup(liftActuator)
