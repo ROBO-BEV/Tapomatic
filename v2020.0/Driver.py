@@ -262,7 +262,7 @@ if __name__ == "__main__":
 
     Z_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[1]
     X_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[2]
-    Y_LINEAR_TOOL_STEPPER_MOTOR  = actuatorObjects[3]
+    Y_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[3]
 
     Z1_LINEAR_LIFT_MOTOR = actuatorObjects[4]
     Z2_LINEAR_LIFT_MOTOR = actuatorObjects[5]
@@ -283,7 +283,7 @@ if __name__ == "__main__":
 
     Z_LINEAR_LASER_STEPPER_MOTOR = actuatorObjects[16]
     X_LINEAR_LASER_STEPPER_MOTOR = actuatorObjects[17]
-    Y_LINEAR_LASER_STEPPER_MOTOR  = actuatorObjects[18]
+    Y_LINEAR_LASER_STEPPER_MOTOR = actuatorObjects[18]
 
     ROTATIONAL_DISK_STEPPER_MOTOR = actuatorObjects[19]
 
@@ -300,42 +300,45 @@ if __name__ == "__main__":
     BackendPi = RaspPi()
 
     # DEFINE ALL ACTUATORS INSIDE TAPOMATIC ATTACH TO ADAFRUIT DC & STEPPER MOTOR HAT 2348
-	# https://upverter.com/design/blazesandersinc/tapomatic-v2020-1/
+    # https://upverter.com/design/blazesandersinc/tapomatic-v2020-1/
     immunityHealthAdditivePins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]	
-    immunityHealthAdditiveMotor = Actuator("R", ImmunityHealthAdditivePins, "Immunity Boost Motor: Zjchao 202", Actuator.CW)
+    ImmunityHealthAdditiveMotor = Actuator("R", ImmunityHealthAdditivePins, "Immunity Boost Motor: Zjchao 202", Actuator.CW)
     vitaminsHealthAdditivePins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    vitaminsHealthAdditiveMotor = Actuator("R", vitaminsHealthAdditivePins, "Daily Vitamins Motor: Zjchao 202", Actuator.CW)
+    VitaminsHealthAdditiveMotor = Actuator("R", vitaminsHealthAdditivePins, "Daily Vitamins Motor: Zjchao 202", Actuator.CW)
 
     rumFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    rumFlavorMotor = Actuator("R", rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)
+    RumFlavorMotor = Actuator("R", rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)
     pinaColadaFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    pinaColadaFlavorMotor = Actuator("R", pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW)
+    PinaColadaFlavorMotor = Actuator("R", pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW)
     pineappleFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    pineappleFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)	
+    PineappleFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)	
     orangeFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    orangeFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)
+    OrangeFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)
 
     #TODO GPIO20 = BOARD? = DC_STEPPER_HAT?   / GPIO21 = BOARD? = DC_STEPPER_HAT?
     liftMotor1Pins = [PWR_12V, GND, BOARD4]
-    liftMotor1 = Actuator("M", liftMotor1Pins, "Lift Motor 1: TODO")
+    LiftMotor1 = Actuator("M", liftMotor1Pins, "Lift Motor 1: TODO")
     liftMotor2Pins = [PWR_12V, GND, BOARD4]
-    liftMotor2 = Actuator("M", liftMotor2Pins, "Lift Motor 2: TODO ECO L11TGF900NB100-T1")
+    LiftMotor2 = Actuator("M", liftMotor2Pins, "Lift Motor 2: TODO ECO L11TGF900NB100-T1")
 
     powderServo1Pins = [VCC_5V, GND, BOARD7]		#TODO GPIO13 = BOARD? = DC_STEPPER_HAT?
-    powderServo1 = Actuator("S", powderServo1Pins, "Powder Servo 1: Seamuing MG996R")
+    PowderServo1 = Actuator("S", powderServo1Pins, "Powder Dispensing Servo: Seamuing MG996R")
     powderServo2Pins = [VCC_5V, GND, BOARD11]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
-    powderServo2 = Actuator("S", powderServo2Pins, "Powder Servo 2: Seamuing MG996R")
+    PowderServo2 = Actuator("S", powderServo2Pins, "Powder Dispensing Servo: Seamuing MG996R")
     powderMixingServo1Pins = [VCC_5V, GND, BOARD13]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
-    powderMixngServo1 = Actuator("S", powderServo2Pins, "Powder Servo 2: Seamuing MG996R")
+    PowderMixngServo1 = Actuator("S", powderServo1Pins, "Powder Mixing Servo: Seamuing MG996R")
+    powderMixingServo2Pins = [VCC_5V, GND, BOARD??]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
+    PowderMixngServo2 = Actuator("S", powderServo2Pins, "Powder Mixing Servo: Seamuing MG996R")
     
 	
     # SEPARATE FULL LIST OF ACTUATOR OBJECTS INTO MORE SPECIFIC ARRAY GROUPINGS
-    ActuatorObjects = []
-    fluidActuators = [actuatorObjects[0], actuatorObjects[1]]
-    powderActuators = [actuatorObjects[2], actuatorObjects[3], actuatorObjects[4], actuatorObjects[5]]
-    liftingActuators = [actuatorObjects[11], actuatorObjects[12]]
-    cuttingActuators = [3 items]
-    coverActuators = [2 items]
+    ActuatorObjects = [ImmunityHealthAdditiveMotor, VitaminsHealthAdditiveMotor, RumFlavorMotor, PinaColadaFlavorMotor, PineappleFlavorMotor, OrangeFlavorMotor LiftMotor1, LiftMotor2, PowderServo1, PowderServo2, PowderMixingServo1, PowderMixingServo2, ]
+    
+    FluidActuators = [actuatorObjects[0], actuatorObjects[1]]
+    PowderActuators = [actuatorObjects[2], actuatorObjects[3], actuatorObjects[4], actuatorObjects[5]]
+    LiftingActuators = [actuatorObjects[11], actuatorObjects[12]]
+    CuttingActuators = [3 items]
+    CoverActuators = [2 items]
     
     LaserObject = LASER(LASER.HIGH_POWER)
     guiReady = False 
