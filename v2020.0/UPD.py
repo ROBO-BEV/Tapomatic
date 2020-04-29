@@ -1,21 +1,40 @@
 #!/usr/bin/env python
 
+"""
+__author__  = "Blaze Sanders and Ethan Sharratt"
+__email__   = "blaze@cocotaps.com and sharratt@tethers.com"
+__company__ = "Coco Taps and Tethers Unlimited Inc."
+__status__  = "Development"
+__date__    = "Late Updated: 2020-04-29"
+__doc__     = "Script for sending a file via UDP packets over Ethernet."
+"""
+
 import os, sys, time, traceback, argparse
 sys.path.insert(1, "../../Packages")
-from swiftradio.clients import SwiftRadioEthernet
+from swiftradio.clients import SwiftRadioEthernet #TODO Find or get this file from Tethers Unlimited
 from swiftradio.clients import SwiftUDPClient
 import swiftradio
 
-__author__ = "Ethan Sharratt"
-__email__ = "sharratt@tethers.com"
-__company__ = "Tethers Unlimited Inc."
-__status__ = "Development"
-__date__ = "Late Updated: 08/02/16"
-__doc__ = "Script for sending a file to the radio to be downlinked."
+from RaspberryPiUDPclient import *
 
-STX_PKTSIZE = 1115
+# Lower until 99.9% of packets successfully transit between two Raspberry Pis
+PKTSIZE = 1115
 
-def GetFile(radioIP_Address, port, filename, loop):
+
+def GetFile(serverIP_Address, port, filename, loop):
+	"""
+	In Tapomatic v2020.0 the server in the GUI Pi and the Client is the backend Pi
+
+	Key arguments:
+	serverIP_Address -- The Raspberry Pi that is sending data.
+	port -- Ethernet port communication should occur through
+	filename -- .txt file that contains ALL the orders make on a kiosk ever
+	loop -- ??? 
+
+	Return value:
+	NOTHING
+	"""
+
 	try:
 		# Ensure a file was given.
 		if filename == None:
@@ -24,7 +43,7 @@ def GetFile(radioIP_Address, port, filename, loop):
 
 		# Instantiate a UDP connection to the downlink port.
 		try:
-			udp = SwiftUDPClient(radioIP_Address, port)
+			udp = SwiftUDPClient(serverIP_Address, port)
 			udp.connect()
 		except:
 			print "Could not open a udp client for the provided IPv4 address and port."
