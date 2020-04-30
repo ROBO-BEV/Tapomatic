@@ -40,7 +40,7 @@ class LASER:
 	def __init__(self, powerLevel):
 		self.DebugObject = Debug(True)
 		
-		elf.powerLevel = 8.0 				# Initialize to 8.0 Watts
+		self.powerLevel = 8.0 				# Initialize to 8.0 Watts
 		self.brandingArt = COCOTAPS_LOGO	# Initialize to standard CocoTaps logo
 
 	def LoadLImage(fileName):
