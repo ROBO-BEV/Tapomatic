@@ -9,6 +9,9 @@ __date__    = "Late Updated: 2020-04-29"
 __doc__     = "Script for sending a file via UDP packets over Ethernet."
 """
 
+# Allow UDP communication between different CPUs (e.g. Raspberry Pi, NVIVDIA TX2, etc) using Ethernet
+import socket
+
 import os, sys, time, traceback, argparse
 sys.path.insert(1, "../../Packages")
 from swiftradio.clients import SwiftRadioEthernet #TODO Find or get this file from Tethers Unlimited

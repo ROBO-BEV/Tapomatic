@@ -1,19 +1,16 @@
 #!/usr/bin/env python
 
 """
-__author__ =  "Blaze Sanders"
-__email__ =   "blaze.d.a.sanders@gmail.com"
+__author__  = "Blaze Sanders"
+__email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
-__status__ =  "Development"
-__date__ =    "Late Updated: 2020-04-24"
-__doc__ =     "Logic to run Tapomatic back-end services (i.e. not GUI)"
+__status__  = "Development"
+__date__    = "Late Updated: 2020-04-29"
+__doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
 # Useful standard Python system jazz
 import sys, time, traceback, argparse, string
-
-# Allow UDP communication between different CPUs (e.g. Raspberry Pi, NVIVDIA TX2, etc) using Ethernet
-import socket
 
 # Allow keyboard to control program flow and typing to terminal window
 import pynput.keyboard
@@ -22,9 +19,10 @@ from pynput.keyboard import Key, Controller
 # Custom CocoTaps and Robotic Beverage Technologies Inc code
 from CocoDrink import *         # Store valid CoCoTaps drink configurations
 from Actuator import *         	# Modular plug and play control of motors, servos, and relays
-from Debug import *		    	# Configure datalogging parameters and debug printing control
+from Debug import *		# Configure datalogging parameters and debug printing control
+from UDP import *		# Allow UDP communiation over an Ethernet cable between two computers 
 from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
-#from LASER import *		    # Enables LASER movement and image warping around coconut
+from LASER import *		# Enable LASER movement and image warping around coconut
 
 # Create a command line parser
 parser = argparse.ArgumentParser(prog = "Tapomatic v2020.0", description = __doc__, add_help=True)
@@ -53,12 +51,13 @@ MAX_TOPPING_OFF_TIME = 5
 MAX_LASER_TIME = MAX_DRILLING_TIME + MAX_TAPPING_TIME + MAX_TOPPING_OFF_TIME
 
 #The TODO?17? actuators CONSTANTS
+TOTAL_NUM_OF_ACTUATORS = 17    		#TODO DOUBLE CHECK THIS
 ROTATIONTAL_TOOL_MOTOR = 0
-Z_LINEAR_TOOL_MOTOR    = -1
-X_LINEAR_TOOL_MOTOR    = -2
-Y_LINEAR_TOOL_MOTOR    = -3
-Z1_LINEAR_LIFT_MOTOR   = -4
-Z2_LINEAR_LIFT_MOTOR   = -5
+Z_LINEAR_TOOL_MOTOR    = 1
+X_LINEAR_TOOL_MOTOR    = 2
+Y_LINEAR_TOOL_MOTOR    = 3
+Z1_LINEAR_LIFT_MOTOR   = 4
+Z2_LINEAR_LIFT_MOTOR   = 5
 #TODO
 
 # Tool change CONSTANTS
@@ -67,23 +66,26 @@ DRILL_BIT_TOOL = -1
 TAPPING_SOCKET_TOOL = -2
 #TODO Not needed LASER_BRANDING_TOOL = -3
 
-# If force on top off knive is greater than CONSTANT below it is probably dull
+# If force on topping off knife is greater than DULL_KNIFE_FORCE it is probably dull
 DULL_KNIFE_FORCE = 100	# Units are Newtons
 SHARP = 1
 DULL = 0
-# Array elements 
+NUM_OF_KNIFE_CUTTING_AREAS = 6
+KNIVE_SECTIONS[NUM_OF_KNIFE_CUTTING_AREAS] = [SHARP, SHARP, SHARP, SHARP, SHARP, SHARP]
 # [Side A Section 1, Side A Section 2, Side A Section 3, Side B Section 4, Side B Section 5, Side B Section 6]
-KNIVE_SECTIONS[6] = [SHARP, SHARP, SHARP, SHARP, SHARP, SHARP]
 
-
-def ConfigureKnife():
+def ConfigureKnife(currentKnifeSectionInUse):
     if(Sensor.GetForce(Sensor.FORCE_SENSOR) > DULL_KNIFE_FORCE):
         KNIVE_SECTIONS[currentKnifeSectionInUse] == DULL
         currentKnifeSectionInUse += 1
         MoveKnifePostion(currentKnifeSectionInUse)
 
-def MoveKnifePostion(currentKnifeSectionInUse):
-    print("TODO")
+def MoveKnifePostion(newKnifeSectionInUse):
+    if():
+    else:
+    print("TODO CHECK IF ON SIDE A OR B AND MOVE OR RETURN REPAIT ME ERROR CODE"
+    
+    return )
 
 ###
 # Actuate N number of actuators to LIFT coconuts into the drilling, tapping, and toping off system
@@ -296,52 +298,77 @@ if __name__ == "__main__":
     TempDrink = CocoDrink(CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE)
     vendQueue[MAX_VEND_QUEUE_SIZE] =  [tempDrink]
 
-    GuiPi = RaspPi()
-    BackendPi = RaspPi()
+    # TODO REMOVE? GuiPi = RaspPi()
+    # REMOVE? BackendPi = RaspPi()
 
     # DEFINE ALL ACTUATORS INSIDE TAPOMATIC ATTACH TO ADAFRUIT DC & STEPPER MOTOR HAT 2348
+    # SEPARATE FULL LIST OF ACTUATOR OBJECTS INTO MORE SPECIFIC ARRAY GROUPINGS   
     # https://upverter.com/design/blazesandersinc/tapomatic-v2020-1/
+    ActuatorObjects[TOTAL_NUM_OF_ACTUATORS] = Actuator("TODO", BackendPi.NO_PIN, "Non-Configured Actutator") 
+
     immunityHealthAdditivePins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]	
     ImmunityHealthAdditiveMotor = Actuator("R", ImmunityHealthAdditivePins, "Immunity Boost Motor: Zjchao 202", Actuator.CW)
+    ActuatorObject[0] = ImmunityHealthAdditiveMotor
     vitaminsHealthAdditivePins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     VitaminsHealthAdditiveMotor = Actuator("R", vitaminsHealthAdditivePins, "Daily Vitamins Motor: Zjchao 202", Actuator.CW)
+    ActuatorObject[1] = VitaminsHealthAdditiveMotor
 
     rumFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     RumFlavorMotor = Actuator("R", rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)
+    ActuatorObject[2] = RumFlavorMotor
     pinaColadaFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     PinaColadaFlavorMotor = Actuator("R", pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW)
+    ActuatorObject[3] = PinaColadaFlavorMotor
     pineappleFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     PineappleFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)	
+    ActuatorObject[4] = PineappleFlavorMotor
     orangeFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     OrangeFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)
-
-    #TODO GPIO20 = BOARD? = DC_STEPPER_HAT?   / GPIO21 = BOARD? = DC_STEPPER_HAT?
-    liftMotor1Pins = [PWR_12V, GND, BOARD4]
+    ActuatorObject[5] = OrangeFlavorMotor
+    FluidActuators = [ActuatorObject[0], ActuatorObject[1], ActuatorObject[2], ActuatorObject[3], ActuatorObject[4], ActuatorObject[5]]]
+ 
+    liftMotor1Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
     LiftMotor1 = Actuator("M", liftMotor1Pins, "Lift Motor 1: TODO")
-    liftMotor2Pins = [PWR_12V, GND, BOARD4]
+    ActuatorObject[6] = LiftMotor1
+    liftMotor2Pins = [BackendPi1.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
     LiftMotor2 = Actuator("M", liftMotor2Pins, "Lift Motor 2: TODO ECO L11TGF900NB100-T1")
+    ActuatorObject[7] = LiftMotor2
+    LiftingActuators = [ActuatorObject[6], ActuatorObjects[7]]
 
     powderServo1Pins = [VCC_5V, GND, BOARD7]		#TODO GPIO13 = BOARD? = DC_STEPPER_HAT?
     PowderServo1 = Actuator("S", powderServo1Pins, "Powder Dispensing Servo: Seamuing MG996R")
+    ActuatorObject[8] = PowerServo1
     powderServo2Pins = [VCC_5V, GND, BOARD11]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
     PowderServo2 = Actuator("S", powderServo2Pins, "Powder Dispensing Servo: Seamuing MG996R")
+    ActuatorObject[9] = PowerServo2
     powderMixingServo1Pins = [VCC_5V, GND, BOARD13]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
     PowderMixngServo1 = Actuator("S", powderServo1Pins, "Powder Mixing Servo: Seamuing MG996R")
+    ActuatorObject[10] = PowerMixingServo1
     powderMixingServo2Pins = [VCC_5V, GND, BOARD??]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
     PowderMixngServo2 = Actuator("S", powderServo2Pins, "Powder Mixing Servo: Seamuing MG996R")
+    ActuatorObject[11] = PowerMixingServo2
+    PowderActuators = [ActuatorObject[8], ActuatorObject[9], ActuatorObject[10], ActuatorObject[11]]
+
+    cuttingMotor1Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
     
-	
-    # SEPARATE FULL LIST OF ACTUATOR OBJECTS INTO MORE SPECIFIC ARRAY GROUPINGS
-    ActuatorObjects = [ImmunityHealthAdditiveMotor, VitaminsHealthAdditiveMotor, RumFlavorMotor, PinaColadaFlavorMotor, PineappleFlavorMotor, OrangeFlavorMotor LiftMotor1, LiftMotor2, PowderServo1, PowderServo2, PowderMixingServo1, PowderMixingServo2, ]
+    cuttingMotor2Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
     
-    FluidActuators = [actuatorObjects[0], actuatorObjects[1]]
-    PowderActuators = [actuatorObjects[2], actuatorObjects[3], actuatorObjects[4], actuatorObjects[5]]
-    LiftingActuators = [actuatorObjects[11], actuatorObjects[12]]
-    CuttingActuators = [3 items]
-    CoverActuators = [2 items]
+    knifePositionMotorPins [RaspPi.PWR_12V, RaspPi.GND, RaspPi.TODO]
+    
+    CuttingActuators = [ActuatorObject[12], ActuatorObject[13], ActuatorObject[14]]
+
+    coveringMotor1Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
+    
+    coveringMotor2Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
+    
+    CoverActuators = [ActuatorObject[15], ActuatorObject[16]]
+
     
     LaserObject = LASER(LASER.HIGH_POWER)
     guiReady = False 
+
+   #TODO DELETE [ImmunityHealthAdditiveMotor, VitaminsHealthAdditiveMotor, RumFlavorMotor, PinaColadaFlavorMotor, PineappleFlavorMotor, OrangeFlavorMotor LiftMotor1, LiftMotor2, PowderServo1, PowderServo2, PowderMixingServo1, PowderMixingServo2, ]
+
     while(True):
     	for drinkNum in range(0, MAX_VEND_QUEUE_SIZE-1):
     		try:
