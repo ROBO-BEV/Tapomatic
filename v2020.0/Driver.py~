@@ -5,15 +5,12 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-04-30"
+__date__    = "Late Updated: 2020-04-29"
 __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
 # Useful standard Python system jazz
 import sys, time, traceback, argparse, string
-
-# Allow UDP communication between compu
-import socket
 
 # Allow keyboard to control program flow and typing to terminal window
 import pynput.keyboard
@@ -73,7 +70,6 @@ TAPPING_SOCKET_TOOL = -2
 DULL_KNIFE_FORCE = 100	# Units are Newtons
 SHARP = 1
 DULL = 0
-DULL_KNIFE = -1
 NUM_OF_KNIFE_CUTTING_AREAS = 6
 KNIVE_SECTIONS[NUM_OF_KNIFE_CUTTING_AREAS] = [SHARP, SHARP, SHARP, SHARP, SHARP, SHARP]
 # [Side A Section 1, Side A Section 2, Side A Section 3, Side B Section 4, Side B Section 5, Side B Section 6]
@@ -84,63 +80,37 @@ def ConfigureKnife(currentKnifeSectionInUse):
         currentKnifeSectionInUse += 1
         MoveKnifePostion(currentKnifeSectionInUse)
 
-
-def MoveKnifePostion():
-    """
-    Use linear actuator to slide knife left or right and expose new cutting surface / section
-
-    Key arguments:
-    NONE
-
-    Return value:
-    knifeSectionNowInUse -- The new knife cutting section; otherwise retrun DULL_KNIFE so vendor can be informed    
-    """
-    
-    # currentKnifeSectionInUse is a global variable in the Driver.py
-
-    if(0 <= currentKnifeSectionInUse or currentKnifeSectionInUse < NUM_OF_KNIFE_CUTTING_AREAS - 1): 	
-        Debug.Drpint(DebugObject, "Moving knife to next cutting surface / section")
-	knifeSectionNowInUse = currentKniifeSectionInUse + 1
-    elif(currentKnifeSectionInUse == NUM_OF_CUTTING_AREAS - 1):
-        Debug.Drpint(DebugObject, "Message Code:" + MissionControl.DULL_KNIFE_MESSAGE + "Tapomatic has used up all the cutting surfaces on the current knife")
-	MissionControl.SendMessage(MissionControl.DULL_KNIFE_MESSAGE)
-	knifeSectionNowInUse = DULL_KNIFE
+def MoveKnifePostion(newKnifeSectionInUse):
+    if():
+        print("TODO CHECK IF OLD POSITION IS SIDE A SECTION 1 - AKA NEW KNIFE")
     else:
-	print("BAD PARAMETERS")
-
+        print("TODO CHECK IF ON SIDE A OR B AND MOVE OR RETURN REPAIT ME ERROR CODE"
+    
     return knifeSectionNowInUse
 
-
+###
+# Actuate N number of actuators to LIFT coconuts into the drilling, tapping, and toping off system
+#
+# @actuatorObjects - Array of linear actuators() objects to control
+#
+# return NOTHING
+###
 def LiftCoconut(actuatorObjects):
-	"""
-	Actuate N number of actuators to LIFT coconuts into the drilling, tapping, and toping off system
-	
-	Key Arguments:
-	actuatorObjects -- Array of linear actuators() objects to control
-	
-	Return value:
-	NOTHING
-	"""
-
 	for i in actuatorObjects:			# Move ALL actuators to LIFT cocoonut to max position at the same time
-		ActuatorObjects[i].max()		# OLD WAY cupSeparatorServo1.min()
+		actuatorObjects[i].max()		# OLD WAY cupSeparatorServo1.min()
 
 	#time.sleep(MAX_DRILLING_TIME + MAX_TAPPING_TIME + MAX_TOPPING_OFF_TIME) #TODO REAL LIFE TESTING ~30 seconds
 
-
+###
+# Actuate N number of actuators to LOWER coconuts into the drilling, tapping, and toping off system
+#
+# @actuatorObjects - Array of linear actuators() objects to control
+#
+# return NOTHING
+###
 def LowerCoconut(actuatorObjects):
-	"""
-	Actuate N number of actuators to LOWER coconuts into the drilling, tapping, and toping off system
-
-	Key arguments:
-	actuatorObjects -- Array of linear actuators() objects to control
-
-	Retrun vlaue:
-	NOTHING
-	"""
-
-	for j in ActuatorObjects:			# Move ALL actuators to LOWER coconut to min position at the same time
-		ActuatorObjects[j].min()		# OLD WAY cupSeparatorServo1.min()
+	for j in actuatorObjects:			# Move ALL actuators to LOWER coconut to min position at the same time
+		actuatorObjects[j].min()		# OLD WAY cupSeparatorServo1.min()
 
 
 ###
@@ -260,35 +230,31 @@ def actuateFlavorPump(flavorType, flavorLevel, actuatorObjects):
 	else:
 		print("INVALID SUGAR LEVEL PASSED TO FUNCTION - TRY VALUE 0 TO 8")
 
-def MoveConveyor(actuatorObjects, direction, numOfPositions):
-    """
-    Move conveyor / ring to position product under the actuator
-
-    Key arguments:
-    actuatorObjects --
-    direction -- Clockwise or Counter Clockwise rotation on main conveyor belt
-    numOfPositions - Number of unit steps to move conveyor / ring
-
-    Key values:
-    NOTHING
-    """
-	
-    if(direction == Actuator.FORWARD):
-        for posNum in range(1, numOfPositions+1):
-	    for i in actuatorObjects: 			# Move ALL actuators to drop cup to min position at the same time
-	        actuatorObjects[i].run(Actuator.CW) 	#or Actuator.FORWARD
-		time.sleep(MAX_ADDON_DISPENSE_TIME)		#Units are Seconds
-    elif(direction == Actuator.BACKWARDS):
-	for posNum in range(1, numOfPositions+1):
-	    for i in actuatorObjects: 			# Move ALL actuators to drop cup to min position at the same time
-		actuatorObjects[i].run(Actuator.CCW) 	#or Actuator.BACKWARD
-		time.sleep(MAX_ADDON_DISPENSE_TIME)		#Units are Seconds
-    else:
-	print("INVALID CONVEYOR DIRECTION PASSED TO FUNCTION - TRY FORWARD OR BACKWARDS")
+###
+# Move belt conveyor to position cups under add-on product pumps
+#
+# @direction - Clockwise or Counter Clockwise rotation on main conveyor belt
+# @numOfPositions - Number of unit steps to move conveyor belt
+#
+# return NOTHING
+###
+def moveConveyor(actuatorObjects, direction, numOfPositions):
+	if(direction == Actuator.FORWARD):
+		for posNum in range(1, numOfPositions+1):
+			for i in actuatorObjects: 			# Move ALL actuators to drop cup to min position at the same time
+				actuatorObjects[i].run(Actuator.CW) 	#or Actuator.FORWARD
+			time.sleep(MAX_ADDON_DISPENSE_TIME)		#Units are Seconds
+	elif(direction == Actuator.BACKWARDS):
+		for posNum in range(1, numOfPositions+1):
+			for i in actuatorObjects: 			# Move ALL actuators to drop cup to min position at the same time
+				actuatorObjects[i].run(Actuator.CCW) 	#or Actuator.BACKWARD
+			time.sleep(MAX_ADDON_DISPENSE_TIME)		#Units are Seconds
+	else:
+		print("INVALID CONVEYOR DIRECTION PASSED TO FUNCTION - TRY FORWARD OR BACKWARDS")
 
 
-def GetOrder():
-    print("TODO UDP communications")
+	def GetOrder():
+		print("TODO UDP communications")
 		
 if __name__ == "__main__":
 
@@ -360,7 +326,7 @@ if __name__ == "__main__":
     orangeFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     OrangeFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)
     ActuatorObject[5] = OrangeFlavorMotor
-    FluidActuators = [ActuatorObject[0], ActuatorObject[1], ActuatorObject[2], ActuatorObject[3], ActuatorObject[4], ActuatorObject[5]]
+    FluidActuators = [ActuatorObject[0], ActuatorObject[1], ActuatorObject[2], ActuatorObject[3], ActuatorObject[4], ActuatorObject[5]]]
  
     liftMotor1Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
     LiftMotor1 = Actuator("M", liftMotor1Pins, "Lift Motor 1: TODO")
@@ -370,16 +336,16 @@ if __name__ == "__main__":
     ActuatorObject[7] = LiftMotor2
     LiftingActuators = [ActuatorObject[6], ActuatorObjects[7]]
 
-    powderServo1Pins = [VCC_5V, GND, BOARD7]
+    powderServo1Pins = [VCC_5V, GND, BOARD7]		#TODO GPIO13 = BOARD? = DC_STEPPER_HAT?
     PowderServo1 = Actuator("S", powderServo1Pins, "Powder Dispensing Servo: Seamuing MG996R")
     ActuatorObject[8] = PowerServo1
-    powderServo2Pins = [VCC_5V, GND, BOARD11]
+    powderServo2Pins = [VCC_5V, GND, BOARD11]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
     PowderServo2 = Actuator("S", powderServo2Pins, "Powder Dispensing Servo: Seamuing MG996R")
     ActuatorObject[9] = PowerServo2
-    powderMixingServo1Pins = [VCC_5V, GND, BOARD13]
+    powderMixingServo1Pins = [VCC_5V, GND, BOARD13]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
     PowderMixngServo1 = Actuator("S", powderServo1Pins, "Powder Mixing Servo: Seamuing MG996R")
     ActuatorObject[10] = PowerMixingServo1
-    powderMixingServo2Pins = [VCC_5V, GND, BOARD15]
+    powderMixingServo2Pins = [VCC_5V, GND, BOARD??]		#TODO GPIO19 = BOARD? = DC_STEPPER_HAT?
     PowderMixngServo2 = Actuator("S", powderServo2Pins, "Powder Mixing Servo: Seamuing MG996R")
     ActuatorObject[11] = PowerMixingServo2
     PowderActuators = [ActuatorObject[8], ActuatorObject[9], ActuatorObject[10], ActuatorObject[11]]
@@ -406,24 +372,28 @@ if __name__ == "__main__":
 
     while(True):
     	for drinkNum in range(0, MAX_VEND_QUEUE_SIZE-1):
-    	    try:
-                vendQueue[drinkNum] = GetOrder(UDP_GUI_PI)
-    		guiReady = True
-    	    except socket.timeout:		# Network connection to GUI down or busy
-    	        guiReady = False
+    		try:
+    			vendQueue[drinkNum] = GetOrder(UDP_GUI_PI)
+    			guiReady = True
+    		catch ???:
+    			guiReady = False
     			
-    	    finally:	
-    	    	if(guiReady == True and vendQueue[drinkNum] != Drink.NONE):
-    		    artFilename = vendQueue[drinkNum].GetBrandingArt()
-    		    LaserObject.LoadImage(artFilename)
-    		    ActuateAddon(vendQueue[drinkNum].GetAddOn())
-    	    	    if(vendQueue[drinkNum].GetFlow() == CocoDrink.TAPPED):
-    		    	Run(TappingAcutors)
-    	            else:
-    	            	Run(CuttingActuators)
-		else:
-		    Debug.Dprint(Debug(True), "No orders in queue")
-		    time.sleep(0.1) #Pause for 100 ms to slow down while loop and reduce CPU usage 
+    		
+    		if(guiReady == True and vendQueue[drinkNum] != Drink.NONE):
+    			artFilename = vendQueue[drinkNum].GetBrandingArt()
+    			LaserObject.LoadImage(artFilename)
+    						actuatePowder(vendQueue[drinkNum].GetAddOn())
+    		if(vendQueue[drinkNum].GetFlow() == CocoDrink.TAPPED):
+    			Run(tappingAcutors)
+    		else:
+    			Run(cuttingActuators)
+			
+			
+			
+			
+			else:
+				Debug.Dprint(Debug(True), "No orders in queue")
+				time.sleep(0.1) #Pause for 100 ms to slow down while loop and reduce CPU usage 
 				
 				
 			# VEND MILK ADD-ON
