@@ -35,6 +35,9 @@ h1, p, .button{
 h1 {
     font-weight: lighter;
 }
+a {
+    display: block;
+}
 
 .container{
     height: auto;
@@ -67,11 +70,7 @@ h1 {
     justify-content: center;
 }
 
-@media screen and (max-width: 960px){
-    .sm-justify-center{
-        justify-content: center!important;
-    }
-}
+
 
 
 
@@ -110,6 +109,7 @@ h1 {
 
 button{
     background-color: transparent;
+    border: none;
 }
 
 button:focus{
@@ -169,11 +169,7 @@ button:focus{
     margin-bottom: 4px;
 }
 
-@media screen and (max-width: 1110px){
-    .warning-box{
-        margin-bottom: 40px;
-    }
-}
+
 
 .warning-box p {
     font-size: small;
@@ -262,12 +258,4 @@ button:focus{
     font-weight: bolder;
     color: var(--main-color);
     font-size: 3rem;
-}
-
-.button {
-    border: none;
-}
-
-a {
-    display: block;
 }
