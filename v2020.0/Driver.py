@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-06"
+__date__    = "Late Updated: 2020-05-08"
 __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
@@ -22,7 +22,7 @@ import socket
 import numpy as np
 
 # Custom CocoTaps and Robotic Beverage Technologies Inc code
-#from CocoDrink import *         # Store valid CoCoTaps drink configurations
+from CocoDrink2 import *         # Store valid CoCoTaps drink configurations
 from Actuator import *         	# Modular plug and play control of motors, servos, and relays
 from Debug import *		# Configure datalogging parameters and debug printing control
 #TODO REMOVE SINCE NOT CLASS from UDP import *		# Allow UDP communiation over an Ethernet cable between two computers 
@@ -307,44 +307,45 @@ if __name__ == "__main__":
 
     numberOfOrdersCompleted = 0
     numberOfOrdersInProgress = 0
-
-    tempDrink = CocoDrink(NONE, NONE, NONE, NONE, NONE, NONE, NONE, NONE)
-    #tempDrink = CocoDrink(CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE)
-    vendQueue[MAX_VEND_QUEUE_SIZE] =  [tempDrink]
+    #TODO tempDrink = CocoDrink2(CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE)
+    #TODO tempDrink = CocoDrink(CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE)
+    vendQueue = np.array(MAX_VEND_QUEUE_SIZE)
+    # vendQueue[0] = [tempDrink]
 
     # TODO REMOVE? GuiPi = RaspPi()
-    # REMOVE? BackendPi = RaspPi()
+    BackendPi = RaspPi()
 
     # DEFINE ALL ACTUATORS INSIDE TAPOMATIC ATTACH TO ADAFRUIT DC & STEPPER MOTOR HAT 2348
     # SEPARATE FULL LIST OF ACTUATOR OBJECTS INTO MORE SPECIFIC ARRAY GROUPINGS   
-    # https://upverter.com/design/blazesandersinc/tapomatic-v2020-1/
-    ActuatorObjects[TOTAL_NUM_OF_ACTUATORS] = Actuator("TODO", BackendPi.NO_PIN, "Non-Configured Actutator") 
+    # https://upverter.com/design/blazesandersinc/tapomatic-v2020-1
 
-    immunityHealthAdditivePins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]	
-    ImmunityHealthAdditiveMotor = Actuator("R", ImmunityHealthAdditivePins, "Immunity Boost Motor: Zjchao 202", Actuator.CW)
+    actuatorObject = np.array(TOTAL_NUM_OF_ACTUATORS)
+
+    immunityHealthAdditivePins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]	
+    ImmunityHealthAdditiveMotor = Actuator("R", immunityHealthAdditivePins, "Immunity Boost Motor: Zjchao 202", Actuator.CW)
     actuatorObject[0] = ImmunityHealthAdditiveMotor
-    vitaminsHealthAdditivePins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    vitaminsHealthAdditivePins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     VitaminsHealthAdditiveMotor = Actuator("R", vitaminsHealthAdditivePins, "Daily Vitamins Motor: Zjchao 202", Actuator.CW)
     actuatorObject[1] = VitaminsHealthAdditiveMotor
 
-    rumFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    rumFlavorPins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     rumFlavorMotor = Actuator("R", rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)
     actuatorObject[2] = rumFlavorMotor
-    pinaColadaFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    pinaColadaFlavorPins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     pinaColadaFlavorMotor = Actuator("R", pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW)
     actuatorObject[3] = pinaColadaFlavorMotor
-    pineappleFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    pineappleFlavorPins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     pineappleFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)	
     actuatorObject[4] = pineappleFlavorMotor
-    orangeFlavorPins = [BackendPi.PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    orangeFlavorPins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     orangeFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)
     actuatorObject[5] = orangeFlavorMotor
     fluidActuators = [ActuatorObject[0], ActuatorObject[1], ActuatorObject[2], ActuatorObject[3], ActuatorObject[4], ActuatorObject[5]]
  
-    liftMotor1Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
+    liftMotor1Pins = [Actuator.HIGH_PWR_12V, BackendPi1.GND, BackendPi1.TODO]
     LiftMotor1 = Actuator("M", liftMotor1Pins, "Lift Motor 1: TODO")
     ActuatorObject[6] = LiftMotor1
-    liftMotor2Pins = [BackendPi1.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
+    liftMotor2Pins = [Actuator.HIGH_PWR_12V, BackendPi1.GND, BackendPi1.TODO]
     LiftMotor2 = Actuator("M", liftMotor2Pins, "Lift Motor 2: TODO ECO L11TGF900NB100-T1")
     ActuatorObject[7] = LiftMotor2
     LiftingActuators = [ActuatorObject[6], ActuatorObjects[7]]

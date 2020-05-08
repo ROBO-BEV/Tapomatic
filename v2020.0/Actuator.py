@@ -4,7 +4,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-02-19"
+__date__ =    "Late Updated: 2020-05-08"
 __doc__ =     "Class to operate at least 8 servos, 4 relays, and 4 motors at once with latency less then 100 ms"
 
 # Useful documentation:
@@ -61,7 +61,6 @@ except ImportError:
 	DebugObject = Debug(True)
 	Debug.Dprint(DebugObject, "WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
 
-
 class Actuator:
 
 	# Class attributes that can be accessed using ActuatorControl.X (not actuatorcontrol.X)
@@ -102,29 +101,32 @@ class Actuator:
 	PWM0_NAME = "BOARD12"				#Pulse Width Modulation https://pinout.xyz/pinout/pin12_gpio18
 
 	# Negative to NOT confuse it with Pi BOARD 12 https://pinout.xyz/pinout/pin12_gpio18
-	HIGH_PWR_5V = -5					# 5.00 Volts @ upto 5.0 Amps = 25.0 Watts to power Pi, force / load cell sensor and servos
-	HIGH_PWR_12V = -12					# 12.0 Volts @ upto 5.0 Amps = 70.0 Watts to power linear actuators 
-	HIGH_PWR_30V = -30					# TODO (30 or 36) Volts @ upto 5 Amps = 150 Watts to power Stepper Motors
+	HIGH_PWR_5V = 5					# 5.00 Volts @ upto 5.0 Amps = 25.0 Watts to power Pi, force / load cell sensor and servos
+	HIGH_PWR_12V = 12					# 12.0 Volts @ upto 5.0 Amps = 70.0 Watts to power linear actuators 
+	HIGH_PWR_36V = 36					# TODO (30 or 36) Volts @ upto 5 Amps = 150 Watts to power Stepper Motors
 
-	# Class variables
+	# Global class variables
 	currentNumOfActuators = 0
-
 	wires = [NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE]
 
-	###
-	# Constructor to initialize an Actutator object, which can be a Servo(), Motor(), or Relay()
-	#
-	# @self - Newly created object
-	# @wires[] - Array to document wires / pins being used by Raspberry Pi to control an actuator
-	# @aType - Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
-	# @currentNumOfActuators - Global Class variable holding the number of actuators in a system
-	# @actuatorID - Auto-incremented interger bassed off the number of actuator currently in system
-	# @partNumber - Vendor part number string variable (e.g. Seamuing MG996R)
-	# @forwardDirection - Set counter-clockwise (CCW) or clockwise (CW) as the forward direction
-	#
-	# return NOTHING
-	###
 	def __init__(self, currentNumOfActuators, aType, pins, partNumber, direction):
+	    """
+	    Constructor to initialize an Actutator object, which can be a Servo(), Motor(), or Relay()
+	
+	    Key arguments:
+	    self - Newly created object
+	    wires[] - Array to document wires / pins being used by Raspberry Pi to control an actuator
+	    aType - Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
+	    currentNumOfActuators - Global Class variable holding the number of actuators in a system
+	    actuatorID - Auto-incremented interger bassed off the number of actuator currently in system
+	    partNumber - Vendor part number string variable (e.g. Seamuing MG996R)
+	    forwardDirection - Set counter-clockwise (CCW) or clockwise (CW) as the forward direction
+	 
+	    Return value:
+	    Newly created object
+	    """
+	
+
 		self.DebugObject = Debug(True)
 		
 		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]

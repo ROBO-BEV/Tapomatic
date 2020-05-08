@@ -12,6 +12,7 @@ rpi = "*"
 rpi-gpio = "*"
 numpy = "*"
 opencv-python = "*"
+pynut = "*"
 
 [requires]
 python_version = "3.7"
