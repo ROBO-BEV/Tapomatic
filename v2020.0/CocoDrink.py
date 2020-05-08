@@ -229,7 +229,7 @@ class CocoDrink:
 		"""
 		Since each pump has a different flow rate(mL/Sec) this function defined how long each pump type should stay on to dispense an exact (~2 ml variance) of fluid. fudgeFactor variable enable "THICK BOI" (Search Google) fluids to be dispenses currently  
 	
-		Key Paramters:
+		Key arguments:
 		volume -- The requested volume that pump should dispense in units of milliLiters
 		pumpPartNumber -- CocoTaps 8 character part number (e.g. 202-000N) as defines in Actuator.py
 	

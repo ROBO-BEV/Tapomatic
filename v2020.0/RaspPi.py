@@ -5,7 +5,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-04-29"
+__date__    = "Late Updated: 2020-05-06"
 __doc__     = "Class to document the configurations of the multiple Raspberry Pi 4 inside the Tampomatic"
 """
 
@@ -51,14 +51,14 @@ I2C_SCL1_NAME = "BOARD5"
 # Pulse Width Modulation https://pinout.xyz/pinout/pin12_gpio18 
 PWM0 = 12
 PWM0_NAME = "BOARD12"				
-PWM0_BCM_NAME = GPIO18
+PWM0_BCM_NAME = "GPIO18"
 
 # UART recieve pin / Serial Port https://pinout.xyz/pinout/pin10_gpio15					
 TXD = 8
 TXD_NAME = "BOARD8" 				
-TXD_BCM_NAME = GPIO14
+TXD_BCM_NAME = "GPIO14"
 RXD = 10	
-RXD_NAME = "BOARD10
+RXD_NAME = "BOARD10"
 RXD_BCM_NAME = "GPIO15"
 
 # General Purpose Input / Output (GPIO) pins that work in default mode 
@@ -79,3 +79,21 @@ GPIO16 = "BOARD36"
 GPIO26 = "BOARD37"
 GPIO20 = "BOARD38"
 GPIO21 = "BOARD40"
+
+
+#    ROTATAIIONAL_MOTOR_
+#    Z_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[1]
+#    X_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[2]
+#    Y_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[3]
+
+#    Z1_LINEAR_LIFT_MOTOR = actuatorObjects[4]
+#    Z2_LINEAR_LIFT_MOTOR = actuatorObjects[5]
+
+#    Y1_LINEAR_CUT_MOTOR = actuatorObjects[6]
+#    Y2_LINEAR_CUT_MOTOR = actuatorObjects[7]
+#    X1_LINEAR_KNIFE_POSITION_MOTOR = actuatorObjects[8]
+
+#    Y1_LINEAR_COVER_MOTOR = actuatorObjects[9]
+#    Y2_LINEAR_COVER_MOTOR = actuatorObjects[10]
+
+#    ROTATIONAL_DISK_STEPPER_MOTOR = actuatorObjects[19]

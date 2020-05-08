@@ -25,18 +25,18 @@ PKTSIZE = 1115
 
 
 def GetFile(serverIP_Address, port, filename, loop):
-	"""
-	In Tapomatic v2020.0 the server in the GUI Pi and the Client is the backend Pi
+    """
+    In Tapomatic v2020.0 the server in the GUI Pi and the Client is the backend Pi
 
-	Key arguments:
-	serverIP_Address -- The Raspberry Pi that is sending data.
-	port -- Ethernet port communication should occur through
-	filename -- .txt file that contains ALL the orders make on a kiosk ever
-	loop -- ??? 
+    Key arguments:
+    serverIP_Address -- The Raspberry Pi that is sending data.
+    port -- Ethernet port communication should occur through
+    filename -- .txt file that contains ALL the orders make on a kiosk ever
+    loop -- ??? 
 
-	Return value:
-	NOTHING
-	"""
+    Return value:
+    NOTHING
+    """
 
 	try:
 		# Ensure a file was given.
