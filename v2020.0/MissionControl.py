@@ -5,7 +5,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-04-29"
+__date__    = "Late Updated: 2020-05-11"
 __doc__     = "Class to define OTA commuications architecture of 30K+ Tapomatic kiosk"
 """
 
@@ -20,18 +20,32 @@ DULL_KNIFE_MESSAGE = 3
 
 class MissionControl():	
 
-    def __init__(self, currentNumOfSensors, currentNumOfActuators, kioskID, version):
-	"""
+    def __init__(self, kioskID, version, key):
+		"""
 
-	"""
+		"""
 
         self.DebugObject = Debug(True)
 
-	self.kioskID = kioskID    
+		self.kioskID = kioskID    
+		self.version = version
+		self.key = key 			# For example Coco420@69 taken from a hidden .key textfile 
 
-    def ReportLiquidLevel(lType, percentage, kioskID):
-		
-    def ReportLowLiquidLevel(lType, bottleLocation, kioskID):
+    def ReportLiquidLevel(lType, internalBottleLocation, kioskID):
+    	"""
+    	Report 
+    	"""
+    	
+    	
+    	
+    	
+    	
+    def ReportLowLiquidLevel(lType, internalBottleLocation, kioskID):
+    
+    def GetKioskGPSlocation():
+    	print("TODO RavenDB or TextFile?")
+    
+    def GetKioskLocationName():
     
     def ReportDamage():
 	
