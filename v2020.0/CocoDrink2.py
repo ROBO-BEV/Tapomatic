@@ -16,6 +16,12 @@ from Actuator import *
 # Robotic Beverage Technologies code for controlling the physical movement and power output of a LASER
 #TODO from LASER import *
 
+
+except ImportError:
+	#TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
+	DebugObject = Debug(True)
+	Debug.Dprint(DebugObject, "WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
+
 class CocoDrink2:
 
     # Drink Name CONSTANTS

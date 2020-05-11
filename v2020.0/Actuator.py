@@ -4,7 +4,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-05-08"
+__date__ =    "Late Updated: 2020-05-10"
 __doc__ =     "Class to operate at least 8 servos, 4 relays, and 4 motors at once with latency less then 100 ms"
 
 # Useful documentation:
@@ -69,9 +69,11 @@ class Actuator:
 	MAX_NUM_OF_LINEAR_ACT = 5 	# Linear actuators
 	N_A = 0						# Not Applicable
 
-	# Actuator direction v
+	# Circular & linear actuator direction CONSTANTS
 	CCW = -1  			# Counter-Clockwise
 	CW = 1    			# Clockwise
+	LINEAR_IN = CCW		# Towardsbase of linear actuator 
+	LINEAR_OUT = CW		# Away from base of linear 
 	SERVO_SLACK = 0.2	# Positional accuaracy slack for servo so that control system does not go crazy
 	FORWARD = 1
 	BACKWARD = -1
@@ -107,9 +109,11 @@ class Actuator:
 
 	# Global class variables
 	currentNumOfActuators = 0
+	
+	# wires are on the actuator side of hardwrae schematic. While pins are on the CPU side, but often have similar names
 	wires = [NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE]
 
-	def __init__(self, currentNumOfActuators, aType, pins, partNumber, direction):
+	def __init__(self, aType, pins, partNumber, direction):
 	    """
 	    Constructor to initialize an Actutator object, which can be a Servo(), Motor(), or Relay()
 	
@@ -117,23 +121,21 @@ class Actuator:
 	    self - Newly created object
 	    wires[] - Array to document wires / pins being used by Raspberry Pi to control an actuator
 	    aType - Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
-	    currentNumOfActuators - Global Class variable holding the number of actuators in a system
+	    TODO REMOVE THIS PARAMETER-currentNumOfActuators - Global Class variable holding the number of actuators in a system
 	    actuatorID - Auto-incremented interger bassed off the number of actuator currently in system
 	    partNumber - Vendor part number string variable (e.g. Seamuing MG996R)
-	    forwardDirection - Set counter-clockwise (CCW) or clockwise (CW) as the forward direction
+	    forwardDirection - Set counter-clockwise (CCW) / Linear IN or clockwise (CW) / Linear OUT as the forward direction
 	 
 	    Return value:
-	    Newly created object
+	    Newly created Actuator object
 	    """
-	
-
 		self.DebugObject = Debug(True)
 		
 		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 		for i in pins:
 			self.wires[i] = pins[i]
 		self.actuatorType = aType
-		currentNumOfActuators += 1
+		currentNumOfActuators = currentNumOfActuators + 1
 		self.actuatorID = currentNumOfActuators	# Auto-incremented interger class variable
 		self.partNumber = partNumber
 		self.forwardDirection = direction
