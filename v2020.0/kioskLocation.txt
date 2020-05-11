@@ -1,0 +1,2 @@
+0, Vinny's Home, 2728 Brookstone Court Las Vegas NV 89117, 36.1416584, -115.2958079;
+1, Mersea Restuarant, 699 Avenue of the Palms San Francisco CA 94130, 37.8225720, -122.3756502;
