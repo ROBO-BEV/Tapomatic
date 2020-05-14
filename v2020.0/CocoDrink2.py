@@ -10,12 +10,12 @@ __doc__ =     "Class to define flavors and health additivies in a CocoDrink"
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
 
-# Robotic Beverage Technologies code for controlling many different types of motors, servos, and relays
-from Actuator import *
+try:
+    # Robotic Beverage Technologies code for controlling many different types of motors, servos, and relays
+    from Actuator import *
 
-# Robotic Beverage Technologies code for controlling the physical movement and power output of a LASER
-#TODO from LASER import *
-
+    # Robotic Beverage Technologies code for controlling the physical movement and power output of a LASER
+    #TODO from LASER import *
 
 except ImportError:
 	#TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
