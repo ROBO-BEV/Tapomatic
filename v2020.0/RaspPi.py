@@ -67,25 +67,27 @@ class RaspPi:
 
     # General Purpose Input / Output (GPIO) pins that work in default mode 
     # Format for following pin "BCM mode pin name= BOARD mode pin name":
-    GPIO4  = "BOARD7"
-    GPIO17 = "BOARD11"
-    GPIO27 = "BOARD13"
-    GPIO22 = "BOARD15"
-    GPIO23 = "BOARD16"
-    GPIO24 = "BOARD18"
-    GPIO25 = "BOARD22"
-    GPIO5  = "BOARD29"
-    GPIO6  = "BOARD31"
-    GPIO12 = "BOARD32"
-    GPIO13 = "BOARD33"
-    GPIO19 = "BOARD35"
-    GPIO16 = "BOARD36"
-    GPIO26 = "BOARD37"
-    GPIO20 = "BOARD38"
-    GPIO21 = "BOARD40"
+    BOARD7 = "GPIO4"
+    BOARD11 = "GPIO17"
+    BOARD13 = "GPIO27"
+    BOARD15 = "GPIO22"  
+    BOARD16 = "GPIO23"
+    BOARD18 = "GPIO24"
+    BOARD22 = "GPIO25"
+    BOARD29 = "GPIO5"    
+    BOARD31 = "GPIO6"
+    BOARD32 = "GPIO12"
+    BOARD33 = "GPIO13"
+    BOARD35 = "GPIO19"
+    BOARD36 = "GPIO16"
+    BOARD37 = "GPIO26"
+    BOARD38 = "GPIO20"
+    BOARD40 = "GPIO21"
 
+class Raspi:
+    
     def __init__(self):
-	self.DebugObject = Debug(True)
+        self.DebugObject = Debug(True)
 
 
 #    ROTATAIIONAL_MOTOR_
