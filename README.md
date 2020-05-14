@@ -25,6 +25,8 @@ See examples and usage at https://docutils.sourceforge.io/README.html#quick-star
 
 Static type checking was done using http://mypy-lang.org/
 
+Copy .nanorc in your home directory to use the best IDE every made NANO!
+
 ***
 v2020.0:
 
@@ -38,11 +40,6 @@ Download this FULL git repo onto a Raspberry Pi 4 B
 5. NOTE: Use "python3" and NOT "python", in step 5 or you will get run time errors!!!
 6. Open Google Chrome (best GUI compatibility) and type http://127.0.0.1:5000/ into URL textbox. 
 7. Type terminal input as prompted when in debug mode. Have fun nerd!
-
-Production Linode IP Addresses:
-
-Team Viewer login for Pi 4 in Vegas called “Hawaii”
-1 562 885 698 Tapomatic@42
 
 ***
 CompressedLibraryCode:
