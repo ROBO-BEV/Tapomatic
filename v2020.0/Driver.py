@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-08"
+__date__    = "Late Updated: 2020-05-11"
 __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
@@ -298,7 +298,7 @@ def GetOrder():
 		
 if __name__ == "__main__":
 
-    DebugObject = Debug(True)  #https://github.com/ROBO-BEV/Tapomatic/issues/8
+    driverDebugObject = Debug(True)  #https://github.com/ROBO-BEV/Tapomatic/issues/8
 
     actuatorObjects = np.array(TOTAL_NUM_OF_ACTUATORS)
 
@@ -312,115 +312,94 @@ if __name__ == "__main__":
     vendQueue = np.array(MAX_VEND_QUEUE_SIZE)
     # vendQueue[0] = [tempDrink]
 
-    # TODO REMOVE? GuiPi = RaspPi()
+    GuiPi = RaspPi()
     BackendPi = RaspPi()
 
-    # DEFINE ALL ACTUATORS INSIDE TAPOMATIC ATTACH TO ADAFRUIT DC & STEPPER MOTOR HAT 2348
-    # SEPARATE FULL LIST OF ACTUATOR OBJECTS INTO MORE SPECIFIC ARRAY GROUPINGS   
-    # https://upverter.com/design/blazesandersinc/tapomatic-v2020-1
-
+    # Actuators as define in schematic tab at https://upverter.com/design/blazesandersinc/tapomatic-v2020-1
     actuatorObject = np.array(TOTAL_NUM_OF_ACTUATORS)
 
-    immunityHealthAdditivePins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]	
-    ImmunityHealthAdditiveMotor = Actuator("R", immunityHealthAdditivePins, "Immunity Boost Motor: Zjchao 202", Actuator.CW)
-    actuatorObject[0] = ImmunityHealthAdditiveMotor
-    vitaminsHealthAdditivePins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    VitaminsHealthAdditiveMotor = Actuator("R", vitaminsHealthAdditivePins, "Daily Vitamins Motor: Zjchao 202", Actuator.CW)
-    actuatorObject[1] = VitaminsHealthAdditiveMotor
-
-    rumFlavorPins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    immunityHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD7]	
+    ImmunityHealthAdditiveMixingServo = Actuator("S", immunityHealthAdditivePins, "Immunity Boost Servo: Seamuing MG996R", Actuator.CW)
+    actuatorObject[0] = ImmunityHealthAdditiveMixingServo
+    vitaminsHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD11]
+    VitaminsHealthAdditiveMixingServo = Actuator("S", vitaminsHealthAdditivePins, "Daily Vitamins Servo: Seamuing MG996R", Actuator.CW)
+    actuatorObject[1] = VitaminsHealthAdditiveMixingServo
+    powderActuators = [actuatorObject[0], actuatorObject[1]]
+ 
+    
+    rumFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     rumFlavorMotor = Actuator("R", rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)
     actuatorObject[2] = rumFlavorMotor
-    pinaColadaFlavorPins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    pinaColadaFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     pinaColadaFlavorMotor = Actuator("R", pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW)
     actuatorObject[3] = pinaColadaFlavorMotor
-    pineappleFlavorPins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    pineappleFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     pineappleFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)	
     actuatorObject[4] = pineappleFlavorMotor
-    orangeFlavorPins = [Actuator.HIGH_PWR_12V, BackendPi.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    orangeFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     orangeFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)
     actuatorObject[5] = orangeFlavorMotor
-    fluidActuators = [ActuatorObject[0], ActuatorObject[1], ActuatorObject[2], ActuatorObject[3], ActuatorObject[4], ActuatorObject[5]]
+    fluidActuators = [actuatorObject[2], actuatorObject[3], actuatorObject[4], actuatorObject[5]]
  
-    liftMotor1Pins = [Actuator.HIGH_PWR_12V, BackendPi1.GND, BackendPi1.TODO]
-    LiftMotor1 = Actuator("M", liftMotor1Pins, "Lift Motor 1: TODO")
-    ActuatorObject[6] = LiftMotor1
-    liftMotor2Pins = [Actuator.HIGH_PWR_12V, BackendPi1.GND, BackendPi1.TODO]
-    LiftMotor2 = Actuator("M", liftMotor2Pins, "Lift Motor 2: TODO ECO L11TGF900NB100-T1")
-    ActuatorObject[7] = LiftMotor2
-    LiftingActuators = [ActuatorObject[6], ActuatorObjects[7]]
+ 
+    liftMotor1Pins = [Actautor.HIGH_PWR_5V, Actuator.GND, Actuator.I2C_SDA, Actuator.I2C_SCL]
+    liftMotor1 = Actuator("L", liftMotor1Pins, "Lift Motor 1: PA-07-12-5V", Actuator.LINEAR_OUT)
+    actuatorObject[6] = LiftMotor1
+    liftMotor2Pins = [Actautor.HIGH_PWR_5V, Actuator.GND, Actuator.I2C_SDA, Actuator.I2C_SCL]
+    liftMotor2 = Actuator("L", liftMotor2Pins, "Lift Motor 2: PA-07-12-5V", Actuator.LINEAR_OUT)
+    actuatorObject[7] = LiftMotor2
+    liftingActuators = [actuatorObject[6], actuatorObjects[7]]
 
-    powderServo1Pins = [VCC_5V, GND, BOARD7]
-    powderServo1 = Actuator("S", powderServo1Pins, "Powder Dispensing Servo: Seamuing MG996R")
-    actuatorObject[8] = powerServo1
-    powderServo2Pins = [VCC_5V, GND, BOARD11]
-    powderServo2 = Actuator("S", powderServo2Pins, "Powder Dispensing Servo: Seamuing MG996R")
-    ActuatorObject[9] = powerServo2
-    powderMixingServo1Pins = [VCC_5V, GND, BOARD13]
-    powderMixngServo1 = Actuator("S", powderServo1Pins, "Powder Mixing Servo: Seamuing MG996R")
-    actuatorObject[10] = powerMixingServo1
-    powderMixingServo2Pins = [VCC_5V, GND, BOARD15]
-    powderMixngServo2 = Actuator("S", powderServo2Pins, "Powder Mixing Servo: Seamuing MG996R")
-    actuatorObject[11] = powerMixingServo2
-    powderActuators = [ActuatorObject[8], ActuatorObject[9], ActuatorObject[10], ActuatorObject[11]]
 
-    cuttingMotor1Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
-    
-    cuttingMotor2Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
-    
-    knifePositionMotorPins [RaspPi.PWR_12V, RaspPi.GND, RaspPi.TODO]
-    
-    cuttingActuators = [ActuatorObject[12], ActuatorObject[13], ActuatorObject[14]]
+    cuttingMotor1Pins = [Actuator.PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    cuttingMotor1 = Actuator("L", cuttingMotor1Pins, "Cutting Motor 1: PA-04-6-100", Actuator.LINEAR_OUT)
+    actuatorObject[8] = cuttingMotor1    
+    cuttingMotor2Pins = [Actuator.PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    cuttingMotor2 = Actuator("L", cuttingMotor2Pins, "Cutting Motor 2: PA-04-6-100", Actuator.LINEAR_OUT)
+    actuatorObject[9] = cutingMotor2
+    knifePositionMotorPins [Actuator.PWR_5V, Actator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    knifePositionMotor = Actuator("L", knifePositionMotorPins, "Knife Position Motor : PA-07-?TODO?-5V", Actuator.LINEAR_OUT)
+    actuatorObject[10] = knifePositionMotor
+    cuttingActuators = [ActuatorObject[8], ActuatorObject[9], ActuatorObject[10]]
 
     coveringMotor1Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
-    
+    coveringMotor1 = Actuator("L", coveringMotorPins, "Knife Position Motor : PA-07-?TODO?-5V", Actuator.LINEAR_OUT)
+    actuatorsObject[11] = coveringMotor1
     coveringMotor2Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
-    
-    coverActuators = [ActuatorObject[15], ActuatorObject[16]]
+    coveringMotor2 = Actuator("L", coveringMotorPins, "Knife Position Motor : PA-07-?TODO?-5V", Actuator.LINEAR_OUT)
+    actuatorsObject[11] = coveringMotor2    
+    coverActuators = [ActuatorObject[11], ActuatorObject[12]]
 
+
+    laserObject = LASER("40004672600113", LASER.HIGH_POWER)
     
-    laserObject = LASER(LASER.HIGH_POWER)
     guiReady = False 
 
-   #TODO DELETE [ImmunityHealthAdditiveMotor, VitaminsHealthAdditiveMotor, RumFlavorMotor, PinaColadaFlavorMotor, PineappleFlavorMotor, OrangeFlavorMotor LiftMotor1, LiftMotor2, PowderServo1, PowderServo2, PowderMixingServo1, PowderMixingServo2, ]
 
     while(True):
-    	for drinkNum in range(0, MAX_VEND_QUEUE_SIZE-1):
+        for drinkNum in range(0, MAX_VEND_QUEUE_SIZE-1):
     	    try:
-                vendQueue[drinkNum] = GetOrder(UDP_GUI_PI)
-    		guiReady = True
+    	        vendQueue[drinkNum] = GetOrder(UDP_GUI_PI)
+    	        guiReady = True
     	    except socket.timeout:		# Network connection to GUI down or busy
     	        guiReady = False
     			
     	    finally:	
     	    	if(guiReady == True and vendQueue[drinkNum] != Drink.NONE):
-    		    artFilename = vendQueue[drinkNum].GetBrandingArt()
-    		    LaserObject.LoadImage(artFilename)
-    		    ActuateAddon(vendQueue[drinkNum].GetAddOn())
-    	    	    if(vendQueue[drinkNum].GetFlow() == CocoDrink.TAPPED):
-    		    	Run(TappingAcutors)
-    	            else:
-    	            	Run(CuttingActuators)
-		else:
-		    Debug.Dprint(Debug(True), "No orders in queue")
-		    time.sleep(0.1) #Pause for 100 ms to slow down while loop and reduce CPU usage 
-				
-				
-		    # VEND MILK ADD-ON
-		    vendQueue[drinkNum+1] = getOrder(UDP_FOR_OTHER_PI)
-		    dropCup(dropCupActuators)
-		    moveConveyor(conveyorActuators, Actuator.FORWARD, 1)
-		    actuateMilkMotor(milkActuators, vendQueue[drinkNum].getMilkType, vendQueue[drinkNum].getMilkLevel)
-		    actuateSugarMotor(sugarActuators, vendQueue[drinkNum+1].getSugarType, vendQueue[drinkNum+1].getSugarLevel)
-
-		    # VEND POWDER ADD-ON
-		    vendQueue[drinkNum+2] = getOrder(UDP_FOR_OTHER_PI)
-		    dropCup(dropCupActuators)
-		    moveConveyor(conveyorActuators, Actuator.FORWARD, 1)
-		    ActuatePowderServo(powderActuators, vendQueue[drinkNum].getPowderType)
-		    actuateMilkMotor(milkActuators, vendQueue[drinkNum+1].getMilkType, vendQueue[drinkNum].getMilkLevel)
-		    actuateSugarMotor(sugarActuators, vendQueue[drinkNum+2].getSugarType, vendQueue[drinkNum+1].getSugarLevel)
-
-		    # LIFT CUP TO USER VEND PORT(S)
-		    moveConveyor(conveyorActuators, Actuator.FORWARD, 1)
-		    liftCup(liftActuator)
+                    Run(lifingActuators)                        # Raise cocont platform
+                    
+                    artFilename = vendQueue[drinkNum].GetBrandingArt()
+                    LaserObject.LoadImage(artFilename)
+                    
+                    if(vendQueue[drinkNum].GetFlow() == CocoDrink.TAPPED):
+                        Run(tappingAcutors)
+                        ActuateAddon(vendQueue[drinkNum].GetAddOn())
+                        #TODO actuateSugarMotor(sugarActuators, vendQueue[drinkNum+1].getSugarType, vendQueue[drinkNum+1].getSugarLevel)
+                    else:
+                        Run(cuttingActuators)
+                        
+                    Run(lifingActuators)                        # Lower cocont platform
+                    
+                else:
+                    Debug.Dprint(driverDebugObject, "No orders in queue")
+                    time.sleep(0.1) #Pause for 100 ms to slow down while loop and reduce CPU usage 
