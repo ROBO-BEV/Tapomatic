@@ -3,15 +3,25 @@
 # GUI Pi send the txt file.
 import socket
 
-UDP_IP = "192.168.225.56"
-UDP_PORT = 5005
-MESSAGE = "Hello, World!"
+# localIP = socket.gethostname()
+# localPort = 5000
+# udpServerSocket = socket.socket(family = socket.AF_INET, type = socket.SOCK_DGRAM)
+# udpServerSocket.bind((localIP, localPort))
+# print("UDP server up and listening")
 
-
-# print ("UDP target IP:", UDP_IP)
-# print  ("UDP target port:", UDP_PORT)
-# print  ("message:", MESSAGE)
-
-sock = socket.socket(socket.AF_INET, # Internet
+# Find a way to get the client PI address here.
+UDP_CLIENT_IP = socket.gethostname()
+UDP_CLIENT_PORT = 5005
+udpClientSocket = socket.socket(socket.AF_INET, # Internet
                      socket.SOCK_DGRAM) # UDP
-sock.sendto(MESSAGE.encode(), (UDP_IP, UDP_PORT))
+
+filename= 'coco_orders.csv'
+#LOOP CONDITIONS????
+while (True):
+    f = open(filename, 'rb')
+    l = f.read(1024)
+    while (l):
+        udpClientSocket.sendto(l,(UDP_CLIENT_IP, UDP_CLIENT_PORT))
+        print('Sent ',repr(l))
+        l = f.read(1024)
+    f.close()
