@@ -11,27 +11,43 @@ __doc__     = "UDP Server to send the kiosk orders to the UDP Client running on 
 # GUI Pi send the txt file.
 import socket
 from time import sleep
+import sys, logging
 
-# localIP = socket.gethostname()
-# localPort = 5000
-# udpServerSocket = socket.socket(family = socket.AF_INET, type = socket.SOCK_DGRAM)
-# udpServerSocket.bind((localIP, localPort))
-# print("UDP server up and listening")
+def raspberryServerProgram(filename):
+    # localIP = socket.gethostname()
+    # localPort = 5000
+    # udpServerSocket = socket.socket(family = socket.AF_INET, type = socket.SOCK_DGRAM)
+    # udpServerSocket.bind((localIP, localPort))
+    # print("UDP server up and listening")
 
-# Find a way to get the client PI address here.
-UDP_CLIENT_IP = socket.gethostname()
-UDP_CLIENT_PORT = 5005
-udpClientSocket = socket.socket(socket.AF_INET, # Internet
-                     socket.SOCK_DGRAM) # UDP
+    # Find a way to get the client PI address here.
+    UDP_CLIENT_IP = socket.gethostname()
+    UDP_CLIENT_PORT = 5005
+    try:
+        udpClientSocket = socket.socket(socket.AF_INET,  # Internet
+                                        socket.SOCK_DGRAM)  # UDP
+        udpClientSocket.connect()
+        logging.info('Running the server program to start sending order files.')
+    except udpClientSocket.error:
+        logging.error('Error in creating the udpClientSocket')
+        ## INVOKE A SMS MESSAGE TO THE OWNER? or To the Cloud?
+        sys.exit(1)
 
-filename= 'coco_orders.csv'
-#LOOP CONDITIONS????
-while (True):
-    f = open(filename, 'rb')
-    l = f.read(1024)
-    while (l):
-        udpClientSocket.sendto(l,(UDP_CLIENT_IP, UDP_CLIENT_PORT))
-        print('Sent ',repr(l))
-        l = f.read(1024)
-    f.close()
-    sleep(15)
+    #LOOP CONDITIONS????
+    while (True):
+        try:
+            f = open(filename, 'rb')  # open only in read mode.
+            l = f.read(1024)
+        except:
+            logging.error("Could not open {}, ensure the filepath is correct.".format(filename))
+            sys.exit(1)
+        while (l):
+            udpClientSocket.sendto(l,(UDP_CLIENT_IP, UDP_CLIENT_PORT))
+            print('Sent ',repr(l))
+            l = f.read(1024)
+        f.close()
+        sleep(15) ## Refractor this Code, USE THREADING ?
+
+if __name__ == '__main__':
+    filename= 'coco_orders.csv'
+    raspberryServerProgram(filename)
