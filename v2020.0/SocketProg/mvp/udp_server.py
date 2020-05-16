@@ -1,7 +1,16 @@
 #!/usr/bin/env python
+
+__author__  = "Murali Dulla"
+__email__   = "jeevanmurali@gmail.com"
+__company__ = "COCOTAPS"
+__status__  = "Development"
+__date__    = "Late Updated: 2020-05-14"
+__doc__     = "UDP Server to send the kiosk orders to the UDP Client running on PI4."
+
 #In Tapomatic v2020.0 the server in the GUI Pi
 # GUI Pi send the txt file.
 import socket
+from time import sleep
 
 # localIP = socket.gethostname()
 # localPort = 5000
@@ -25,3 +34,4 @@ while (True):
         print('Sent ',repr(l))
         l = f.read(1024)
     f.close()
+    sleep(15)
