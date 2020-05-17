@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-11"
+__date__    = "Late Updated: 2020-05-15"
 __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
@@ -22,12 +22,11 @@ import socket
 import numpy as np
 
 # Custom CocoTaps and Robotic Beverage Technologies Inc code
-from CocoDrink2 import *         # Store valid CoCoTaps drink configurations
+from CocoDrink2 import *        # Store valid CoCoTaps drink configurations
 from Actuator import *         	# Modular plug and play control of motors, servos, and relays
-from Debug import *		# Configure datalogging parameters and debug printing control
-#TODO REMOVE SINCE NOT CLASS from UDP import *		# Allow UDP communiation over an Ethernet cable between two computers 
+from Debug import *		        # Configure datalogging parameters and debug printing control
 from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
-#from LASER import *		# Enable LASER movement and image warping around coconut
+from LASER import *		        # Enable LASER movement and image warping around coconut
 
 # Over The Air (OTA) Updating Configurations
 VERSION = "2020.0"
@@ -293,9 +292,26 @@ def MoveConveyor(actuatorObjects, direction, numOfPositions):
 	print("INVALID CONVEYOR DIRECTION PASSED TO FUNCTION - TRY FORWARD OR BACKWARDS")
 
 
-def GetOrder():
-    print("TODO UDP communications")
-		
+def GetOrder(timeout):
+    """
+    Allow UDP communiation over an Ethernet cable between two computers by sending a CSV file from 
+    the server /computer running GUI.py and to the client / computer running Driver.py back-end code
+    
+    Key arguments:
+    timeout -- Time in milliseconds GetOrder() function should wait for all UDP datapacket to arrive
+
+    Return value:
+    NOTHING
+    """
+    UDP_HOST = socket.gethostname()
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Internet and UDP
+    sock.bind((UDP_HOST, RaspPi.UDP_PORT))
+    
+    while timeOut > 0:
+        data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
+        print('received message:', data)		
+        timeout = timeout - 0.0002   #TODO TEST TIMING AND/OR ADD pause(0.010) 10 ms
+        
 if __name__ == "__main__":
 
     driverDebugObject = Debug(True)  #https://github.com/ROBO-BEV/Tapomatic/issues/8

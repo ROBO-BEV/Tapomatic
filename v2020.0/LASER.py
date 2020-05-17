@@ -5,27 +5,26 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development" 
-__date__    = "Late Updated: 2020-05-08"
+__date__    = "Late Updated: 2020-05-15"
 __doc__     = "Class to control and move LASER system"
 
 # Allow program to create GMT and local timestamps
 from time import gmtime, strftime
 
 # Computer Vision module to 
-# TODO import cv2
+import cv2
 
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
 
 class LASER:
 
-	# Global variable
-	currentPowerLevel = 0
-
 	# Preset LASER power level CONSTANTS (units are Watts)
-	HIGH_POWER = 10.0
-	STANDARD_POWER = 5.0
-	LOW_POWER = 2.5
+	HIGHEST_POWER = 10.01
+	HIGH_POWER = 10.00
+	STANDARD_POWER = 5.00
+	LOW_POWER = 2.50
+	LOWEST_POWER = 0.01 
 
 	# LASER branding PNG filename CONSTANTS
 	RESORT_WORLD_LOGO = "ResortWorldLogoV0.png"
@@ -38,11 +37,24 @@ class LASER:
 	LASER_CONSTANT = 0.05264472  	#TODO Adjust this until LASER branding looks good
 
 	def __init__(self, partNumber, powerLevel):
-		self.DebugObject = Debug(True)
-		
-		self.powerLevel = 8.0 				# Initialize to 8.0 Watts
-		self.partNumber = partNumber
-		self.brandingArt = COCOTAPS_LOGO	# Initialize to standard CocoTaps logo
+	    """
+	    TODO
+	    
+	    Key arguments:
+	    partNumber -- Supplier part number (i.e. ?????)
+	    powerLevel -- Power in Wats to intialize LASER module to
+	    brandingArt -- Black & White PNG image ro brand / burn into an object
+	    """
+	    self.DebugObject = Debug(True)
+	    
+	    self.powerLevel = powerLevel        # Initialize to 8.0 Watts
+	    if(LOWEST_POWER > powerLevel or powerLevel > HIGHEST_POWER):
+	        # Check for valid power level and default to 10 Watts if invalid
+	        Debug.Dprint(DebugOject, "Invalid power setting LASER power set to " + repr(HIGH_POWER))
+	        self.powerLevel = HIGH_POWER
+	    
+	    self.partNumber = partNumber
+	    self.brandingArt = COCOTAPS_LOGO	# Initialize to standard CocoTaps logo
 
 	def LoadLImage(fileName):
 		"""
@@ -52,9 +64,9 @@ class LASER:
 		filename -- PNG file to load into memory
 		
 		Return value:
-		NONE
+		img -- Black & White PNG image
 		"""
-		print("TODO")		
+		print("TODO: CHECK FOR >PNG?")		
 		path = "../static/images/" + fileName
 		img = cv2.imread(path)
 		return img
@@ -69,9 +81,8 @@ class LASER:
 
 		Return value:
 		newImage -- A new image that has been warpped to to display correctly after LASER branding 
-
 		"""
-		Mat m = ... // some RGB image
+		Mat m = Mat() #... // some RGB image
 		imgWidth = m.width
 		imgHeight = m.height
 

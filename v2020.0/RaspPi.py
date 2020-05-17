@@ -14,8 +14,8 @@ from Debug import *
 
 class RaspPi:
     # Internal local network IP addresses and ports
-    GUI_PI_IP = "127.168.1.69"
-    VEND_PI_IP = "127.168.1.42"
+    GUI_PI_IP = "69.69.1.69"
+    VEND_PI_IP = "69.69.1.42"
     UDP_PORT = 5005
 
     # External network IP addresses

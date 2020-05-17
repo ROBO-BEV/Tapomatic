@@ -98,57 +98,55 @@ class Actuator:
     HIGH_PWR_12V = 12					# 12.0 Volts @ upto 5.0 Amps = 70.0 Watts to power linear actuators 
     HIGH_PWR_36V = 36					# TODO (30 or 36) Volts @ upto 5 Amps = 150 Watts to power Stepper Motors
 
-    # Global class variables
-    currentNumOfActuators = 0
-	
     # wires are on the actuator side of hardwrae schematic. While pins are on the CPU side, but often have similar names
     wires = [NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE]
 
-    def __init__(self, aType, pins, partNumber, direction):
+    def __init__(self, actuatorID, aType, pins, partNumber, direction):
 	    """
 	    Constructor to initialize an Actutator object, which can be a Servo(), Motor(), or Relay()
 	
 	    Key arguments:
 	    self - Newly created object
-	    wires[] - Array to document wires / pins being used by Raspberry Pi to control an actuator
-	    aType - Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
-	    TODO REMOVE THIS PARAMETER-currentNumOfActuators - Global Class variable holding the number of actuators in a system
-	    actuatorID - Auto-incremented interger bassed off the number of actuator currently in system
+	    actuatorID - Interger CONSTANT defined in Driver.py to enable quick array searches 
+        aType - Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
+	    pins - Array to document wires / pins being used by Raspberry Pi to control an actuator
 	    partNumber - Vendor part number string variable (e.g. Seamuing MG996R)
-	    forwardDirection - Set counter-clockwise (CCW) / Linear IN or clockwise (CW) / Linear OUT as the forward direction
+	    direction - Set counter-clockwise (CCW) / Linear IN or clockwise (CW) / Linear OUT as the forward direction
 	 
 	    Return value:
 	    Newly created Actuator object
 	    """
-	    
 	    self.DebugObject = Debug(True)
-	    wires = np.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
-	    for i in pins:
-		self.wires[i] = pins[i]
-	    
+
+	    self.actuatorID = actuatorID
 	    self.actuatorType = aType
-	    self.actuatorID = currentNumOfActuators	# Auto-incremented interger class variable
-	    currentNumOfActuators = currentNumOfActuators + 1
+	    
+	    numOfWires = len(pins)
+	    wires = np.empty(numOfWires, dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
+	    for i in range(numOfWires):
+		    #TODO REMOVE print("PIN: "  + repr(i))
+		    self.wires[i] = pins[i]
+	    
 	    self.partNumber = partNumber
 	    self.forwardDirection = direction
 		
 	    # https://gist.github.com/johnwargo/ea5edc8516b24e0658784ae116628277
 	    # https://gpiozero.readthedocs.io/en/stable/api_output.html
 	    # https://stackoverflow.com/questions/14301967/bare-asterisk-in-function-arguments/14302007#14302007
-	    if(type == "S"):
+	    if(aType == "S"):
 		    # The last wire in array is the PWM control pin
 		    self.actuatorObject = Servo.AngularServo(wires[len(wires)-1])
 		    #TODO If above DOES NOT WORK: self.actuatorType = Servo(wires[0], initial_value=0, min_pulse_width=1/1000, max_pulse_width=2/1000, frame_width=20/1000, pin_factory=None)
-	    elif(type == "M"):
+	    elif(aType == "M"):
 		    # The last two wires in array are the INPUT control pins
 		    self.actuatorObject = Motor(wires[len(wires)-2], wires[len(wires)-1])
 		    #TODO If above DOES NOT WORK: self.actuatorType = Motor(wires[0], wires[1], pwm=true, pin_factory=None)
-	    elif(type == "R"):
+	    elif(aType == "R"):
 		    # The last wire in array is the relay control pin
 		    self.actuatorObject = OutputDevice(wires[len(wires)-1])
 		    #TODO If above DOES NOT WORK: self.actuatorObject = gpiozero.OutputDevice(wired[0], active_high=False, initial_value=False)
 	    else:
-		    Debug.Dprint(DebugObject, "INVALID Actutator Type in __init__ method, please use S, M, R as first parameter to Actuator() Object")
+		    Debug.Dprint(self.DebugObject, "INVALID Actutator Type in __init__ method, please use S, M, R as first parameter to Actuator() Object")
 		
     def Run(self, duration, newPosition, speed, direction):
 	    #TODO https://www.google.com/search?q=pass+object+to+python+function&rlz=1C1GCEA_enUS892US892&oq=pass+object+to+python+function&aqs=chrome..69i57.5686j0j7&sourceid=chrome&ie=UTF-8
