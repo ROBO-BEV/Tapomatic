@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-15"
+__date__    = "Late Updated: 2020-05-17"
 __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
@@ -26,7 +26,7 @@ from CocoDrink2 import *        # Store valid CoCoTaps drink configurations
 from Actuator import *         	# Modular plug and play control of motors, servos, and relays
 from Debug import *		        # Configure datalogging parameters and debug printing control
 from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
-from LASER import *		        # Enable LASER movement and image warping around coconut
+#from LASER import *		        # Enable LASER movement and image warping around coconut
 
 # Over The Air (OTA) Updating Configurations
 VERSION = "2020.0"
@@ -56,7 +56,14 @@ MAX_TOPPING_OFF_TIME = 5
 MAX_LASER_TIME = MAX_DRILLING_TIME + MAX_TAPPING_TIME + MAX_TOPPING_OFF_TIME
 
 #The TODO?17? actuators CONSTANTS
-TOTAL_NUM_OF_ACTUATORS = 19    		#TODO DOUBLE CHECK THIS
+MAX_NUM_OF_ACTUATORS = 19    		#TODO DOUBLE CHECK THIS
+IMMUNITY_ADDITIVE_SERVO = 0
+VITAMIN_ADDITIVE_SERVO = 1
+RUM_PUMP = 2
+PINA_COLADA_FLAVOR_PUMP = 3
+PINEAPPLE_FLAVOR_PUMP = 4
+ORANGE_FLAVOR_PUMP = 5
+
 ROTATIONTAL_TOOL_MOTOR = 0
 Z_LINEAR_TOOL_MOTOR    = 1
 X_LINEAR_TOOL_MOTOR    = 2
@@ -316,7 +323,7 @@ if __name__ == "__main__":
 
     driverDebugObject = Debug(True)  #https://github.com/ROBO-BEV/Tapomatic/issues/8
 
-    actuatorObjects = np.array(TOTAL_NUM_OF_ACTUATORS)
+    actuatorObjects = np.array(MAX_NUM_OF_ACTUATORS)
 
     currentTool = NO_TOOL           # Default is having no tool attached to 3-axis system
     currentKnifeSectionInUse = 0    # Always attempt to used section 0 when code restarts
@@ -332,32 +339,25 @@ if __name__ == "__main__":
     BackendPi = RaspPi()
 
     # Actuators as define in schematic tab at https://upverter.com/design/blazesandersinc/tapomatic-v2020-1
-    actuatorObject = np.array(TOTAL_NUM_OF_ACTUATORS)
-
     immunityHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD7]	
-    ImmunityHealthAdditiveMixingServo = Actuator("S", immunityHealthAdditivePins, "Immunity Boost Servo: Seamuing MG996R", Actuator.CW)
-    actuatorObject[0] = ImmunityHealthAdditiveMixingServo
     vitaminsHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD11]
-    VitaminsHealthAdditiveMixingServo = Actuator("S", vitaminsHealthAdditivePins, "Daily Vitamins Servo: Seamuing MG996R", Actuator.CW)
-    actuatorObject[1] = VitaminsHealthAdditiveMixingServo
-    powderActuators = [actuatorObject[0], actuatorObject[1]]
- 
-    
+    actuatorList = [Actuator("S", IMMUNITY_ADDITIVE_SERVO, immunityHealthAdditivePins, "Immunity Boost Servo: Seamuing MG996R", Actuator.CW)]
+    actuatorList.append(Actuator("S", VITAMIN_ADDITIVE_SERVO, vitaminsHealthAdditivePins, "Daily Vitamins Servo: Seamuing MG996R", Actuator.CW))
+    powderActuatorList = actuatorList
+
     rumFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    rumFlavorMotor = Actuator("R", rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)
-    actuatorObject[2] = rumFlavorMotor
     pinaColadaFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    pinaColadaFlavorMotor = Actuator("R", pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW)
-    actuatorObject[3] = pinaColadaFlavorMotor
     pineappleFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    pineappleFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)	
-    actuatorObject[4] = pineappleFlavorMotor
     orangeFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    orangeFlavorMotor = Actuator("R", orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW)
-    actuatorObject[5] = orangeFlavorMotor
-    fluidActuators = [actuatorObject[2], actuatorObject[3], actuatorObject[4], actuatorObject[5]]
- 
- 
+    fluidActuatorList =  [Actuator("R", RUM_PUMP, rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)]
+    fluidActuatorList.append(Actuator("R", PINA_COLADA_FLAVOR_PUMP, pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW))
+    fluidActuatorList.append(Actuator("R", PINEAPPLE_FLAVOR_PUMP, pineappleFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
+    fluidActuatorList.append(Actuator("R", ORANGE_FLAVOR_PUMP, orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
+    # Add fluid actuators to the full system actuator list
+    actuatorList.append(fluidActuatorList)   
+
+
+  
     liftMotor1Pins = [Actautor.HIGH_PWR_5V, Actuator.GND, Actuator.I2C_SDA, Actuator.I2C_SCL]
     liftMotor1 = Actuator("L", liftMotor1Pins, "Lift Motor 1: PA-07-12-5V", Actuator.LINEAR_OUT)
     actuatorObject[6] = LiftMotor1
