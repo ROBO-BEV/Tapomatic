@@ -10,12 +10,25 @@ __doc__     = "UDP Client to receive the kiosk orders from the UDP Server runnin
 #Backedn Pi receives the csv file.
 import socket
 import sys, logging
+
+#Buffer Size , change this if want to receive the data in a different size.
+DATA_BUFFER_SIZE = 1024
+
 def raspberryClientProgram():
+    """
+        Initiate the UDP Socket bind to the local host and sepcified port,
+        waits for the UDP Server message from GUI PI.
+       	Key arguments: Nothing.
+        #Return Value: Nothing.
+       """
+    # Client binds to the local host.
     UDP_HOST = socket.gethostname()
     UDP_PORT = 5005
     try:
+        #Initiate the socket for the UDP Protocol.
         udpClientSocket = socket.socket(socket.AF_INET,  # Internet
                              socket.SOCK_DGRAM)  # UDP
+        # Bind the udp socket to the HOST AND PORT.
         udpClientSocket.bind((UDP_HOST, UDP_PORT))
         logging.info('Client is running to start receiving the order files.')
     except udpClientSocket.error:
@@ -24,7 +37,8 @@ def raspberryClientProgram():
         sys.exit(1)
 
     while True:
-        data, addr = udpClientSocket.recvfrom(1024) # buffer size is 1024 bytes
+        # Receiving data from the UDP Server.
+        data, addr = udpClientSocket.recvfrom(DATA_BUFFER_SIZE) # buffer size is 1024 bytes
         logging.info('received message:', data)
         ##TODO Write code to handle this data
 

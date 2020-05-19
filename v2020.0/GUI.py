@@ -39,10 +39,10 @@ def WelcomeScreen():
 	return render_template(HTMLtoDisplay)
 
 ###
-# TODO Murali Document Function
+# GUI for displaying options to the user Cancel order or  1. Tap 2. Cutoff.
+# HTTP GET Method
 #
-#
-# return
+# return HTML template to display TaporCut
 ###
 @app.route('/TapOrCut', methods=['GET'])
 def TapOrCutScreen():
@@ -52,10 +52,11 @@ def TapOrCutScreen():
 	return render_template(HTMLtoDisplay)
 
 ###
-# TODO Murali Document Function
-#
-#
-# return
+# GUI for displaying options to the user for selecting a brand to get printed on the coconut.
+# HTTP GET Method
+# @userselection from the tapOrCut userselection.
+# Depending on userselection, will prepare the order. (Tap or Cutoff)
+# return HTML template to display branding.html
 ###
 @app.route('/Branding', methods=['GET'])
 def Branding():
@@ -65,10 +66,10 @@ def Branding():
 	return render_template(HTMLtoDisplay)
 
 ###
-# TODO Murali Document Function
-#
-#
-# return
+# GUI for displaying options to the user for selecting Health Supplements
+# HTTP GET Method
+# @userselection from the branding.html , Depending on userselection, will print the brand on the coconut.
+# return HTML template to display health.html
 ###
 @app.route('/Health', methods=['GET'])
 def Health():
@@ -78,10 +79,10 @@ def Health():
 	return render_template(HTMLtoDisplay)
 
 ###
-# TODO Murali Document Function
-#
-#
-# return
+# GUI for displaying options to the user for selecting different flavors.
+# HTTP GET Method
+# @userselection from the health.html , Depending on userselection, will mix the selected healthy supplement to the order.
+# return HTML template to display flavor.html
 ###
 @app.route('/Flavor', methods=['GET'])
 def Flavor():
@@ -91,10 +92,11 @@ def Flavor():
 	return render_template(HTMLtoDisplay)
 
 ###
-# TODO Murali Document Function
-#
-#
-# return
+# GUI to display WAITING.
+# HTTP GET Method
+# @userselection from the flavor.html , Depending on userselection, will mix the selected flavor to the order.
+# return HTML template to display waiting.html
+##TODO This function will get a signal from the SYSTEM???? to move on to the next screen.
 ###
 @app.route('/Waiting', methods=['GET'])
 def Waiting():
@@ -104,10 +106,9 @@ def Waiting():
 	return render_template(HTMLtoDisplay)
 
 ###
-# TODO Murali Document Function
-#
-#
-# return
+# GUI to display COMPLETE.
+# HTTP GET Method
+# return HTML template to display complete.html
 ###
 @app.route('/Complete')
 def CompleteScreen():
