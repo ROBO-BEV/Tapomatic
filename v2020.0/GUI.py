@@ -38,80 +38,81 @@ def WelcomeScreen():
 	HTMLtoDisplay = "welcome.html"
 	return render_template(HTMLtoDisplay)
 
-###
-# GUI for displaying options to the user Cancel order or  1. Tap 2. Cutoff.
-# HTTP GET Method
-#
-# return HTML template to display TaporCut
-###
 @app.route('/TapOrCut', methods=['GET'])
 def TapOrCutScreen():
+	"""
+	GUI for displaying options to the user Cancel order or  1. Tap 2. Cutoff.
+	HTTP GET Method
+	:return: HTML template to display TaporCut
+	"""
 	# userSelection = request.args.get('userselection')
 	# print('userSelection:: ' + str(userSelection))
 	HTMLtoDisplay = "tapOrCut.html"
 	return render_template(HTMLtoDisplay)
 
-###
-# GUI for displaying options to the user for selecting a brand to get printed on the coconut.
-# HTTP GET Method
-# @userselection from the tapOrCut userselection.
-# Depending on userselection, will prepare the order. (Tap or Cutoff)
-# return HTML template to display branding.html
-###
+
 @app.route('/Branding', methods=['GET'])
 def Branding():
+	"""
+	GUI for displaying options to the user for selecting a brand to get printed on the coconut.
+	HTTP GET Method
+	@userselection from the tapOrCut userselection. Depending on userselection, will prepare the order. (Tap or Cutoff)
+	:return: HTML template to display branding.html
+	"""
 	userSelection = request.args.get('userselection')
 	print('userSelection:: ' + str(userSelection))
 	HTMLtoDisplay = "branding.html"
 	return render_template(HTMLtoDisplay)
 
-###
-# GUI for displaying options to the user for selecting Health Supplements
-# HTTP GET Method
-# @userselection from the branding.html , Depending on userselection, will print the brand on the coconut.
-# return HTML template to display health.html
-###
 @app.route('/Health', methods=['GET'])
 def Health():
+	"""
+	GUI for displaying options to the user for selecting Health Supplements
+	 HTTP GET Method
+	 @userselection from the branding.html , Depending on userselection, will print the brand on the coconut.
+	:return: HTML template to display health.html
+	"""
 	userSelection = request.args.get('userselection')
 	print('userSelection:: ' + str(userSelection))
 	HTMLtoDisplay = "health.html"
 	return render_template(HTMLtoDisplay)
 
-###
-# GUI for displaying options to the user for selecting different flavors.
-# HTTP GET Method
-# @userselection from the health.html , Depending on userselection, will mix the selected healthy supplement to the order.
-# return HTML template to display flavor.html
-###
+
 @app.route('/Flavor', methods=['GET'])
 def Flavor():
+	"""
+	GUI for displaying options to the user for selecting different flavors.
+	HTTP GET Method
+	@userselection from the health.html , Depending on userselection, will mix the selected healthy supplement to the order.
+	:return: HTML template to display flavor.html
+	"""
 	userSelection = request.args.get('userselection')
 	print('userSelection:: ' + str(userSelection))
 	HTMLtoDisplay = "flavor.html"
 	return render_template(HTMLtoDisplay)
 
-###
-# GUI to display WAITING.
-# HTTP GET Method
-# @userselection from the flavor.html , Depending on userselection, will mix the selected flavor to the order.
-# return HTML template to display waiting.html
-##TODO This function will get a signal from the SYSTEM???? to move on to the next screen.
-###
+
 @app.route('/Waiting', methods=['GET'])
 def Waiting():
+	"""
+	TODO This function will get a signal from the SYSTEM???? to move on to the next screen.
+	GUI to display WAITING.
+    HTTP GET Method
+    @userselection from the flavor.html , Depending on userselection, will mix the selected flavor to the order.
+	:return: HTML template to display waiting.html
+	"""
 	userSelection = request.args.get('userselection')
 	print('userSelection:: ' + str(userSelection))
 	HTMLtoDisplay = "waiting.html"
 	return render_template(HTMLtoDisplay)
 
-###
-# GUI to display COMPLETE.
-# HTTP GET Method
-# return HTML template to display complete.html
-###
 @app.route('/Complete')
 def CompleteScreen():
+	"""
+	GUI to display COMPLETE.
+	HTTP GET Method
+	:return: HTML template to display complete.html
+	"""
 	HTMLtoDisplay = "complete.html"
 	return render_template(HTMLtoDisplay)
 

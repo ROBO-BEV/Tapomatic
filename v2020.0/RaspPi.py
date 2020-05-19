@@ -23,7 +23,7 @@ class RaspPi:
     RAVEN_DB_IP = "TODO"
 
     # TODO Raspberry Pi 4B refernce pin constants as defined in rc.local script at ~/usr/??? 
-    NUM_PI_GPIO_PINS = 8              	# Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
+    NUM_PI_GPIO_PINS = 8              	    # Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
     MAX_NUM_PI_A_OR_B_PLUS_GPIO_PINS = 40 	# Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
     MAX_NUM_PI_A_OR_B_GPIO_PINS = 26      	# Pins 1 to 26 on Raspberry Pi A or B
     NUM_PI_OUTPUT_PINS = 4                	# This software instance of Raspberry Pi can have up to four output pins
