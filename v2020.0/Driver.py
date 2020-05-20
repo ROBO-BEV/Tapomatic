@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-17"
+__date__    = "Late Updated: 2020-05-20"
 __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
@@ -63,14 +63,20 @@ RUM_PUMP = 2
 PINA_COLADA_FLAVOR_PUMP = 3
 PINEAPPLE_FLAVOR_PUMP = 4
 ORANGE_FLAVOR_PUMP = 5
+Z1_LINEAR_LIFT_MOTOR = 6
+Z2_LINEAR_LIFT_MOTOR = 7
+X1_CUTTING_MOTOR = 8
+X2_CUTTING_MOTOR = 9
+Y1_CUTTING_MOTOR = 10
+Y1_LINEAR_COVER_MOTOR = 11
+Y2_LINEAR_COVER_MOTOR = 12
+
+
 
 ROTATIONTAL_TOOL_MOTOR = 0
 Z_LINEAR_TOOL_MOTOR    = 1
 X_LINEAR_TOOL_MOTOR    = 2
 Y_LINEAR_TOOL_MOTOR    = 3
-Z1_LINEAR_LIFT_MOTOR   = 4
-Z2_LINEAR_LIFT_MOTOR   = 5
-Y_LINEAR_COVER_MOTOR   = 6
 
 #TODO
 
@@ -323,7 +329,7 @@ if __name__ == "__main__":
 
     driverDebugObject = Debug(True)  #https://github.com/ROBO-BEV/Tapomatic/issues/8
 
-    actuatorObjects = np.array(MAX_NUM_OF_ACTUATORS)
+    #actuatorObjects = np.array(MAX_NUM_OF_ACTUATORS)
 
     currentTool = NO_TOOL           # Default is having no tool attached to 3-axis system
     currentKnifeSectionInUse = 0    # Always attempt to used section 0 when code restarts
@@ -333,64 +339,56 @@ if __name__ == "__main__":
     #TODO tempDrink = CocoDrink2(CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE)
     #TODO tempDrink = CocoDrink(CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE)
     vendQueue = np.array(MAX_VEND_QUEUE_SIZE)
-    # vendQueue[0] = [tempDrink]
+
 
     GuiPi = RaspPi()
     BackendPi = RaspPi()
 
+
     # Actuators as define in schematic tab at https://upverter.com/design/blazesandersinc/tapomatic-v2020-1
     immunityHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD7]	
     vitaminsHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD11]
-    actuatorList = [Actuator("S", IMMUNITY_ADDITIVE_SERVO, immunityHealthAdditivePins, "Immunity Boost Servo: Seamuing MG996R", Actuator.CW)]
-    actuatorList.append(Actuator("S", VITAMIN_ADDITIVE_SERVO, vitaminsHealthAdditivePins, "Daily Vitamins Servo: Seamuing MG996R", Actuator.CW))
+    actuatorList = [Actuator('S', IMMUNITY_ADDITIVE_SERVO, immunityHealthAdditivePins, "Immunity Boost Servo: Seamuing MG996R", Actuator.CW)]
+    actuatorList.append(Actuator('S', VITAMIN_ADDITIVE_SERVO, vitaminsHealthAdditivePins, "Daily Vitamins Servo: Seamuing MG996R", Actuator.CW))
     powderActuatorList = actuatorList
 
     rumFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     pinaColadaFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     pineappleFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     orangeFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    fluidActuatorList =  [Actuator("R", RUM_PUMP, rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)]
-    fluidActuatorList.append(Actuator("R", PINA_COLADA_FLAVOR_PUMP, pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW))
-    fluidActuatorList.append(Actuator("R", PINEAPPLE_FLAVOR_PUMP, pineappleFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
-    fluidActuatorList.append(Actuator("R", ORANGE_FLAVOR_PUMP, orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
+    fluidActuatorList =  [Actuator('R', RUM_PUMP, rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)]
+    fluidActuatorList.append(Actuator('R', PINA_COLADA_FLAVOR_PUMP, pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW))
+    fluidActuatorList.append(Actuator('R', PINEAPPLE_FLAVOR_PUMP, pineappleFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
+    fluidActuatorList.append(Actuator('R', ORANGE_FLAVOR_PUMP, orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
     # Add fluid actuators to the full system actuator list
     actuatorList.append(fluidActuatorList)   
 
+    liftMotor1Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
+    liftMotor2Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
+    liftingActuatorList = [Actuator('L', Z1_LINEAR_LIFT_MOTOR, liftMotor1Pins, "Lift Motor 1: PA-07-12-5V", Actuator.LINEAR_OUT)]
+    liftingActuatorList.append(Actuator('L', Z2_LINEAR_LIFT_MOTOR, liftMotor2Pins, "Lift Motor 2: PA-07-12-5V", Actuator.LINEAR_OUT))
+    # Add lifting actuators to the full system actuator list
+    actuatorList.append(liftingActuatorList)   
 
-  
-    liftMotor1Pins = [Actautor.HIGH_PWR_5V, Actuator.GND, Actuator.I2C_SDA, Actuator.I2C_SCL]
-    liftMotor1 = Actuator("L", liftMotor1Pins, "Lift Motor 1: PA-07-12-5V", Actuator.LINEAR_OUT)
-    actuatorObject[6] = LiftMotor1
-    liftMotor2Pins = [Actautor.HIGH_PWR_5V, Actuator.GND, Actuator.I2C_SDA, Actuator.I2C_SCL]
-    liftMotor2 = Actuator("L", liftMotor2Pins, "Lift Motor 2: PA-07-12-5V", Actuator.LINEAR_OUT)
-    actuatorObject[7] = LiftMotor2
-    liftingActuators = [actuatorObject[6], actuatorObjects[7]]
+    cuttingMotor1Pins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    cuttingMotor2Pins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    knifePositionMotorPins = [Actuator.HIGH_PWR_5V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    cuttingActuatorList = [Actuator('L', X1_CUTTING_MOTOR, cuttingMotor1Pins, "Cutting Motor 1: PA-04-6-100", Actuator.LINEAR_OUT)]
+    cuttingActuatorList.append(Actuator('L', X2_CUTTING_MOTOR, cuttingMotor2Pins, "Cutting Motor 2: PA-04-6-100", Actuator.LINEAR_OUT))
+    cuttingActuatorList.append(Actuator('L', Y1_CUTTING_MOTOR, knifePositionMotorPins, "Knife Position Motor: PA-07-?TODO?-5V", Actuator.LINEAR_OUT))
+    # Add cutting actuators to the full system actuator list
+    actuatorList.append(cuttingActuatorList)   
 
+    coveringMotor1Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
+    coveringMotor2Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
+    coveringActuatorList = [Actuator('L', Y1_LINEAR_COVER_MOTOR, coveringMotor1Pins, "Covering Motor 1: PA-07-?TODO?-5V", Actuator.LINEAR_OUT)]
+    coveringActuatorList.append(Actuator('L', Y2_LINEAR_COVER_MOTOR, coveringMotor2Pins, "Covering Motor 2: PA-07-?TODO?-5V", Actuator.LINEAR_OUT))
+    # Add cocering actuators to the full system actuator list
+    actuatorList.append(coveringActuatorList)   
 
-    cuttingMotor1Pins = [Actuator.PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    cuttingMotor1 = Actuator("L", cuttingMotor1Pins, "Cutting Motor 1: PA-04-6-100", Actuator.LINEAR_OUT)
-    actuatorObject[8] = cuttingMotor1    
-    cuttingMotor2Pins = [Actuator.PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    cuttingMotor2 = Actuator("L", cuttingMotor2Pins, "Cutting Motor 2: PA-04-6-100", Actuator.LINEAR_OUT)
-    actuatorObject[9] = cutingMotor2
-    knifePositionMotorPins [Actuator.PWR_5V, Actator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    knifePositionMotor = Actuator("L", knifePositionMotorPins, "Knife Position Motor : PA-07-?TODO?-5V", Actuator.LINEAR_OUT)
-    actuatorObject[10] = knifePositionMotor
-    cuttingActuators = [ActuatorObject[8], ActuatorObject[9], ActuatorObject[10]]
-
-    coveringMotor1Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
-    coveringMotor1 = Actuator("L", coveringMotorPins, "Knife Position Motor : PA-07-?TODO?-5V", Actuator.LINEAR_OUT)
-    actuatorsObject[11] = coveringMotor1
-    coveringMotor2Pins = [BackendPi.PWR_12V, BackendPi1.GND, BackendPi1.TODO]
-    coveringMotor2 = Actuator("L", coveringMotorPins, "Knife Position Motor : PA-07-?TODO?-5V", Actuator.LINEAR_OUT)
-    actuatorsObject[11] = coveringMotor2    
-    coverActuators = [ActuatorObject[11], ActuatorObject[12]]
-
-
-    laserObject = LASER("40004672600113", LASER.HIGH_POWER)
+    #TODO FIX Vec3b laserObject = LASER("40004672600113", LASER.HIGH_POWER)
     
     guiReady = False 
-
 
     while(True):
         for drinkNum in range(0, MAX_VEND_QUEUE_SIZE-1):
