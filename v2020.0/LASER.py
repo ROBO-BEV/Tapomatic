@@ -14,6 +14,8 @@ from time import gmtime, strftime
 # Computer Vision module to 
 import cv2
 
+import numpy as np
+
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
 
@@ -82,26 +84,30 @@ class LASER:
 		Return value:
 		newImage -- A new image that has been warpped to to display correctly after LASER branding 
 		"""
-		Mat m = Mat() #... // some RGB image
+		# https://docs.opencv.org/2.4/doc/tutorials/core/mat_the_basic_image_container/mat_the_basic_image_container.html
+        # https://pythonprogramming.net/loading-images-python-opencv-tutorial/
+
+		#Mat m = Mat() #... // some RGB image
+		img = cv.imread(currentImage)
 		imgWidth = m.width
 		imgHeight = m.height
 
 		for xPixel in range(imgWidth):
 			for yPixel in range(imgHeight):
-					Vec3b rgbColor = currentImage.at<Vec3b>(xPixel,yPixel)
-					#TODO TRANSLATION
-					#Split image into three part vertically and horizonatlly
-					newImage.at<Vec3b>(xPixel,yPixel) = rgbColor
-					if(pixel < (imgWidth/5)):
-						xPixel = xPixel + 8		# Skip EIGHT pixels since ends warps more at ends
-					elif((imgWidth/5) <= xPixel and xPixel < (imgWidth*2/5)):
-						xPixel = xPixel + 4		# Skip FOUR pixels since ends warps more at ends
-					elif((imgWidth*2/5) <= xPixel and xPixel < (imgWidth*3/5)):
-						xPixel = xPixel + 0
-					elif((imgWidth*3/5) <= xPixel and xPixel < (imgWidth*4/5)):
-						xPixel = xPixel + 4		# Skip FOUR pixels since ends warps more at ends
-					elif((imgWidth*4/5) <= xPixel and xPixel < (imgWidth)):	
-						xPixel = xPixel + 8		# Skip EIGHT pixels since ends wraps more at ends
+			    Vec3b rgbColor = img.at<Vec3b>(xPixel,yPixel)
+				#TODO TRANSLATION
+				#Split image into three part vertically and horizonatlly
+				newImage.at<Vec3b>(xPixel,yPixel) = rgbColor
+				if(pixel < (imgWidth/5)):
+					xPixel = xPixel + 8		# Skip EIGHT pixels since ends warps more at ends
+				elif((imgWidth/5) <= xPixel and xPixel < (imgWidth*2/5)):
+					xPixel = xPixel + 4		# Skip FOUR pixels since ends warps more at ends
+				elif((imgWidth*2/5) <= xPixel and xPixel < (imgWidth*3/5)):
+					xPixel = xPixel + 0
+				elif((imgWidth*3/5) <= xPixel and xPixel < (imgWidth*4/5)):
+					xPixel = xPixel + 4		# Skip FOUR pixels since ends warps more at ends
+				elif((imgWidth*4/5) <= xPixel and xPixel < (imgWidth)):	
+					xPixel = xPixel + 8		# Skip EIGHT pixels since ends wraps more at ends
 						
 
 	def ConfigureLaserForNewImage(powerLevel, filename):
