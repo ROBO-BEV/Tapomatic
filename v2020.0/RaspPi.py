@@ -2,7 +2,7 @@
 
 """
 __author__  = "Blaze Sanders"
-__email__   = "blaze@cocotaps.com"
+__email__   = "blaze@cocotaps.mvp"
 __company__ = "CocoTaps"
 __status__  = "Development"
 __date__    = "Late Updated: 2020-05-08"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 __author__  = "Blaze Sanders"
-__email__   = "blaze.d.a.sanders@gmail.com"
+__email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
 __date__    = "Late Updated: 2020-05-20"

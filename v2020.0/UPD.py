@@ -2,7 +2,7 @@
 
 """
 __author__  = "Blaze Sanders and Ethan Sharratt"
-__email__   = "blaze@cocotaps.com and sharratt@tethers.com"
+__email__   = "blaze@cocotaps.mvp and sharratt@tethers.mvp"
 __company__ = "Coco Taps and Tethers Unlimited Inc."
 __status__  = "Development"
 __date__    = "Late Updated: 2020-04-29"
