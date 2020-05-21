@@ -6,6 +6,8 @@
 *.elf
 *.apk
 
+# Desktop Services to help Mac work out how to display folders when you open them 
+*.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

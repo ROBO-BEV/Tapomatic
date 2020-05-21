@@ -101,14 +101,14 @@ class Actuator:
     # wires are on the actuator side of hardwrae schematic. While pins are on the CPU side, but often have similar names
     wires = [NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE]
 
-    def __init__(self, actuatorID, aType, pins, partNumber, direction):
+    def __init__(self, aType, actuatorID, pins, partNumber, direction):
 	    """
 	    Constructor to initialize an Actutator object, which can be a Servo(), Motor(), or Relay()
 	
 	    Key arguments:
 	    self - Newly created object
-	    actuatorID - Interger CONSTANT defined in Driver.py to enable quick array searches 
         aType - Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
+	    actuatorID - Interger CONSTANT defined in Driver.py to enable quick array searches 
 	    pins - Array to document wires / pins being used by Raspberry Pi to control an actuator
 	    partNumber - Vendor part number string variable (e.g. Seamuing MG996R)
 	    direction - Set counter-clockwise (CCW) / Linear IN or clockwise (CW) / Linear OUT as the forward direction
@@ -135,7 +135,7 @@ class Actuator:
 	    # https://stackoverflow.com/questions/14301967/bare-asterisk-in-function-arguments/14302007#14302007
 	    if(aType == "S"):
 		    # The last wire in array is the PWM control pin
-		    self.actuatorObject = Servo.AngularServo(wires[len(wires)-1])
+		    self.actuatorObject = gpiozero.Servo.AngularServo(wires[len(wires)-1])
 		    #TODO If above DOES NOT WORK: self.actuatorType = Servo(wires[0], initial_value=0, min_pulse_width=1/1000, max_pulse_width=2/1000, frame_width=20/1000, pin_factory=None)
 	    elif(aType == "M"):
 		    # The last two wires in array are the INPUT control pins
@@ -146,7 +146,7 @@ class Actuator:
 		    self.actuatorObject = OutputDevice(wires[len(wires)-1])
 		    #TODO If above DOES NOT WORK: self.actuatorObject = gpiozero.OutputDevice(wired[0], active_high=False, initial_value=False)
 	    else:
-		    Debug.Dprint(self.DebugObject, "INVALID Actutator Type in __init__ method, please use S, M, R as first parameter to Actuator() Object")
+		    Debug.Dprint(self.DebugObject, "INVALID Actutator Type in __init__ method, please use S, M, or R string as first parameter to Actuator() Object")
 		
     def Run(self, duration, newPosition, speed, direction):
 	    #TODO https://www.google.com/search?q=pass+object+to+python+function&rlz=1C1GCEA_enUS892US892&oq=pass+object+to+python+function&aqs=chrome..69i57.5686j0j7&sourceid=chrome&ie=UTF-8
@@ -252,6 +252,7 @@ if __name__ == "__main__":
 	    time.sleep(20) # seconds or milliseconds?
 	    relay.off()
 	except NameError:
+	    DebugObject = Debug(True)
 	    Debug.Dprint(DebugObject, "WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
 	    print("END ACTUATOR.PY MAIN")
 
