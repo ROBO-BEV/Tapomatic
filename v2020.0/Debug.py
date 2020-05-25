@@ -28,15 +28,27 @@ USER_ERROR = 6
 
 class Debug:
 
-    def __init__(self, initState):
+    def __init__(self, initState, pythonClass):
+        """
+        
+        Key arguments:
+        initState --
+        pythonClass --
+        
+        
+        Return value:
+        Newly created Debug object
+        """
+    
         self.f = open('DataLog.txt','r+')    # Open read and append at end write access to .txt file
-
+        self.pythonClass = pythonClass
+        
         # Toogle initial debug statements ON (true) or Off (false)
         if(initState == False):
             self.DEBUG_STATEMENTS_ON = False
         else:
             self.DEBUG_STATEMENTS_ON = True
-            print("DEBUG STATEMENTS ARE ON")
+            print("DEBUG STATEMENTS ARE ON INSIDE " + pythonClass  " CLASS")
 
     def GetMode(self):
 	    return self.DEBUG_STATEMENTS_ON
@@ -51,14 +63,21 @@ class Debug:
         self.f.close()
 
     ###
-    # Debug print to terminal only
-    # Calls standard Python 3 print("X") statement if class variable is TRUE
-    #
-    # return NOTHING
-    ###
     def Dprint(self, logMessage):
+        """
+        Debug print to terminal only
+        Calls standard Python 3 print("X") statement if class variable is TRUE
+        
+        Key arguments:
+        self --
+        logMessage -- 
+        
+        Return value:
+        NOTHING      
+        """
+    
         if(self.DEBUG_STATEMENTS_ON):
-            print("MESSAGE: " + logMessage + "\n")
+            print(self.pythonClass + " MESSAGE: " + logMessage + "\n")
         else:
             print("\n") # PRINT NEW LINE / DO NOTHING
 
@@ -72,16 +91,16 @@ class Debug:
     ###
     def Lprint(self, logMessage):
         if(self.DEBUG_STATEMENTS_ON):
-            self.Dprint(logMessage + " on " + strftime("%c") + "\n")
+            self.Dprint(self.pythonClass + logMessage + " on " + strftime("%c") + "\n")
 
-            self.f.write("DAY & TIME: " + strftime("%c") + "\n")
-            self.f.write("MESSAGE: " + logMessage + "\n")
+            self.f.write(self.pythonClass + " DAY & TIME: " + strftime("%c") + "\n")
+            self.f.write(self.pythonClass + " MESSAGE: " + logMessage + "\n")
         else:
             print("\n") # PRINT NEW LINE / DO NOTHING
 
 if __name__ == "__main__":
-    print("UNIT TESTING:")
-    test = Debug()
+    print("UNIT TESTING Debug.py:")
+    test = Debug(True, "Debug.py")
 
     print(test.GetMode())
     test.TurnOffDebugMode()
