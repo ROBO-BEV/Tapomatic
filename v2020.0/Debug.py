@@ -48,7 +48,7 @@ class Debug:
             self.DEBUG_STATEMENTS_ON = False
         else:
             self.DEBUG_STATEMENTS_ON = True
-            print("DEBUG STATEMENTS ARE ON INSIDE " + pythonClass  " CLASS")
+            print("DEBUG STATEMENTS ARE ON INSIDE " + pythonClass + " CLASS")
 
     def GetMode(self):
 	    return self.DEBUG_STATEMENTS_ON
