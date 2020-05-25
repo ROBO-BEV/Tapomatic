@@ -1,5 +1,6 @@
 yy
 #!/usr/bin/env python
+import cv as cv
 
 __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
@@ -102,16 +103,17 @@ class LASER:
 
 		#Mat m = Mat() #... // some RGB image
 		img = cv.imread(currentImage)
-		imgWidth = m.width
-		imgHeight = m.height
+		imgWidth = img.width
+		imgHeight = img.height
 
 		for xPixel in range(imgWidth):
 			for yPixel in range(imgHeight):
-			    Vec3b rgbColor = img.at<Vec3b>(xPixel,yPixel)
+				rgbColor = img.at<Vec3b>(xPixel,yPixel)
 				#TODO TRANSLATION
 				#Split image into three part vertically and horizonatlly
-				newImage.at<Vec3b>(xPixel,yPixel) = rgbColor
-				if(pixel < (imgWidth/5)):
+				##TODO Why we need the below line? Blaze?
+				# img.at<Vec3b>(xPixel,yPixel) = rgbColor
+				if(xPixel < (imgWidth/5)):
 					xPixel = xPixel + 8		# Skip EIGHT pixels since ends warps more at ends
 				elif((imgWidth/5) <= xPixel and xPixel < (imgWidth*2/5)):
 					xPixel = xPixel + 4		# Skip FOUR pixels since ends warps more at ends
@@ -119,7 +121,7 @@ class LASER:
 					xPixel = xPixel + 0
 				elif((imgWidth*3/5) <= xPixel and xPixel < (imgWidth*4/5)):
 					xPixel = xPixel + 4		# Skip FOUR pixels since ends warps more at ends
-				elif((imgWidth*4/5) <= xPixel and xPixel < (imgWidth)):	
+				elif((imgWidth*4/5) <= xPixel and xPixel < (imgWidth)):
 					xPixel = xPixel + 8		# Skip EIGHT pixels since ends wraps more at ends
 						
 
