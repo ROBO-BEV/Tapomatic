@@ -1,11 +1,11 @@
-
+yy
 #!/usr/bin/env python
 
 __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development" 
-__date__    = "Late Updated: 2020-05-15"
+__date__    = "Late Updated: 2020-05-21"
 __doc__     = "Class to control and move LASER system"
 
 # Allow program to create GMT and local timestamps
@@ -22,11 +22,10 @@ from Debug import *
 class LASER:
 
 	# Preset LASER power level CONSTANTS (units are Watts)
-	HIGHEST_POWER = 10.01
 	HIGH_POWER = 10.00
 	STANDARD_POWER = 5.00
 	LOW_POWER = 2.50
-	LOWEST_POWER = 0.01 
+	DEFAULT_LASER_CONSTANT = 0.05264472  	#TODO Adjust this until LASER branding looks good
 
 	# LASER branding PNG filename CONSTANTS
 	RESORT_WORLD_LOGO = "ResortWorldLogoV0.png"
@@ -36,30 +35,43 @@ class LASER:
 	BACARDI_LOGO = "BacardiLogoV0.png"
 	ROYAL_CARRIBBEAN_LOGO = "RoyalCarribbeanLogoV0.png"
 
-	LASER_CONSTANT = 0.05264472  	#TODO Adjust this until LASER branding looks good
-
-	def __init__(self, partNumber, powerLevel):
+	# Global class variable
+	laserConstant = -1
+	
+	def __init__(self, gpioFirePin, supplierPartNumber, cocoPartNumber, powerLevel, maxPowerLevel, brandingArt):
 	    """
-	    TODO
+	    Create a LASER object storing power, part number, and image data to used when fired
 	    
 	    Key arguments:
-	    partNumber -- Supplier part number (i.e. ?????)
+        gpioFirePin -- 5V GPIO pin used to control an LASER
+	    supplierPartNumber -- External supplier part number (i.e. PA-07-12-5V)
+	    cocoPartNumber -- Internal part number (i.e XXX-YYYYY-Z))linked to to one supplier part number
 	    powerLevel -- Power in Wats to intialize LASER module to
-	    brandingArt -- Black & White PNG image ro brand / burn into an object
-	    """
+	    maxPowerLevel -- Max power in Watts that LASER can support in continous operation (> 30 seconds)
+	    brandingArt -- Black & White PNG image to brand / burn into an object
+	    
+	    Return value:
+	    Newly created LASER object
+	    """	    
 	    self.DebugObject = Debug(True)
 	    
+	    self.gpioFirePin = gpiozero.DigitalOutputDevice(gpioPin)
+	    
 	    self.powerLevel = powerLevel        # Initialize to 8.0 Watts
-	    if(LOWEST_POWER > powerLevel or powerLevel > HIGHEST_POWER):
+	    if(0 > powerLevel or powerLevel > self.maxPowerLevel):
 	        # Check for valid power level and default to 10 Watts if invalid
-	        Debug.Dprint(DebugOject, "Invalid power setting LASER power set to " + repr(HIGH_POWER))
-	        self.powerLevel = HIGH_POWER
+	        Debug.Dprint(DebugOject, "Invalid power. I'm  setting the LASER power to " + repr(self.maxPowerLevel) + " Watts")
+	        self.powerLevel = self.maxPowerLevel
 	    
 	    self.partNumber = partNumber
+	    
 	    self.brandingArt = COCOTAPS_LOGO	# Initialize to standard CocoTaps logo
+
 
 	def LoadLImage(fileName):
 		"""
+		TODO CALL ComputerVision.py code
+		
 		Load a PNG image on the local harddrive into RAM
 		
 		Key arguments:
@@ -72,6 +84,7 @@ class LASER:
 		path = "../static/images/" + fileName
 		img = cv2.imread(path)
 		return img
+
 
 	def WarpImage(currentImage, coconutSize):
 		"""
@@ -110,42 +123,107 @@ class LASER:
 					xPixel = xPixel + 8		# Skip EIGHT pixels since ends wraps more at ends
 						
 
-	def ConfigureLaserForNewImage(powerLevel, filename):
+	def ConfigureLaserForNewImage(filename):
 		"""
 		Calculate firing duration based on LASER power level and image size
+
+        Key arguments:
+        filename --
+
+        Return value:
+        pixelBurnDuration -- Time in seconds that LASER should dwell on coconut pixel
 		"""
-		#TODO 
-		if(powerLevel != STANDARD_POWER):
-			numOfPixels = GetNumOfPixels(filename)
-			moistureLevel = GetCoconutMoistureLevel()
-			duration = LASER_CONSTANT * moistureLevel * numOfPixels 
-		elif():
-			#TODO CHANGE POWER LEVEL HERE
-			print("TODO")
-		elif():
-			print("TODO")
+
+		numOfPixels = GetNumOfPixels(filename)
+	    moistureLevel = GetCoconutMoistureLevel()
+
+		if(0 < self.powerLevel or self.powerLevel <= LOW_POWER):
+			laserConstant = DEFAULT_LASER_CONSTANT * 0.5
+		elif(LOW < self.powerLevel or  self.powerLevel < STANDARD_POWER):
+			laserConstant = DEFAULT_LASER_CONSTANT * 1.0
+		elif(self.powerLevel >= STANDARD_POWER):
+			laserConstant = DEFAULT_LASER_CONSTANT * 1.5
 		else:
 			Debug.Lprint("ERROR: Invalid power level choosen in ConfigureLaserForNewImage() function")
 
-		return duration
+    	pixelBurnDuration = laserConstant * moistureLevel/100.0 * numOfPixels/1000000 
+
+		return pixelBurnDuration
+
 
 	def StopLaser():
-		print("TODO")
+        """
+        Toogle GPIO pin connected to high power relay LOW to turn OFF a LASER
+        
+        Key arguments:
+        NONE
+        
+        Return value:
+        NOTHING
+        """"
+		gpiozero.off(self.gpioFirePin)
+		
+		
+	def BurnImage(filename):
+        """
+        Toogle GPIO pin connected to high power relay HIGH to turn ON a LASER
+        
+        Puts CPU to sleep so NOT a threadable function yet
+        
+        Key arguments:
+        filename --
+        
+        Return value:
+        NOTHING
+        """"
 
-	def FireLaser(duration):
-		print("TODO")
+        pixelDwellDuration = ConfigureLaserForNewImage(filename):
+        
+        dutyCycle = self.powerLevel/self.maxPowerLevel
+        imageBurnComplete = False
+        frequency = 100                                         # Desired LASER pulse in Hz
+        while(!imageBurnComplete):
+            # laserConstant is a class variable
+            highTime = 1/frequency  * dutyCycle * laserConstant        
+            sleep(highTime)                                     # Sleep upto 10 ms and keep LASER ON
+		    gpiozero.on(self.gpioFirePin)
+            sleep(0.010 - highTime)                             # Sleep 10 ms minus time is HIGH
+		    gpiozero.off(self.gpioFirePin)
+
+            imageBurnComplete = MoveLaserStepperMotor(pixelDwellDuration, frequency)
+
+
+
+    def MoveLaserStepperMotor(frequency):
+        """
+        
+        Return value:
+        
+        """
+        for pixelNum in range (0, GetNumOfPixels(filename) - 1):
+            
+            sleep(pixelDwellDuration + 1/frequency)
+            if(pixelNum = )
+        
 
 	def SetPowerLevel(watts, cocoPartNumber):
 		"""
 		Set the power level based on LASER part number being used
 		
 		Key arguments: 
-		watts -- 
+		watts -- Power in Watts to set LASER output to
+		cocoPartNumber -- Internal XXX-YYYYY-Z part number linked to a vendor part number 
 		"""
-		self.powerLevel = watts
 		
-
-
+		if(cocoPartNumber == "205-00003-A"):
+		    if(0 > watts or watts > 10):
+                Debug.Dprint(self.DebugObject, "The 400067260113 LASER must have power level between or equal to 0.1 and 10 Watts")
+            else:
+                self.powerLevel = watts            
+		else():
+                Debug.Dprint(self.DebugObject, "This LASER supplier part number is not supported in LASER.py code base")
+		    
+		
 	def GetNumOfPixels(filename):
 		"""
 		Calculate the total number of (pixels / 1,000,000) that is in an image file 
@@ -156,8 +234,9 @@ class LASER:
 		Return value:
 		totalNumOfPixels -- Total number of megapixels (million pixels) in an image
 		"""
+		
 		img = LoadLImage(filename)
-		Mat m = ... // some RGB image
+		#Mat m = ... // some RGB image
 		imgWidth = m.width
 		imgHeight = m.height
 		totalNumOfPixels = imgWidth * imgHeight
@@ -167,10 +246,15 @@ class LASER:
 	def GetCoconutMoistureLevel():
 		"""
 		Moisture level from 0 to 100 corresponing to % humidity
+    	
+    	Key arguments:
+    	NONE
+    	
     	Return value:
     	moisturePercentage -- An float from 0.0 to 100.0 
 		"""
-	    #idTODO Moisture sensor in fridge
+		
+	    #TODO Moisture sensor in fridge
 		print("TODO I2C sensor")
-		moisturePercentage = 5
+		moisturePercentage = 100
 		return moisturePercentage

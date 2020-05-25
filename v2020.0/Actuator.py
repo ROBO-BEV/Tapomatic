@@ -135,7 +135,7 @@ class Actuator:
 	    # https://stackoverflow.com/questions/14301967/bare-asterisk-in-function-arguments/14302007#14302007
 	    if(aType == "S"):
 		    # The last wire in array is the PWM control pin
-		    self.actuatorObject = gpiozero.Servo.AngularServo(wires[len(wires)-1])
+		    self.actuatorObject = Servo.AngularServo(wires[len(wires)-1])
 		    #TODO If above DOES NOT WORK: self.actuatorType = Servo(wires[0], initial_value=0, min_pulse_width=1/1000, max_pulse_width=2/1000, frame_width=20/1000, pin_factory=None)
 	    elif(aType == "M"):
 		    # The last two wires in array are the INPUT control pins
