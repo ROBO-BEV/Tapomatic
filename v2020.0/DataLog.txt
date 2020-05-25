@@ -1,4 +1,4 @@
-DAY & TIME: Sun Mar  1 08:25:25 2020
-MESSAGE: Goodbye World data logging is NOT fun
-DAY & TIME: Sun Mar  1 08:25:25 2020
-MESSAGE: Just kidding :)
+Debug.py DAY & TIME: Mon May 25 06:10:39 2020
+Debug.py MESSAGE: Goodbye World data logging is NOT fun
+Debug.py DAY & TIME: Mon May 25 06:10:39 2020
+Debug.py MESSAGE: Just kidding :)
