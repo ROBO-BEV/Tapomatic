@@ -1,20 +1,21 @@
-yy
 #!/usr/bin/env python
-import cv as cv
-
+"""
 __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development" 
-__date__    = "Late Updated: 2020-05-21"
+__date__    = "Late Updated: 2020-05-25"
 __doc__     = "Class to control and move LASER system"
+"""
 
 # Allow program to create GMT and local timestamps
 from time import gmtime, strftime
 
-# Computer Vision module to 
+# Computer Vision modules to edit / warp images  
 import cv2
+import cv as cv
 
+#TODO REMOVE IF NOT USING ARRASY ANY MORE?
 import numpy as np
 
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
@@ -101,7 +102,7 @@ class LASER:
 		# https://docs.opencv.org/2.4/doc/tutorials/core/mat_the_basic_image_container/mat_the_basic_image_container.html
         # https://pythonprogramming.net/loading-images-python-opencv-tutorial/
 
-		#Mat m = Mat() #... // some RGB image
+		#TODO WHAT DOES THIS DO? Mat m = Mat() #... // some RGB image
 		img = cv.imread(currentImage)
 		imgWidth = img.width
 		imgHeight = img.height
@@ -109,10 +110,11 @@ class LASER:
 		for xPixel in range(imgWidth):
 			for yPixel in range(imgHeight):
 				rgbColor = img.at<Vec3b>(xPixel,yPixel)
-				#TODO TRANSLATION
-				#Split image into three part vertically and horizonatlly
+				# Split image into three part vertically and horizonatlly
 				##TODO Why we need the below line? Blaze?
+				### Murali this makes a new image which will be warped and we can NOT use img variable name
 				# img.at<Vec3b>(xPixel,yPixel) = rgbColor
+				warppedImg.at<Vec3b>(xPixel,yPixel) = rgbColor				
 				if(xPixel < (imgWidth/5)):
 					xPixel = xPixel + 8		# Skip EIGHT pixels since ends warps more at ends
 				elif((imgWidth/5) <= xPixel and xPixel < (imgWidth*2/5)):
