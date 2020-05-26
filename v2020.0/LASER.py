@@ -13,7 +13,7 @@ from time import gmtime, strftime
 
 # Computer Vision modules to edit / warp images  
 import cv2
-import cv as cv
+#TODO ADD BACK? import cv
 
 #TODO REMOVE IF NOT USING ARRASY ANY MORE?
 import numpy as np
@@ -38,9 +38,9 @@ class LASER:
 	ROYAL_CARRIBBEAN_LOGO = "RoyalCarribbeanLogoV0.png"
 	
 	# Coconut sizing CONSTANTS
-	100MM_SIZE = 100
-
-	# Global class variable
+	SIZE_102MM = 102
+    
+    # Global class variable
 	laserConstant = -1
 	
 	def __init__(self, gpioFirePin, supplierPartNumber, cocoPartNumber, powerLevel, maxPowerLevel, brandingArt):
@@ -70,7 +70,7 @@ class LASER:
 	    
 	    self.partNumber = partNumber
 	    
-	    self.brandingArt = WarpImage(LoadImage(COCOTAPS_LOGO), 100MM_SIZE) # Initialize to standard CocoTaps logo
+	    self.brandingArt = WarpImage(LoadImage(COCOTAPS_LOGO), SIZE_100MM) # Initialize to standard CocoTaps logo
 
 
 	def LoadImage(fileName):
@@ -124,7 +124,7 @@ class LASER:
 				##TODO Why we need the below line? Blaze?
 				### Murali this makes a new image which will be warped and we can NOT use img variable name
 				# img.at<Vec3b>(xPixel,yPixel) = rgbColor
-				warppedImg.at<Vec3b>(xPixel,yPixel) = rgbColor				
+				#warppedImg.at<Vec3b>(xPixel,yPixel) = rgbColor				
 				if(xPixel < (imgWidth/5)):
 					xPixel = xPixel + 8		# Skip EIGHT pixels since ends warps more at ends
 				elif((imgWidth/5) <= xPixel and xPixel < (imgWidth*2/5)):
@@ -137,7 +137,7 @@ class LASER:
 					xPixel = xPixel + 8		# Skip EIGHT pixels since ends wraps more at ends
 						
 
-	def ConfigureLaserForNewImage(filename):
+	def ConfigureLaserForNewImage():
 		"""
 		Calculate pixel dwell duration based on LASER power level and image size
 
@@ -147,10 +147,10 @@ class LASER:
         Return value:
         pixelBurnDuration -- Time in seconds that LASER should dwell on coconut pixel
 		"""
-
-		numOfPixels = GetNumOfPixels(filename)
-	    moistureLevel = GetCoconutMoistureLevel()
-
+		
+		numOfPixels = GetNumOfPixels()
+		moistureLevel = GetCoconutMoistureLevel()
+		
 		if(0 < self.powerLevel or self.powerLevel <= LOW_POWER):
 			laserConstant = DEFAULT_LASER_CONSTANT * 0.5
 		elif(LOW < self.powerLevel or  self.powerLevel < STANDARD_POWER):
@@ -159,66 +159,65 @@ class LASER:
 			laserConstant = DEFAULT_LASER_CONSTANT * 1.5
 		else:
 			Debug.Lprint("ERROR: Invalid power level choosen in ConfigureLaserForNewImage() function")
-
-    	pixelBurnDuration = laserConstant * moistureLevel/100.0 * numOfPixels/1000000 
-
+		pixelBurnDuration = laserConstant * moistureLevel/100.0 * numOfPixels/1000000
+		
 		return pixelBurnDuration
 
 
 	def StopLaser():
-        """
-        Toogle GPIO pin connected to high power relay LOW to turn OFF a LASER
+	    """
+	    Toogle GPIO pin connected to high power relay LOW to turn OFF a LASER
+	    
+	    Key arguments:
+	    NONE
+	    
+	    Return value:
+	    NOTHING
+	    """
         
-        Key arguments:
-        NONE
-        
-        Return value:
-        NOTHING
-        """
-								   gpiozero.off(self.gpioFirePin)
+        gpiozero.off(self.gpioFirePin)
 		
 		
 	def BurnImage(laserConfig):
-        """
-        Toogle GPIO pin possibly connected to a high power relay HIGH to turn ON a LASER
-        
-        Puts CPU to sleep so NOT a threadable function yet
-        
-        Key arguments:
-        laserConfig -- TODO REMOVE?
+		    """
+	    Toogle GPIO pin possibly connected to a high power relay HIGH to turn ON a LASER
+	    
+	    Puts CPU to sleep so NOT a threadable function yet
+	    
+	    Key arguments:
+	    laserConfig -- TODO REMOVE?
         
         Return value:
         NOTHING
-        """
+	    """
 
-        pixelDwellDuration = ConfigureLaserForNewImage(filename):
+        pixelDwellDuration = ConfigureLaserForNewImage()
         
         dutyCycle = self.powerLevel/self.maxPowerLevel
         imageBurnComplete = False
         frequency = 100                                         # Desired LASER pulse in Hz
-        while(!imageBurnComplete):
+        while(not imageBurnComplete):
             # laserConstant is a class variable
             highTime = 1/frequency  * dutyCycle * laserConstant        
             sleep(highTime)                                     # Sleep upto 10 ms and keep LASER ON
-		    gpiozero.on(self.gpioFirePin)
+            gpiozero.on(self.gpioFirePin)
             sleep(0.010 - highTime)                             # Sleep 10 ms minus time is HIGH
-		    gpiozero.off(self.gpioFirePin)
-
-            imageBurnComplete = MoveLaserStepperMotor(pixelDwellDuration, frequency)
-
-
-
-    def MoveLaserStepperMotor(frequency, motorID):
-        """
-        
-        Return value:
-        
-        """
-        for pixelNum in range (0, GetNumOfPixels(filename) - 1):
+            gpiozero.off(self.gpioFirePin)
             
+            imageBurnComplete = MoveLaserStepperMotor(pixelDwellDuration, frequency)
+            
+	
+	def MoveLaserStepperMotor(frequency, motorID):
+	    """
+	    Return value:
+        NOTHING
+        """
+
+        for pixelNum in range (0, GetNumOfPixels(filename) - 1):
             sleep(pixelDwellDuration + 1/frequency)
-            if(pixelNum = )
+            #TODO if(pixelNum = )
         
+
 
 	def SetPowerLevel(watts, cocoPartNumber):
 		"""
@@ -231,31 +230,32 @@ class LASER:
 		
 		if(cocoPartNumber == "205-00003-A"):
 		    if(0 > watts or watts > 10):
-                Debug.Dprint(self.DebugObject, "The 400067260113 LASER must have power level between or equal to 0.1 and 10 Watts")
-            else:
-                self.powerLevel = watts            
-		else():
-                Debug.Dprint(self.DebugObject, "This LASER supplier part number is not supported in LASER.py code base")
+		        Debug.Dprint(self.DebugObject, "The 400067260113 LASER must have power level between or equal to 0.1 and 10 Watts")
+		    else:
+		        self.powerLevel = watts            
+		else:
+		    Debug.Dprint(self.DebugObject, "This LASER supplier part number is not supported in LASER.py code base")
 		    
 		
-	def GetNumOfPixels(filename):
+	def GetNumOfPixels():
 		"""
 		Calculate the total number of (pixels / 1,000,000) that is in an image file 
 		
 		Key argument:
-		filename -- PNG file to load into memory
-		
+        NONE
+        		
 		Return value:
 		totalNumOfPixels -- Total number of megapixels (million pixels) in an image
 		"""
 		
-		img = LoadLImage(filename)
-		#Mat m = ... // some RGB image
-		imgWidth = m.width
-		imgHeight = m.height
+		#img = LoadLImage(self.brandingArt #TODO DOES LoadImage RETURN a img variable)
+		img = cv.imread(self.brandingArt)
+		imgWidth = img.width
+		imgHeight = img.height
 		totalNumOfPixels = imgWidth * imgHeight
 		
 		return totalNumOfPixels
+
     
 	def GetCoconutMoistureLevel():
 		"""
