@@ -36,6 +36,9 @@ class LASER:
 	RED_BULL_LOGO = "RedBullLogoV0.png"
 	BACARDI_LOGO = "BacardiLogoV0.png"
 	ROYAL_CARRIBBEAN_LOGO = "RoyalCarribbeanLogoV0.png"
+	
+	# Coconut sizing CONSTANTS
+	100MM_SIZE = 100
 
 	# Global class variable
 	laserConstant = -1
@@ -45,7 +48,7 @@ class LASER:
 	    Create a LASER object storing power, part number, and image data to used when fired
 	    
 	    Key arguments:
-        gpioFirePin -- 5V GPIO pin used to control an LASER
+        gpioFirePin -- 5V GPIO pin used to control a LASER or relay connected to a LASER 
 	    supplierPartNumber -- External supplier part number (i.e. PA-07-12-5V)
 	    cocoPartNumber -- Internal part number (i.e XXX-YYYYY-Z))linked to to one supplier part number
 	    powerLevel -- Power in Wats to intialize LASER module to
@@ -67,10 +70,10 @@ class LASER:
 	    
 	    self.partNumber = partNumber
 	    
-	    self.brandingArt = COCOTAPS_LOGO	# Initialize to standard CocoTaps logo
+	    self.brandingArt = WarpImage(LoadImage(COCOTAPS_LOGO), 100MM_SIZE) # Initialize to standard CocoTaps logo
 
 
-	def LoadLImage(fileName):
+	def LoadImage(fileName):
 		"""
 		TODO CALL ComputerVision.py code
 		
@@ -85,7 +88,14 @@ class LASER:
 		print("TODO: CHECK FOR >PNG?")		
 		path = "../static/images/" + fileName
 		img = cv2.imread(path)
-		return img
+		
+		# Convert to gray scale first to apply better thresholding which will create a better black and white image
+		grayImg = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
+		
+		# Anything above 127 on a scale from 0 to 255 is WHITE  
+		(thresh, bwImg) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+		
+		return bwImg
 
 
 	def WarpImage(currentImage, coconutSize):
@@ -129,10 +139,10 @@ class LASER:
 
 	def ConfigureLaserForNewImage(filename):
 		"""
-		Calculate firing duration based on LASER power level and image size
+		Calculate pixel dwell duration based on LASER power level and image size
 
         Key arguments:
-        filename --
+        filename -- PNG file to load into memory
 
         Return value:
         pixelBurnDuration -- Time in seconds that LASER should dwell on coconut pixel
@@ -164,22 +174,22 @@ class LASER:
         
         Return value:
         NOTHING
-        """"
-		gpiozero.off(self.gpioFirePin)
-		
-		
-	def BurnImage(filename):
         """
-        Toogle GPIO pin connected to high power relay HIGH to turn ON a LASER
+								   gpiozero.off(self.gpioFirePin)
+		
+		
+	def BurnImage(laserConfig):
+        """
+        Toogle GPIO pin possibly connected to a high power relay HIGH to turn ON a LASER
         
         Puts CPU to sleep so NOT a threadable function yet
         
         Key arguments:
-        filename --
+        laserConfig -- TODO REMOVE?
         
         Return value:
         NOTHING
-        """"
+        """
 
         pixelDwellDuration = ConfigureLaserForNewImage(filename):
         
@@ -198,7 +208,7 @@ class LASER:
 
 
 
-    def MoveLaserStepperMotor(frequency):
+    def MoveLaserStepperMotor(frequency, motorID):
         """
         
         Return value:
