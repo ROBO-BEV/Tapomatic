@@ -11,8 +11,14 @@ __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 # Useful standard Python system jazz
 import sys, time, traceback, argparse, string
 
-# Allow UDP communication between compu
+# Allow UDP communication between computers
 import socket
+
+# TODO Allow logging of ??
+import logging
+
+# Allow program to create GMT and local timestamps
+from time import gmtime, strftime
 
 # Allow keyboard to control program flow and typing to terminal window
 #import pynput.keyboard
@@ -307,8 +313,10 @@ def MoveConveyor(actuatorObjects, direction, numOfPositions):
 
 def GetOrder(timeout):
     """
-    Allow UDP communiation over an Ethernet cable between two computers by sending a CSV file from 
-    the server /computer running GUI.py and to the client / computer running Driver.py back-end code
+    Allow UDP communiation over an Ethernet cable between two computers by sending a CSV file from the server / computer running GUI.py and to the client / computer running Driver.py back-end code
+    
+    In Tapomatic v2020.0 the Client is the Backend Pi
+#Backedn Pi receives the csv file.
     
     Key arguments:
     timeout -- Time in milliseconds GetOrder() function should wait for all UDP datapacket to arrive
@@ -316,21 +324,8 @@ def GetOrder(timeout):
     Return value:
     NOTHING
     """
-#In Tapomatic v2020.0 the Client is the Backend Pi
-#Backedn Pi receives the csv file.
-import socket
-import sys, logging
-
 #Buffer Size , change this if want to receive the data in a different size.
-DATA_BUFFER_SIZE = 1024
-def raspberryClientProgram():
-    """
-        Initiate the UDP Socket bind to the local host and sepcified port,
-        waits for the UDP Server message from GUI PI.
-       	Key arguments: Nothing.
-        #Return Value: Nothing.
-    """
-    # Client binds to the local host.
+    DATA_BUFFER_SIZE = 1024
     UDP_HOST = socket.gethostname()
     UDP_PORT = 5005
     try:
@@ -339,23 +334,24 @@ def raspberryClientProgram():
                              socket.SOCK_DGRAM)  # UDP
         # Bind the udp socket to the HOST AND PORT.
         udpClientSocket.bind((UDP_HOST, UDP_PORT))
+        #TODO Debug.Dprint("Client is running to start receiving the order files.")
         logging.info('Client is running to start receiving the order files.')
     except udpClientSocket.error:
+        #TODO Debug.Dprint("Error in creating the udpClientSocket.")
         logging.error('Error in creating the udpClientSocket')
-        ## INVOKE A SMS MESSAGE TO THE OWNER? or To the Cloud?
         sys.exit(1)
 
+    #TODO while(timeout > 0):
+        startTimeStamp = 
     while True:
         # Receiving data from the UDP Server.
         data, addr = udpClientSocket.recvfrom(DATA_BUFFER_SIZE) # buffer size is 1024 bytes
         logging.info('received message:', data) #TODO LOGGING NOT WORKING, HAVE TO FIX
         print ('received message: ', data)
-        ##TODO Write code to handle this data
+        #TODO Write code to handle this data
+        timeout = timeout - (endTimeStamp - startTimeStamp)
 
-if __name__ == '__main__':
-    raspberryClientProgram()       
-        
-        
+
 if __name__ == "__main__":
 
     driverDebugObject = Debug(True)  #https://github.com/ROBO-BEV/Tapomatic/issues/8
