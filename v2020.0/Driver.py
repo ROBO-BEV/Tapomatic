@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-20"
+__date__    = "Late Updated: 2020-05-28"
 __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
@@ -14,9 +14,6 @@ import sys, time, traceback, argparse, string
 # Allow UDP communication between computers
 import socket
 
-# TODO Allow logging of ??
-import logging
-
 # Allow program to create GMT and local timestamps
 from time import gmtime, strftime
 
@@ -25,7 +22,7 @@ from time import gmtime, strftime
 #from pynput.keyboard import Key, Controller
 
 # Create array
-import numpy as np
+#TODO REMOVE import numpy as np
 
 # Custom CocoTaps and Robotic Beverage Technologies Inc code
 from CocoDrink2 import *        # Store valid CoCoTaps drink configurations
@@ -61,7 +58,7 @@ MAX_TAPPING_TIME     = 10
 MAX_TOPPING_OFF_TIME = 5
 MAX_LASER_TIME = MAX_DRILLING_TIME + MAX_TAPPING_TIME + MAX_TOPPING_OFF_TIME
 
-#The TODO?17? actuators CONSTANTS
+#The TODO?19? actuators CONSTANTS
 MAX_NUM_OF_ACTUATORS = 19    		#TODO DOUBLE CHECK THIS
 IMMUNITY_ADDITIVE_SERVO = 0
 VITAMIN_ADDITIVE_SERVO = 1
@@ -77,14 +74,11 @@ Y1_CUTTING_MOTOR = 10
 Y1_LINEAR_COVER_MOTOR = 11
 Y2_LINEAR_COVER_MOTOR = 12
 
-
-
-ROTATIONTAL_TOOL_MOTOR = 0
-Z_LINEAR_TOOL_MOTOR    = 1
-X_LINEAR_TOOL_MOTOR    = 2
-Y_LINEAR_TOOL_MOTOR    = 3
-
-#TODO
+ROTATIONTAL_TOOL_MOTOR = 13
+Z_LINEAR_TOOL_MOTOR    = 14
+X_LINEAR_TOOL_MOTOR    = 15
+Y_LINEAR_TOOL_MOTOR    = 16
+# TODO 17 to 19
 
 # Tool change CONSTANTS
 NO_TOOL = 0
@@ -315,8 +309,7 @@ def GetOrder(timeout):
     """
     Allow UDP communiation over an Ethernet cable between two computers by sending a CSV file from the server / computer running GUI.py and to the client / computer running Driver.py back-end code
     
-    In Tapomatic v2020.0 the Client is the Backend Pi
-#Backedn Pi receives the csv file.
+    In Tapomatic v2020.0 the Client is the Backend Pi abd the Backedn Pi receives the csv file.
     
     Key arguments:
     timeout -- Time in milliseconds GetOrder() function should wait for all UDP datapacket to arrive
@@ -324,10 +317,11 @@ def GetOrder(timeout):
     Return value:
     NOTHING
     """
-#Buffer Size , change this if want to receive the data in a different size.
+    # Packet buffer size, change this if data seems to be cutoff or missing
     DATA_BUFFER_SIZE = 1024
     UDP_HOST = socket.gethostname()
     UDP_PORT = 5005
+    
     try:
         #Initiate the socket for the UDP Protocol.
         udpClientSocket = socket.socket(socket.AF_INET,  # Internet
@@ -341,6 +335,7 @@ def GetOrder(timeout):
         logging.error('Error in creating the udpClientSocket')
         sys.exit(1)
 
+    #TODO TIMESTAMP OBJECT
     #TODO while(timeout > 0):
         startTimeStamp = 
     while True:

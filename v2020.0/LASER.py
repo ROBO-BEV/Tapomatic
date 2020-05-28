@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development" 
-__date__    = "Late Updated: 2020-05-25"
+__date__    = "Late Updated: 2020-05-26"
 __doc__     = "Class to control and move LASER system"
 """
 
@@ -39,6 +39,7 @@ class LASER:
 	
 	# Coconut sizing CONSTANTS
 	SIZE_102MM = 102
+	SIZE_80MM = 88
     
     # Global class variable
 	laserConstant = -1
@@ -48,17 +49,18 @@ class LASER:
 	    Create a LASER object storing power, part number, and image data to used when fired
 	    
 	    Key arguments:
-        gpioFirePin -- 5V GPIO pin used to control a LASER or relay connected to a LASER 
+        gpioFirePin -- 5V GPIO pin used to control a LASER or a 12V relay connected to a LASER 
 	    supplierPartNumber -- External supplier part number (i.e. PA-07-12-5V)
-	    cocoPartNumber -- Internal part number (i.e XXX-YYYYY-Z))linked to to one supplier part number
-	    powerLevel -- Power in Wats to intialize LASER module to
+	    cocoPartNumber -- Internal part number (i.e XXX-YYYYY-Z)) linked to one supplier part number
+	    powerLevel -- Power in Wats to intialize a LASER module first fire to
 	    maxPowerLevel -- Max power in Watts that LASER can support in continous operation (> 30 seconds)
 	    brandingArt -- Black & White PNG image to brand / burn into an object
 	    
 	    Return value:
 	    Newly created LASER object
 	    """	    
-	    self.DebugObject = Debug(True)
+	    
+	    self.DebugObject = Debug(True, "LASER.py")
 	    
 	    self.gpioFirePin = gpiozero.DigitalOutputDevice(gpioPin)
 	    
@@ -74,28 +76,32 @@ class LASER:
 
 
 	def LoadImage(fileName):
-		"""
-		TODO CALL ComputerVision.py code
-		
+		"""		
 		Load a PNG image on the local harddrive into RAM
 		
 		Key arguments:
 		filename -- PNG file to load into memory
 		
 		Return value:
-		img -- Black & White PNG image
+		bwImg -- Black & White PNG image
 		"""
-		print("TODO: CHECK FOR >PNG?")		
-		path = "../static/images/" + fileName
-		img = cv2.imread(path)
+
+		filenameLength = len(filename)
+		fileExtension = substring((filenameLength - 3), filenameLength)
+
+		if(fileExtension.toLower() == png):
+		    path = "../static/images/" + fileName
+	    	img = cv2.imread(path)
+	    	
+	    	# Convert to gray scale first to apply better thresholding which will create a better black and white image
+		    grayImg = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
 		
-		# Convert to gray scale first to apply better thresholding which will create a better black and white image
-		grayImg = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
-		
-		# Anything above 127 on a scale from 0 to 255 is WHITE  
-		(thresh, bwImg) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
-		
-		return bwImg
+		    # Anything above 127 on a scale from 0 to 255 is WHITE  
+		    (thresh, bwImg) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+		    return bwImg
+
+		else:
+		    Debug.Dprint("Please pass a .png file to the LoadImage() function in LASER.py code")		
 
 
 	def WarpImage(currentImage, coconutSize):
@@ -103,7 +109,7 @@ class LASER:
 		Wrap a straight / square image so that after LASER branding on coconut its straight again
 
 		Key arguments:
-		currentImage -- Starting PNG image (max size in ? x ? pixels / ?? MB)
+		currentImage -- Starting PNG image (TODO max size in ? x ? pixels / ?? MB)
 		coconutSize -- Horizontal diameter of coconut in millimeters
 
 		Return value:
@@ -112,7 +118,6 @@ class LASER:
 		# https://docs.opencv.org/2.4/doc/tutorials/core/mat_the_basic_image_container/mat_the_basic_image_container.html
         # https://pythonprogramming.net/loading-images-python-opencv-tutorial/
 
-		#TODO WHAT DOES THIS DO? Mat m = Mat() #... // some RGB image
 		img = cv.imread(currentImage)
 		imgWidth = img.width
 		imgHeight = img.height
