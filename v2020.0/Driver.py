@@ -319,7 +319,7 @@ def GetOrder(timeout):
 #Backedn Pi receives the csv file.
     
     Key arguments:
-    timeout -- Time in milliseconds GetOrder() function should wait for all UDP datapacket to arrive
+    timeout -- Time in milliseconds GetOrder() function should wait for all UDP datapacket to arrive. Suggested timeout is 750 ms or less
 
     Return value:
     NOTHING
@@ -337,24 +337,24 @@ def GetOrder(timeout):
         #TODO Debug.Dprint("Client is running to start receiving the order files.")
         logging.info('Client is running to start receiving the order files.')
     except udpClientSocket.error:
-        #TODO Debug.Dprint("Error in creating the udpClientSocket.")
+        #TODO Debug.Dprint(driverDebugObject, "Error in creating the udpClientSocket.")
         logging.error('Error in creating the udpClientSocket')
-        sys.exit(1)
 
     #TODO while(timeout > 0):
-        startTimeStamp = 
     while True:
+        startTimeStamp = 
+    
         # Receiving data from the UDP Server.
-        data, addr = udpClientSocket.recvfrom(DATA_BUFFER_SIZE) # buffer size is 1024 bytes
+        data, addr = udpClientSocket.recvfrom(DATA_BUFFER_SIZE) 
+        # TODO Debug.Dprint(driverDebugObject, "received message: " + data)
         logging.info('received message:', data) #TODO LOGGING NOT WORKING, HAVE TO FIX
-        print ('received message: ', data)
         #TODO Write code to handle this data
         timeout = timeout - (endTimeStamp - startTimeStamp)
 
 
 if __name__ == "__main__":
 
-    driverDebugObject = Debug(True)  #https://github.com/ROBO-BEV/Tapomatic/issues/8
+    driverDebugObject = Debug(True, "Driver.py")
 
     #actuatorObjects = np.array(MAX_NUM_OF_ACTUATORS)
 
@@ -366,7 +366,6 @@ if __name__ == "__main__":
     #TODO tempDrink = CocoDrink2(CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE, CocoDrink2.NONE)
     #TODO tempDrink = CocoDrink(CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE)
     vendQueue = np.array(MAX_VEND_QUEUE_SIZE)
-
 
     GuiPi = RaspPi()
     BackendPi = RaspPi()
@@ -443,4 +442,7 @@ if __name__ == "__main__":
                     
                 else:
                     Debug.Dprint(driverDebugObject, "No orders in queue")
+                    
+                    
+MissionControl()
                     time.sleep(0.1) #Pause for 100 ms to slow down while loop and reduce CPU usage 
