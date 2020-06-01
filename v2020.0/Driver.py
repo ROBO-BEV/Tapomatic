@@ -1,21 +1,22 @@
 #!/usr/bin/env python
 """
 __author__  = "Blaze Sanders"
-__email__   = "blaze.d.a.sanders@gmail.mvp"
+__email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-28"
+__date__    = "Late Updated: 2020-05-29"
 __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
 # Useful standard Python system jazz
-import sys, time, traceback, argparse, string
+import sys, traceback, argparse, string
 
 # Allow UDP communication between computers
 import socket
 
-# Allow program to create GMT and local timestamps
-from time import gmtime, strftime
+# TODO DOWNSELECT LIBRARIES Allow program to create GMT and local timestamps
+from time import sleep, gmtime, strftime
+from datetime import datetime, timezone, timedelta 
 
 # Allow keyboard to control program flow and typing to terminal window
 #import pynput.keyboard
@@ -40,8 +41,8 @@ TESTING_MODE = "TESTING"				# Internal developer configuration
 # Create a command line parser
 parser = argparse.ArgumentParser(prog = "Tapomatic v2020.0", description = __doc__, add_help=True)
 parser.add_argument("-i", "--piIP_Address", type=str, default="127.168.1.42", help="IPv4 address of the Tapomatic V0 ID0 backend Raspberry Pi 4.")
-parser.add_argument("-r", "--rx_Socket", type=int, default=30000, help="UDP port / socket number for connected Ethernet device.")
-parser.add_argument("-s", "--tx_Socket", type=int, default=30100, help="UDP port / socket number for connected Ethernet device.")
+parser.add_argument("-r", "--rx_Socket", type=int, default=505, help="UDP port / socket number for connected Ethernet device.")
+parser.add_argument("-s", "--tx_Socket", type=int, default=505, help="UDP port / socket number for connected Ethernet device.")
 parser.add_argument("-u", "--unit", type=str, default= FIELD_MODE, choices=[TESTING_MODE, FIELD_MODE, PRODUCT_MODE], help="Select boot up mode for BARISTO kiosk.")
 parser.add_argument("-t", "--trace", type=int, default=0, help="Program trace level.")
 parser.add_argument("-f", "--filename", type=str, default="Update.py", help="Local or cloud software to be loaded on kiosk.")
@@ -60,8 +61,8 @@ MAX_LASER_TIME = MAX_DRILLING_TIME + MAX_TAPPING_TIME + MAX_TOPPING_OFF_TIME
 
 #The TODO?19? actuators CONSTANTS
 MAX_NUM_OF_ACTUATORS = 19    		#TODO DOUBLE CHECK THIS
-IMMUNITY_ADDITIVE_SERVO = 0
-VITAMIN_ADDITIVE_SERVO = 1
+IMMUNITY_ADDITIVE_SERVO = 0         #IMMUNITY_ADDITIVE_PUMP = 0
+VITAMIN_ADDITIVE_SERVO = 1          #VITAMIN_ADDITIVE_PUMP = 1
 RUM_PUMP = 2
 PINA_COLADA_FLAVOR_PUMP = 3
 PINEAPPLE_FLAVOR_PUMP = 4
@@ -76,15 +77,18 @@ Y2_LINEAR_COVER_MOTOR = 12
 
 ROTATIONTAL_TOOL_MOTOR = 13
 Z_LINEAR_TOOL_MOTOR    = 14
-X_LINEAR_TOOL_MOTOR    = 15
-Y_LINEAR_TOOL_MOTOR    = 16
-# TODO 17 to 19
+Y_LINEAR_TOOL_MOTOR    = 15
+X_LINEAR_TOOL_MOTOR    = 16
+
+Z_LINEAR_LASER_MOTOR = 17
+Y_LINEAR_LASER_MOTOR = 18
+X_LINEAR_LASER_MOTOR = 19
 
 # Tool change CONSTANTS
 NO_TOOL = 0
 DRILL_BIT_TOOL = -1
 TAPPING_SOCKET_TOOL = -2
-#TODO Not needed LASER_BRANDING_TOOL = -3
+LASER_BRANDING_TOOL = -3
 
 # If force on topping off knife is greater than DULL_KNIFE_FORCE it is probably dull
 DULL_KNIFE_FORCE = 100	# Units are Newtons
@@ -95,37 +99,53 @@ NUM_OF_KNIFE_CUTTING_AREAS = 6
 #FIX ARRAY CREATION KNIVE_SECTIONS[NUM_OF_KNIFE_CUTTING_AREAS] = [SHARP, SHARP, SHARP, SHARP, SHARP, SHARP]
 # [Side A Section 1, Side A Section 2, Side A Section 3, Side B Section 4, Side B Section 5, Side B Section 6]
 
-def CheckKnifeSharpness(currentKnifeSectionInUse):
-    """
-    Determine if 
+# Global variables in the Driver.py
 
+previousCuttingForce = SHARP    # 
+currentKnifeSectionInUse = 0    # Interger 0 to (NUM_OF_KNIFE_CUTTING_AREAS - 1) describing part of knife being used
+
+
+def CheckKnifeSharpness():
     """
-    if(Sensor.GetForce(Sensor.FORCE_SENSOR) > DULL_KNIFE_FORCE):
+    Determine if a cutting area is sharp or dull using the cutting force needed during the previous cut
+
+    Key arguments:
+    NONE
+    
+    Return value:
+    previuosCuttingForce -- A float between 0.0 and 220.0 Newtons inclusively
+    """
+    
+    if(previousCuttingForce > DULL_KNIFE_FORCE):
         KNIVE_SECTIONS[currentKnifeSectionInUse] == DULL
         currentKnifeSectionInUse += 1
         MoveKnifePostion(currentKnifeSectionInUse)
 
+    previousCuttingForce = Sensor.GetForce(Sensor.CUTTING_FORCE_SENSOR)
 
+    return previuosCuttingForce
+
+    
 def MoveKnifePostion():
     """
     Use linear actuator to slide knife left or right and expose new cutting surface / section
 
-    currentKnifeSectionInUse is a global variable in the Driver.py
     Key arguments:
     NONE
 
     Return value:
     knifeSectionNowInUse -- The new knife cutting section; otherwise retrun DULL_KNIFE so vendor can be informed    
     """    
+
     if(0 <= currentKnifeSectionInUse or currentKnifeSectionInUse < NUM_OF_KNIFE_CUTTING_AREAS - 1): 	
         Debug.Drpint(DebugObject, "Moving knife to next cutting surface / section")
-	knifeSectionNowInUse = currentKniifeSectionInUse + 1
+        knifeSectionNowInUse = currentKniifeSectionInUse + 1
     elif(currentKnifeSectionInUse == NUM_OF_CUTTING_AREAS - 1):
         Debug.Drpint(DebugObject, "Message Code:" + MissionControl.DULL_KNIFE_MESSAGE + "Tapomatic has used up all the cutting surfaces on the current knife")
-	MissionControl.SendMessage(MissionControl.DULL_KNIFE_MESSAGE)
-	knifeSectionNowInUse = DULL_KNIFE
+        MissionControl.SendMessage(MissionControl.DULL_KNIFE_MESSAGE)
+        knifeSectionNowInUse = DULL_KNIFE
     else:
-	print("BAD PARAMETERS")
+	    print("BAD PARAMETERS")
 
     return knifeSectionNowInUse
 
@@ -173,6 +193,7 @@ def RunDrill(stopSignal, actuatorObjects):
  
     return Exit case CONSTANT describing why drill stopped
     """
+    
     torqueBelowLimit = True
     drillDepthNotAtMax = True
     timeDelta = 0.0
@@ -337,14 +358,20 @@ def GetOrder(timeout):
     #TODO TIMESTAMP OBJECT
     #TODO while(timeout > 0):
     while True:
-        startTimeStamp = 
-    
+        now = datetime.now(timezone.utc)
+        epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)   # Use POSIX epoch with TODO 1, 1
+        startTimeStampMicroSec = (now - epoch)//timedelta(microsecond=1)
+        
         # Receiving data from the UDP Server.
         data, addr = udpClientSocket.recvfrom(DATA_BUFFER_SIZE) 
         # TODO Debug.Dprint(driverDebugObject, "received message: " + data)
         logging.info('received message:', data) #TODO LOGGING NOT WORKING, HAVE TO FIX
         #TODO Write code to handle this data
-        timeout = timeout - (endTimeStamp - startTimeStamp)
+
+        now = datetime.now(timezone.utc)        
+        endTimeStampMicroSec = (now - epoch)//timedelta(microsecond=1)
+        
+        timeout = timeout - (endTimeStampMicroSec/1000 - startTimeStampMicroSec/1000)
 
 
 if __name__ == "__main__":
@@ -439,5 +466,6 @@ if __name__ == "__main__":
                     Debug.Dprint(driverDebugObject, "No orders in queue")
                     
                     
-MissionControl()
+                    MissionControl()
+                    
                     time.sleep(0.1) #Pause for 100 ms to slow down while loop and reduce CPU usage 
