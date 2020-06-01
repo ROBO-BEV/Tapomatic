@@ -5,18 +5,21 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-04-17"
+__date__ =    "Late Updated: 2020-05-29"
 __doc__ =     "Class to communicate with all sensors inside the Tapomatic kiosk" 
 """
 
-# Allow program to pause operation and create local timestamps
-from time import sleep
+# TODO DOWNSELECT LIBRARIES Allow program to pause operation and  create GMT and local timestamps
+from time import sleep, gmtime, strftime
+from datetime import datetime, timezone, timedelta
 
 # Allow communication (Read and write) to senors via the serial port 
 #TODO import serial if gpiozero or RPi.GPIO as GPIO doesn't support 
 
 # Allow communication between one or more kiosks with central server
 #TODO from MissionControl import *
+
+from Debug import *
 
 try:
 	# The following imports do NOT work in a Mac or PC dev enviroment 
@@ -68,8 +71,10 @@ class Sensor():
 	ORANGE_DENSITY = 1.01      		# Units grams/mL
 	PINEAPPLE_FORCE_SENSOR = 5
 	PINEAPPLE_DENSITY = 1.12      	# Units grams/mL
-	LIFTING_PLATFORM_FORCE_SENSOR = 6
 	
+	LIFTING_PLATFORM_FORCE_SENSOR = 6
+	CUTTING_FORCE_SENSOR = 7
+    	
 	LOW_LEVEL = 10.0 				# 10.0% 
 	
 	# TODO Define all pins in schematic
@@ -89,11 +94,13 @@ class Sensor():
 		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 		for i in pins:
 			self.wires[i] = pins[i]
-		self.sensorType = sType
-		currentNumOfActuators += 1
-		self.sensorID = currentNumOfSensors# Auto-incremented interger class variable
-		self.partNumber = partNumber
-		self.currentCount = 0
+		
+		self.DebugObject = Debug(True, "Sensor.py")
+        self.sensorType = sType
+        currentNumOfActuators = currentNumOfActuators + 1
+        self.sensorID = currentNumOfSensors                 # Auto-incremented interger class variable
+        self.partNumber = partNumber
+        self.currentCount = 0
 		
 	def StartFullDuplexSerial():
 		print("TODO")
@@ -114,14 +121,16 @@ class Sensor():
 		
 	def GetLiftPlatformCount(self):
 		"""
+		Update the number of times coconuts have been lifted into the Tapomatic 
 		
 		Key arguments:
 		self --
 		
 		Return value:
-		currentCount -- Number of times coconuts have been lifted into the Tapomatic 
+		NONE
 		"""
-		return self.currentCount = self.currentCount + 1
+		self.currentCount = self.currentCount + 1
+
 
 	def ScanQRcode():
 		print("TODO")
@@ -133,7 +142,8 @@ class Sensor():
 		"""
 		
 		
-		id = 
+		#TODO id = myQR.TakePhoto()
+		id = -1
 		
 		return id
 		
@@ -189,7 +199,8 @@ class Sensor():
 		
 		if(percentage < LOW_LEVEL):
 			#TODO MissionControl.ReportLowLiquidLevel(lType, bottleLocation, MissionControl.KIOSK_ID)
-    
+			print("TODO")
+            
 		return percentage
 
 	def GetForce(lType):
@@ -221,90 +232,96 @@ class Sensor():
 		return forceInNewtons
 
 	def FindLiquidForceSensor(lType):
-	"""
-	Correlate a dynamic interger drink ID (from QR code scan) with static internal force sensor ID 
+	    """
+	    Correlate a dynamic interger drink ID (from QR code scan) with static internal force sensor ID 
 	
-	Keyword arguments:
-	lType -- Type (name) of the liquid inside a 750 ml bottle
+	    Keyword arguments:
+	    lType -- Type (name) of the liquid inside a 750 ml bottle
 
-	Return value:
-	ID -- ID number of the force sensor a bottle is pushing against
-	"""		
-		if(lType == CocoDrink.CBD):
-			ID = FORCE_SENSOR_1
-		elif(lType == CocoDrink.IMMUNITY_BOOST):
-			ID = FORCE_SENSOR_2
-		elif(lType == CocoDrink.DAILY_VITAMINS):
-			ID = FORCE_SENSOR_3
-		elif(lType == CocoDrink.RUM):
-			ID = FORCE_SENSOR_4
-		elif(lType == CocoDrink.PINA_COLADA):
-			ID = FORCE_SENSOR_5 
-		elif(lType == CocoDrink.ORANGE):
-			ID = FORCE_SENSOR_6
+	    Return value:
+	    ID -- ID number of the force sensor a bottle is pushing against
+	    """		
+	    
+	    if(lType == CocoDrink.CBD):
+	        ID = FORCE_SENSOR_1
+	    elif(lType == CocoDrink2.IMMUNITY_BOOST):
+	        ID = FORCE_SENSOR_2
+	    elif(lType == CocoDrink.DAILY_VITAMINS):
+	        ID = FORCE_SENSOR_3
+	    elif(lType == CocoDrink.RUM):
+	        ID = FORCE_SENSOR_4
+	    elif(lType == CocoDrink.PINA_COLADA):
+	        ID = FORCE_SENSOR_5 
+	    elif(lType == CocoDrink.ORANGE):
+	        ID = FORCE_SENSOR_6
 
 		return ID
 
 
 	def IsLaserSafetyGridSafe():
-	"""
-	Determine if any object (e.g. human hand, dog, chopstick, etc) is within 1 of 3 rectanglur danger zones
-	TODO This may require upto 24 LASER sensors (S) unless we use mirrors or ultrasonics
+	    """
+	    Determine if any object (e.g. human hand, dog, chopstick, etc) is within 1 of 3 rectanglur danger zones
+	    TODO This may require upto 24 LASER sensors (S) unless we use mirrors or ultrasonics
+        
+	    Top View of DANGER ZONES (D) and LASER Sensors (S)
+	    S S SS S S
+	    0 25cm 50cm 75cm (x-axis)
+	    |    |    |    |
+	    _----_----_----_   - 0 cm
+	    |  SDSDSSDSDS  | S - 5 cm
+        |  DDDDDDDDDD  |   - 10 cm
+	    |  DSDDSSDDSD  | S - 15 cm
+	    |  DDDDDDDDDD  |   - 20 cm
+	    |  SDSDSSDSDS  | S - 25 cm
+    	|  DDDDSSDDDD  | S - 30 cm (y-axis)
+    
+    	Keyword arguments:
+    	None
 
-	Top View of DANGER ZONES (D) and LASER Sensors (S)
-	   S S SS S S
-	0 25cm 50cm 75cm (x-axis)
-	|    |    |    |
-	_----_----_----_   - 0 cm
-	|  SDSDSSDSDS  | S - 5 cm
-    |  DDDDDDDDDD  |   - 10 cm
-	|  DSDDSSDDSD  | S - 15 cm
-	|  DDDDDDDDDD  |   - 20 cm
-	|  SDSDSSDSDS  | S - 25 cm
-	|  DDDDSSDDDD  | S - 30 cm (y-axis)
-
-	Keyword arguments:
-	None
-
-	Return value:
-	safe -- True if danger zones are clear; Otherwise False
-	"""		
-    	    safe = True
-    	    # Zone (15,0) to (60,-29) cm 
-			# Flip between X-axis S#1 and S#2
-			# Check (ZS#1, YS#1) then (ZS#2, YS#1) 
-			# Check (ZS#5, YS#2) 
-			# Check (ZS#9, YS#3) then (ZS#10, YS#3) 
-			for xAxisSensor in range(0, NUM_X_AXIS_PING_SENSORS): 
-				for yAxix in range(0, NUM_Y_AXIS_PING_SENSORS):
-					xDist = GetLASERpingDistance(PING_Xaxis_Pin)
-					yDist = GetLASERpingDistance(PING_Yaxis_Pin)
-					zDist = GetLASERpingDistance(PING_Zaxis_Pin)
-					if(xDist <= 29): # 29 cm
-						if(15 <= yDist and yDisy <= 60):
-							if(zDist <= 22):
-								safe = False 
-											
-																Debug.Dprint(DebugObject, "X-Axis LASER pin: " + PING_Xaxis_Pin) 
-			Debug.Dprint(DebugObject, "Y-Axis LASER pin: " + PING_Yaxis_Pin) 
-			Debug.Dprint(DebugObject, "Z-Axis LASER pin: " + PING_Zaxis_Pin) 
-					
-    	    return safe
+	    Return value:
+	    safe -- True if danger zones are clear; Otherwise False
+	    """		
     	
+    	safe = True
+    	
+    	# Zone (15,0) to (60,-29) cm 
+    	# Flip between X-axis S#1 and S#2
+		# Check (ZS#1, YS#1) then (ZS#2, YS#1) 
+		# Check (ZS#5, YS#2) 
+		# Check (ZS#9, YS#3) then (ZS#10, YS#3)
+
+    	for xAxisSensor in range(0, NUM_X_AXIS_PING_SENSORS): 
+    		for yAxix in range(0, NUM_Y_AXIS_PING_SENSORS):
+			    xDist = GetLASERpingDistance(PING_Xaxis_Pin)
+			    yDist = GetLASERpingDistance(PING_Yaxis_Pin)
+			    zDist = GetLASERpingDistance(PING_Zaxis_Pin)
+			    if(xDist <= 29): # 29 cm
+					if(15 <= yDist and yDisy <= 60):
+						if(zDist <= 22):
+							safe = False 
+							Debug.Dprint(DebugObject, "X-Axis LASER pin: " + PING_Xaxis_Pin) 				    	
+    	    Debug.Dprint(DebugObject, "Y-Axis LASER pin: " + PING_Yaxis_Pin) 
+			Debug.Dprint(DebugObject, "Z-Axis LASER pin: " + PING_Zaxis_Pin)
+			
+    	
+    	return safe
+
+
 	def GetLASERpingDistance(pingPinNumber, units):
-	"""
-	Get distance to the closet object in direct line of sight of a PING LASER or ultrasonic rangefinder
-	
-	Keyword arguments:
-	pingPinNumber -- Interger Broadcom (BCM) pin number (NOT physical BOARD #) on Raspberry Pi that PING sensor is connected to
-	units -- Unit of measure that distance should be returned in millimeter (default) or inches
-	
-	Return value:
-	range -- Interger distance in millimeters (default) or inches
-	"""
-		if(units == "in" or units == "IN" or units == "In" or units = "iN" of units== "Inches"):
-			range = Ping.GetInches(pingPinNumber) 
-		else:
-			range = Ping.GetMillimeters(pingPinNumber) 
-		
-		return range 
+	    """
+	    Get distance to the closet object in direct line of sight of a PING LASER or ultrasonic rangefinder
+    	
+    	Keyword arguments:
+    	pingPinNumber -- Interger Broadcom (BCM) pin number (NOT physical BOARD #) on Raspberry Pi that PING sensor is connected to
+    	units -- Unit of measure that distance should be returned in millimeter (default) or inches
+    	
+    	Return value:
+    	range -- Interger distance in millimeters (default) or inches
+    	"""
+    	
+    	if(units == "in" or units == "IN" or units == "In" or units == "iN" or units== "Inches"):
+		    range = Ping.GetInches(pingPinNumber) 
+    	else:
+    	    range = Ping.GetMillimeters(pingPinNumber) 
+    	
+    	return range
