@@ -43,164 +43,162 @@ class CocoDrink2:
     # Add-On level CONSTANTS
     MAX_ADD_ON_LEVEL = 5
     MIN_ADD_ON_LEVEL = 0
-	
+
     # User GUI.py program flow selection CONSTANTS
     TAPPED = 0
     TOPPED_OFF = 1
     FLAVOR = 2
     HEALTH_ADDITTIVE = 3
-	
+
     def __init__(self, drinkName, addOnFlavor, addOnFlavorLevel, addOnHealthAdditive, addOnHealthAdditiveLevel, tapOrCutFlow, flavorOrAdditive, brandingArt):
-	"""
-	Constructor to initialize an CocoDrink object
+	    """
+	    Constructor to initialize an CocoDrink object
 
         Key arguments:
         self -- Newly created CocoDrink object
-	drinkName -- CONSTANT product name of drink (e.g. IMMUNITY_BOOST, PINA_COLADA, etc)
+	    drinkName -- CONSTANT product name of drink (e.g. IMMUNITY_BOOST, PINA_COLADA, etc)
         addOnFlavor -- CONSTANT product name of flavoring being added to base drink
-	addOnFlavorLevel -- The unit step amount of flavor to be added to a drink from 0 to MAX_ADD_ON_LEVEL 
+	    addOnFlavorLevel -- The unit step amount of flavor to be added to a drink from 0 to MAX_ADD_ON_LEVEL 
 							Each unit is a different but constant volume (in milliLiters) for each flavor
         addOnHealthAdditive -- CONSTANT product name of  health additive being added to base liquid   
         addOnHealthAdditiveLevel -- The unit step amount of additive to be added to a drink from 0 to MAX_ADD_ON_LEVEL
 									Each discrete unit is a differnt but constant volume (in milliLiters) for each additive
-	tapOrCutFlow -- 
-	flavorOrAdditive --
-	brandingArt -- PNG image to LASER brand onto the side of the coconut (max size is 200 MB or ? x ? pixels / ? x ? inches)							
-    
-        Return value:
-       	Newly created CocoDrink() object  
-       	"""
-		
-	self.DebugObject = Debug(True)
-		
-	self.drinkName = drinkName
-	self.addOnFlavor = addOnFlavor
-	self.addOnFlavorLevel = addOnFlavorLevel
-	self.addOnHealthAdditive = addOnHealthAdditive
-	self.addOnHealthAdditiveLevel = addOnHealthAdditiveLevel
-	self.tapOrCutFlow = tapOrCutFlow
-	self.flavorOrAdditiveFlow = flavorOrAdditive
-	self.brandingArt = brandingArt
-        
-	if(addOnFlavorLevel > MAX_ADD_ON_LEVEL or addOnHealthAdditiveLevel > MAX_ADD_ON_LEVEL):
-	    Debug.Dprint(DebugObject, "OBJECT CREATION ERROR: You created a CocoDrink() object with add-on level greater then " + MAX_ADD_ON_LEVEL)
-	    __exit__() # Destructor / memory clean up
-	
-	if(addOnFlavorLevel < 0 or addOnHewlthAdditiveLevel < 0):
-	    Debug.Dprint(self.DebugObject, "OBJECT CREATION ERROR: You created a CocoDrink() object with add-on level less then " + MIN_ADD_ON_LEVEL)
-	    __exit__() # Destructor / memory clean up
-				
-	if(NO_DRINK > drinkName or drinkName > MAX_DRINK_NAME):
-	    Debug.Dprint(DebugObject, "OBJECT CREATION ERROR: You created a CocoDrink() object with a frink name that doesn't exist. Why did you do that genius?")
-	    __exit__() # Destructor / memory clean up
-				
-				
-	###
-	#
-	#
-        # @self - Instance of object being called
-	#
-	# return object that created exception
-	####
+	    tapOrCutFlow -- 
+	    flavorOrAdditive --
+	    brandingArt -- PNG image to LASER brand onto the side of the coconut (max size is 200 MB or ? x ? pixels / ? x ? inches)							
 
-	def __enter__(self):
-		"""
-		The 'with' statement clarifies code that previously would use try...finally blocks to ensure that clean-up code is executed. 
-		Key arguments:
-		self -- 
+        Return value:
+       	Newl  CocoDrink() object
+       	"""
+
+	    self.DebugObject = Debug(True, "CocoDrink.py")
+
+	    self.drinkName = drinkName
+	    self.addOnFlavor = addOnFlavor
+	    self.addOnFlavorLevel = addOnFlavorLevel
+	    self.addOnHealthAdditive = addOnHealthAdditive
+	    self.addOnHealthAdditiveLevel = addOnHealthAdditiveLevel
+	    self.tapOrCutFlow = tapOrCutFlow
+	    self.flavorOrAdditiveFlow = flavorOrAdditive
+	    self.brandingArt = brandingArt
+
+	    if(addOnFlavorLevel > MAX_ADD_ON_LEVEL or addOnHealthAdditiveLevel > MAX_ADD_ON_LEVEL):
+	        Debug.Dprint(DebugObject, "OBJECT CREATION ERROR: You created a CocoDrink() object with add-on level greater then " + MAX_ADD_ON_LEVEL)
+	        __exit__() # Destructor / memory clean up
+
+	    if(addOnFlavorLevel < 0 or addOnHewlthAdditiveLevel < 0):
+	        Debug.Dprint(self.DebugObject, "OBJECT CREATION ERROR: You created a CocoDrink() object with add-on level less then " + MIN_ADD_ON_LEVEL)
+	        __exit__() # Destructor / memory clean up
+
+	    if(NO_DRINK > drinkName or drinkName > MAX_DRINK_NAME):
+	        Debug.Dprint(DebugObject, "OBJECT CREATION ERROR: You created a CocoDrink() object with a frink name that doesn't exist. Why did you do that genius?")
+	        __exit__() # Destructor / memory clean up
+
+    def __enter__(self):
+        """
+        The 'with' statement clarifies code that previously would use try...finally blocks to ensure that clean-up code is executed. 
 		https://docs.python.org/2.5/whatsnew/pep-343.html
 		https://stackoverflow.com/questions/1984325/explaining-pythons-enter-and-exit
-		"""
-		
-		print("in __enter__")
-		return self
 
+        Key arguments:
+		self -- 
 
-	def __exit__(self, exception_type, exception_value, traceback):
+        Return value:
+        ???
 		"""
+
+        print("in __enter__")
+
+        return self
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        """
 		Memory cleanup
-	
+
 		Key arguments:
 		self --
 		exception_type -- 
 		exception_value -- 
 		traceback -- 
-		"""
-		
-		Debug.Dprint(self.DebugObject, "Cleaning up CocoDrink() object in __exit__ ")
 
-	
-	def GetAddOn(self, lType):
+        Return value:
+        ???
 		"""
-		Determine the type of add-on the user selected from GUI.py and branch code flow 
-		
-		Key arguments:
-		lType -- Type of liquid add-on to inject into thr coconut
-		
-		Return value:
-		addOn - CocoDrink CONSTANT based on user selection
-		
+
+        self.DebugObject.Dprint("Cleaning up CocoDrink() object in __exit__ ")
+
+
+    def GetAddOn(self, lType):
+	    """
+	    Determine the type of add-on the user selected from GUI.py and branch code flow 
+
+        Key arguments:
+        lType -- Type of liquid add-on to inject into thr coconut
+
+        Return value:
+        addOn - CocoDrink CONSTANT based on user selection
 		"""
-		if(lType == FLAVOR):
-			addOn = GetFlavorType(self)
-		elif(lType == HEALTH_ADDITTIVE):
-			addOn = GetHealthAdditiveType(self)
-			
+
+        if(lType == FLAVOR):
+            addOn = GetFlavorType(self)
+	    elif(lType == HEALTH_ADDITTIVE):
+	        addOn = GetHealthAdditiveType(self)
+
 		return addOn
-	
+
 	def GetFlavorType(self):
-		"""
-		Get product name of flavoring 
-	
+	    """
+		Get product name of flavoring
+
     	Key arguments:
     	self -- Instance of object being called
-      
+
     	Return value:
     	return Integer GLOBAL CONSTANT from CocoDrink.py
 		"""
-		
+
 		return self.addOnFlavor
 
- 
+
 	def GetHealthAdditiveType(self):
 		"""
-		Get product name of additive fluid 
-	
+		Get product name of additive fluid
+
     	Key arguments:
     	self -- Instance of object being called
-      
+
     	Return value:
     	return Integer GLOBAL CONSTANT from CocoDrink.py
 		"""
-		
+
 		return self.addOnHealthAdditive
 
 
 	def GetLaserArtType(self):
 		"""
-		Get filename of logo LASER branding into coconut 
-	
+		Get filename of logo LASER branding into coconut
+
     	Key arguments:
     	self -- Instance of object being called
-      
+
     	Return value:
     	return String GLOBAL CONSTANT from CocoDrink.py 
 		"""
-		
+
 		return self.brandingArt
 
 
 	def GetFlavorLevel(self):
 		"""
-		Get amount / level of flavor fluid in a coco drink in User Interface units 
-	
+		Get amount / level of flavor fluid in a coco drink in User Interface units
+
     	Key arguments:
     	self -- Instance of object being called
-      
+
     	Return value:
     	return Integer value between 0 and  MAX_ADD_ON_LEVEL inclusively 
 		"""
-		
+
 		return self.addOnFlavorLevel
 
 	def ConvertLevelToVolume(self, addOnUnits):
