@@ -153,10 +153,10 @@ def MoveKnifePostion():
 def LiftCoconut(actuatorObjects):
 	"""
 	Actuate N number of actuators to LIFT coconuts into the drilling, tapping, and toping off system
-	
+
 	Key Arguments:
-	actuatorObjects -- Array of linear actuators() objects to control
-	
+	actuatorObjects -- Array of linear actuators() objects to contro
+
 	Return value:
 	NOTHING
 	"""
@@ -190,24 +190,24 @@ def RunDrill(stopSignal, actuatorObjects):
     Key arguments:
     stopSignal - Input signal that can cause drill to stop OTHERWISW MAX_DRILLING_TIME causes drill to stop
     actuatorObjects - Array of linear actuators() objects to control
- 
+
     return Exit case CONSTANT describing why drill stopped
     """
-    
+
     torqueBelowLimit = True
     drillDepthNotAtMax = True
     timeDelta = 0.0
 
     while(torqueBelowLimit or drillDepthNotAtMax and timeDelta < MAX_DRILLING_TIME):
-	actuatorObjects[0].max()			# Turn on ONE rotational motor at max speed
-	timeDelta += 0.001					#TODO REAL LIFE TESING OF LOOP SPEED ~1 ms
+        actuatorObjects[0].max()			# Turn on ONE rotational motor at max speed
+        timeDelta += 0.001					#TODO REAL LIFE TESING OF LOOP SPEED ~1 ms
 
-    if(not torqueBelowLimit):
-	return TORQUE_EXIT_CASE
-    elif(not drillDepthNotAtMax):
-	return DEPTH_EXIT_CASE
-    else:
-	return TIME_EXIT_CASE
+        if(not torqueBelowLimit):
+	        return TORQUE_EXIT_CASE
+        elif(not drillDepthNotAtMax):
+	        return DEPTH_EXIT_CASE
+        else:
+	        return TIME_EXIT_CASE
 
 
 def StopDrill(actuatorObjects):
@@ -274,30 +274,31 @@ def ActuateFlavorPump(flavorType, flavorLevel, actuatorObjects):
     powderType - Product name of powder add-on to dispense (e.g. CINNAMON) 
     powderLevel - Amount of powder units to dispense 1 unit = 0.1 oz
     actuatorObjects - Array of Actuator.py objects to control
-   
+
     return NOTHING
     """
     if(CoCoDrink.NONE < flavorLevel and flavorLevel <= CoCoDrink.MAX_FLAVOR_LEVEL):
-	actuationTime = flavorLevel / CoCoDrink.FLAVOR_FLOW_RATE  #Units of Seconds based on flow rate per second of pump
-	if(flavorType == CoCoDrink.RUM):
+	    actuationTime = flavorLevel / CoCoDrink.FLAVOR_FLOW_RATE  #Units of Seconds based on flow rate per second of pump
+
+    if(flavorType == CoCoDrink.RUM):
 	    Debug.Dprint("Pumping RUM into coconut for " + actuationTime  +" seconds")
 	    actuatorObjects[0].run(actuationTime, Actuator.N_A, 0.5, Actuator.FORWARD) #PROBABLY CORRECT
-	elif(flavorType == CoCoDrink.PINA_COLADA):
-	    Debug.Dprint("Pumping PINA COLADA into coconut for " + actuationTime  +" seconds")
-	    #actuatorObjects[1].
-	    self.run(actuationTime, Actuator.N_A, 0.5, Actuator.FORWARD) #PROBABLY WRONG
-	elif(flavorType == CoCoDrink.CBD):
-	    Debug.Dprint("Pumping CBD into coconut for " + actuationTime  +" seconds")
-	    #actuatorObjects[2].
-	    #time.sleep(actuationTime)
-	elif(flavorType == Drink.CHOCOLATE):
-	    print("TODO")
+    elif(flavorType == CoCoDrink.PINA_COLADA):
+        Debug.Dprint("Pumping PINA COLADA into coconut for " + actuationTime  +" seconds")
+        #actuatorObjects[1].
+        self.run(actuationTime, Actuator.N_A, 0.5, Actuator.FORWARD) #PROBABLY WRONG
+    elif(flavorType == CoCoDrink.CBD):
+        Debug.Dprint("Pumping CBD into coconut for " + actuationTime  +" seconds")
+        #actuatorObjects[2].
+        #time.sleep(actuationTime)
+    elif(flavorType == Drink.CHOCOLATE):
+        print("TODO")
 	    #actuatorObjects[1].
 	    #ONE OF ABOVE METHODS
-	elif(sugarLevel == Drink.NONE):
+    elif(sugarLevel == Drink.NONE):
 	    time.sleep(0.001) # DO NOTHING expect pause for 1 millisecond
-	else:
-	    print("INVALID SUGAR LEVEL PASSED TO FUNCTION - TRY VALUE 0 TO 8")
+    else:
+        print("INVALID SUGAR LEVEL PASSED TO FUNCTION - TRY VALUE 0 TO 8")
 
 def MoveConveyor(actuatorObjects, direction, numOfPositions):
     """
@@ -311,19 +312,19 @@ def MoveConveyor(actuatorObjects, direction, numOfPositions):
     Key values:
     NOTHING
     """
-	
+
     if(direction == Actuator.FORWARD):
         for posNum in range(1, numOfPositions+1):
-	    for i in actuatorObjects: 			# Move ALL actuators to drop cup to min position at the same time
-	        actuatorObjects[i].run(Actuator.CW) 	#or Actuator.FORWARD
-		time.sleep(MAX_ADDON_DISPENSE_TIME)		#Units are Seconds
+	        for i in actuatorObjects: 			# Move ALL actuators to drop cup to min position at the same time
+	            actuatorObjects[i].run(Actuator.CW) 	#or Actuator.FORWARD
+	            time.sleep(MAX_ADDON_DISPENSE_TIME)		#Units are Seconds
     elif(direction == Actuator.BACKWARDS):
-	for posNum in range(1, numOfPositions+1):
-	    for i in actuatorObjects: 			# Move ALL actuators to drop cup to min position at the same time
-		actuatorObjects[i].run(Actuator.CCW) 	#or Actuator.BACKWARD
-		time.sleep(MAX_ADDON_DISPENSE_TIME)		#Units are Seconds
+	    for posNum in range(1, numOfPositions+1):
+	        for i in actuatorObjects: 			# Move ALL actuators to drop cup to min position at the same time
+		        actuatorObjects[i].run(Actuator.CCW) 	#or Actuator.BACKWARD
+		        time.sleep(MAX_ADDON_DISPENSE_TIME)		#Units are Seconds
     else:
-	print("INVALID CONVEYOR DIRECTION PASSED TO FUNCTION - TRY FORWARD OR BACKWARDS")
+	    print("INVALID CONVEYOR DIRECTION PASSED TO FUNCTION - TRY FORWARD OR BACKWARDS")
 
 
 def GetOrder(timeout):
@@ -363,14 +364,14 @@ def GetOrder(timeout):
         startTimeStampMicroSec = (now - epoch)//timedelta(microsecond=1)
         
         # Receiving data from the UDP Server.
-        data, addr = udpClientSocket.recvfrom(DATA_BUFFER_SIZE) 
+        data, addr = udpClientSocket.recvfrom(DATA_BUFFER_SIZE)
         # TODO Debug.Dprint(driverDebugObject, "received message: " + data)
         logging.info('received message:', data) #TODO LOGGING NOT WORKING, HAVE TO FIX
         #TODO Write code to handle this data
 
-        now = datetime.now(timezone.utc)        
+        now = datetime.now(timezone.utc)
         endTimeStampMicroSec = (now - epoch)//timedelta(microsecond=1)
-        
+
         timeout = timeout - (endTimeStampMicroSec/1000 - startTimeStampMicroSec/1000)
 
 
@@ -394,7 +395,7 @@ if __name__ == "__main__":
 
 
     # Actuators as define in schematic tab at https://upverter.com/design/blazesandersinc/tapomatic-v2020-1
-    immunityHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD7]	
+    immunityHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD7]
     vitaminsHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD11]
     actuatorList = [Actuator('S', IMMUNITY_ADDITIVE_SERVO, immunityHealthAdditivePins, "Immunity Boost Servo: Seamuing MG996R", Actuator.CW)]
     actuatorList.append(Actuator('S', VITAMIN_ADDITIVE_SERVO, vitaminsHealthAdditivePins, "Daily Vitamins Servo: Seamuing MG996R", Actuator.CW))
@@ -409,14 +410,14 @@ if __name__ == "__main__":
     fluidActuatorList.append(Actuator('R', PINEAPPLE_FLAVOR_PUMP, pineappleFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
     fluidActuatorList.append(Actuator('R', ORANGE_FLAVOR_PUMP, orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
     # Add fluid actuators to the full system actuator list
-    actuatorList.append(fluidActuatorList)   
+    actuatorList.append(fluidActuatorList)
 
     liftMotor1Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
     liftMotor2Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
     liftingActuatorList = [Actuator('L', Z1_LINEAR_LIFT_MOTOR, liftMotor1Pins, "Lift Motor 1: PA-07-12-5V", Actuator.LINEAR_OUT)]
     liftingActuatorList.append(Actuator('L', Z2_LINEAR_LIFT_MOTOR, liftMotor2Pins, "Lift Motor 2: PA-07-12-5V", Actuator.LINEAR_OUT))
     # Add lifting actuators to the full system actuator list
-    actuatorList.append(liftingActuatorList)   
+    actuatorList.append(liftingActuatorList)
 
     cuttingMotor1Pins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
     cuttingMotor2Pins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
@@ -425,47 +426,46 @@ if __name__ == "__main__":
     cuttingActuatorList.append(Actuator('L', X2_CUTTING_MOTOR, cuttingMotor2Pins, "Cutting Motor 2: PA-04-6-100", Actuator.LINEAR_OUT))
     cuttingActuatorList.append(Actuator('L', Y1_CUTTING_MOTOR, knifePositionMotorPins, "Knife Position Motor: PA-07-?TODO?-5V", Actuator.LINEAR_OUT))
     # Add cutting actuators to the full system actuator list
-    actuatorList.append(cuttingActuatorList)   
+    actuatorList.append(cuttingActuatorList)
 
     coveringMotor1Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
     coveringMotor2Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
     coveringActuatorList = [Actuator('L', Y1_LINEAR_COVER_MOTOR, coveringMotor1Pins, "Covering Motor 1: PA-07-?TODO?-5V", Actuator.LINEAR_OUT)]
     coveringActuatorList.append(Actuator('L', Y2_LINEAR_COVER_MOTOR, coveringMotor2Pins, "Covering Motor 2: PA-07-?TODO?-5V", Actuator.LINEAR_OUT))
     # Add cocering actuators to the full system actuator list
-    actuatorList.append(coveringActuatorList)   
+    actuatorList.append(coveringActuatorList)
 
     #TODO FIX Vec3b laserObject = LASER("40004672600113", LASER.HIGH_POWER)
-    
-    guiReady = False 
+
+    guiReady = False
 
     while(True):
         for drinkNum in range(0, MAX_VEND_QUEUE_SIZE-1):
     	    try:
     	        vendQueue[drinkNum] = GetOrder(UDP_GUI_PI)
     	        guiReady = True
-    	    except socket.timeout:		# Network connection to GUI down or busy
+    	    except socket.timeout:		    # Network connection to GUI down or busy
     	        guiReady = False
-    			
-    	    finally:	
+
+    	    finally:
     	    	if(guiReady == True and vendQueue[drinkNum] != Drink.NONE):
-                    Run(lifingActuators)                        # Raise cocont platform
-                    
+                    Run(lifingActuators)    # Raise cocont platform
+
                     artFilename = vendQueue[drinkNum].GetBrandingArt()
                     LaserObject.LoadImage(artFilename)
-                    
+
                     if(vendQueue[drinkNum].GetFlow() == CocoDrink.TAPPED):
                         Run(tappingAcutors)
                         ActuateAddon(vendQueue[drinkNum].GetAddOn())
                         #TODO actuateSugarMotor(sugarActuators, vendQueue[drinkNum+1].getSugarType, vendQueue[drinkNum+1].getSugarLevel)
                     else:
                         Run(cuttingActuators)
-                        
-                    Run(lifingActuators)                        # Lower cocont platform
-                    
-                else:
+
+                    Run(lifingActuators)    # Lower cocont platform
+
+    	    	else:
                     Debug.Dprint(driverDebugObject, "No orders in queue")
-                    
-                    
+
                     MissionControl()
-                    
-                    time.sleep(0.1) #Pause for 100 ms to slow down while loop and reduce CPU usage 
+
+                    time.sleep(0.1) #Pause for 100 ms to slow down while loop and reduce CPU usage
