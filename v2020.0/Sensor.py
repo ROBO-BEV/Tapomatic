@@ -5,7 +5,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-05-29"
+__date__ =    "Late Updated: 2020-06-02"
 __doc__ =     "Class to communicate with all sensors inside the Tapomatic kiosk" 
 """
 
@@ -280,16 +280,14 @@ class Sensor():
 
 	    Return value:
 	    safe -- True if danger zones are clear; Otherwise False
-	    """		
-    	
-    	safe = True
-    	
+	    """
+	
+    	safe = True	
     	# Zone (15,0) to (60,-29) cm 
     	# Flip between X-axis S#1 and S#2
 		# Check (ZS#1, YS#1) then (ZS#2, YS#1) 
 		# Check (ZS#5, YS#2) 
 		# Check (ZS#9, YS#3) then (ZS#10, YS#3)
-
     	for xAxisSensor in range(0, NUM_X_AXIS_PING_SENSORS): 
     		for yAxix in range(0, NUM_Y_AXIS_PING_SENSORS):
 			    xDist = GetLASERpingDistance(PING_Xaxis_Pin)
@@ -299,13 +297,11 @@ class Sensor():
 					if(15 <= yDist and yDisy <= 60):
 						if(zDist <= 22):
 							safe = False 
-							Debug.Dprint(DebugObject, "X-Axis LASER pin: " + PING_Xaxis_Pin) 				    	
-    	    Debug.Dprint(DebugObject, "Y-Axis LASER pin: " + PING_Yaxis_Pin) 
-			Debug.Dprint(DebugObject, "Z-Axis LASER pin: " + PING_Zaxis_Pin)
-			
-    	
-    	return safe
+							Debug.Dprint("X-Axis LASER pin: " + PING_Xaxis_Pin)
+							Debug.Dprint("Y-Axis LASER pin: " + PING_Yaxis_Pin) 
+							Debug.Dprint("Z-Axis LASER pin: " + PING_Zaxis_Pin)
 
+		return safe		
 
 	def GetLASERpingDistance(pingPinNumber, units):
 	    """
