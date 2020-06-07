@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 """
 __author__  = "Blaze Sanders"
@@ -11,10 +12,18 @@ __doc__     = "Script to analyze the size of coconuts, so that we make 99% relia
 # Useful standard Python system jazz
 import sys, time, traceback, argparse, string
 
-# OpenCV magic
-# https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_table_of_contents_imgproc/py_table_of_contents_imgproc.html
-import cv2
-import numpy as np
+# Robotic Beverage Technologies code for custom data logging and terminal debugging output
+from Debug import *
+
+try:
+    # OpenCV magic
+    # https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_table_of_contents_imgproc/py_table_of_contents_imgproc.html
+    import cv2
+    import numpy as np
+
+except ImportError:
+     ImportDebugObject = Debug(True, "ComputerVision.py")
+     Debug.Dprint(ImportDebugObject, "Run ComputerVision.py with python not PYTHON3")
 
 # Create a command line parser
 # parser = argparse.ArgumentParser(prog = "Tapomatic Computer Vision", description = __doc__, add_help=True)
