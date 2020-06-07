@@ -59,7 +59,7 @@ try:
 
 except ImportError:
     #TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
-    ImportDebugObject = Debug(True)
+    ImportDebugObject = Debug(True, "Actuator.py")
     Debug.Dprint(ImportDebugObject, "WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
 
 class Actuator:
@@ -147,101 +147,104 @@ class Actuator:
 		    #TODO If above DOES NOT WORK: self.actuatorObject = gpiozero.OutputDevice(wired[0], active_high=False, initial_value=False)
 	    else:
 		    Debug.Dprint(self.DebugObject, "INVALID Actutator Type in __init__ method, please use S, M, or R string as first parameter to Actuator() Object")
-		
+
     def Run(self, duration, newPosition, speed, direction):
 	    #TODO https://www.google.com/search?q=pass+object+to+python+function&rlz=1C1GCEA_enUS892US892&oq=pass+object+to+python+function&aqs=chrome..69i57.5686j0j7&sourceid=chrome&ie=UTF-8
 		#TODO https://stackoverflow.com/questions/20725699/how-do-i-pass-instance-of-an-object-as-an-argument-in-a-function-in-python
-		"""
+        """
 		Run an actuator for a given number of milliseconds to a given position at percentage of max speed in FORWARD or BACKWARDS direction
-		    
+
 		self - Instance of object being called
 		duration - Time actuator is in motion, for Servo() objects this can be used to control speed of movement
 		newPosition - New position between -1 and 1 that  actuator should move to
 		speed - Speed at which actuator moves at, for Servo() objects this parameter is NOT used
 		direction - Set counter-clockwise (CCW or LINEAR_IN) or clockwise (CW or LINEAR_OUT) as the forward direction
-		
+
 		return NOTHING
 		"""
-		
-		Debug.Dprint(DebugObject, "Actuator.py Run() function started!")
 
-		if(type == "S"):
-			currentPosition = Servo.value()
-			if(currentPosition < (newPosition - Actuator.SERVO_SLACK)):
-			    actuatorObject.max() #TODO THIS MAY NOT STOP AND GO ALL THE WAY TO MAX POS
-			elif(currentPosition > (newPosition - Actuator.SERVO_SLACK)):
-			    actuatorObject.min() #TODO THIS MAY NOT STOP AND GO ALL THE WAY TO MIN POS
-			else:
-			    # NEAR to new position DO NOTHING
-			    Servo.dettach()
-		elif(type == "M"):
-			Debug.Dprint(DebugObject, "Write motor control code")
-			Motor.enable()
-			currentPosition = actuatorObject.value
-			while(currentPosition != newPosition):
-				if(actuatorObject.forwardDirection == Actuator.CW):
-					Motor.forward(speed)
-				else:
-					Motor.reverse(speed)
-				currentPosition = actuatorObject.value
+        Debug.Dprint(DebugObject, "Actuator.py Run() function started!")
 
-			sleep(duration)    #TODO signal.pause(duration)
-			Motor.disable()
+        if(type == "S"):
+            currentPosition = Servo.value()
+            if(currentPosition < (newPosition - Actuator.SERVO_SLACK)):
+                actuatorObject.max() #TODO THIS MAY NOT STOP AND GO ALL THE WAY TO MAX POS
+            elif(currentPosition > (newPosition - Actuator.SERVO_SLACK)):
+                actuatorObject.min() #TODO THIS MAY NOT STOP AND GO ALL THE WAY TO MIN POS
+            else:
+                 # NEAR to new position DO NOTHING
+                 Servo.dettach()
+        elif(type == "M"):
+            Debug.Dprint(DebugObject, "Write motor control code")
+            Motor.enable()
+            currentPosition = actuatorObject.value
+            while(currentPosition != newPosition):
+                if(actuatorObject.forwardDirection == Actuator.CW):
+                    Motor.forward(speed)
+                else:
+                    Motor.reverse(speed)
+                currentPosition = actuatorObject.value
 
-		elif(type == "R"):
-			relay.on()
-			sleep(duration) 	#TODO signal.pause(duration)
-			relay.off()
-		else:
-			Debug.Dprint(DebugObject, "INVALID Actutator Type sent to Run method, please use S, M, R as first parameter to Actuator() Object")
+            sleep(duration)    #TODO signal.pause(duration)
+            Motor.disable()
 
-		Debug.Dprint(DebugObject, "Run function completed!")
+        elif(type == "R"):
+            relay.on()
+            sleep(duration) 	#TODO signal.pause(duration)
+            relay.off()
+        else:
+            Debug.Dprint(DebugObject, "INVALID Actutator Type sent to Run method, please use S, M, R as first parameter to Actuator() Object")
+
+        Debug.Dprint(DebugObject, "Run function completed!")
+
 
     def setAngularPosition(self, newAngle):
         """
         Set the rotational position of a AngularServo() or Motor() object
-        
+
         self - Instance of object being called
         newAngle - Rotational angle to set actuator to, more exact for Servo() objects then Motor() object
-        
+
         return NOTHING
         """
-        
-    	if(self.actuatorType == "S"):
-    	    self.angle = newAngle
-    	elif(self.actuatorType == "M"):
-    	    Debug.Dprint(self.DebugObject, "THIS CODE IS GOING TO BE HARD") 
-		    #TODO Possible global variable with dead recoking needed
-    	elif(self.actuatorType == "R"):
-    	    Debug.Dprint(self.DebugObject, "Relays do not have rotational positions. Are you sure you called the correct object?")
-    	else:
-    	    Debug.Dprint(DebugObject, "INVALID Actutator Type sent to SetAngularPosition method, please use S, M, R as first parameter to Actuator() Object")
-	
-	###
-	# Read the linear or rotational positon on an actuator
-	#
-	# @self - Instance of object being called
-	#
-	# return The position of actuator, with value between -1.0 and 1.0 inclusively
-	###
-	def getPosition(self):
-		if(self.actuatorType == "S"):
-			print("TODO")
-			#TODO return self.value
 
-	###
-	# Determine if actuator is moving
-	#
-	# @self - Instance of object being called
-	#
-	# return TRUE if actuator is powered on and moving, FALSE otherwise
-	###
-	def isActive(self):
-		return self.isActive
+        if(self.actuatorType == "S"):
+            self.angle = newAngle
+        elif(self.actuatorType == "M"):
+            Debug.Dprint(self.DebugObject, "THIS CODE IS GOING TO BE HARD")
+            #TODO Possible global variable with dead recoking needed
+        elif(self.actuatorType == "R"):
+            Debug.Dprint(self.DebugObject, "Relays do not have rotational positions. Are you sure you called the correct object?")
+        else:
+            Debug.Dprint(DebugObject, "INVALID Actutator Type sent to SetAngularPosition method, please use S, M, R as first parameter to Actuator() Object")
 
 
-	def setAngle(self, angle):
-		print("TODO")
+    def getPosition(self):
+        """
+	    Read the linear or rotational positon on an actuator
+
+	    Return value:
+	    The position of actuator, with value between -1.0 and 1.0 inclusively
+        """
+
+        if(self.actuatorType == "S"):
+            print("TODO")
+            #TODO return self.value
+
+
+    def isActive(self):
+        """
+        Determine if actuator is moving
+
+	    Return value:
+        TRUE if actuator is powered on and moving, FALSE otherwise
+        """
+
+        return self.isActive
+
+
+    def setAngle(self, angle):
+        print("TODO")
 
 
 if __name__ == "__main__":
@@ -252,7 +255,7 @@ if __name__ == "__main__":
 	    time.sleep(20) # seconds or milliseconds?
 	    relay.off()
 	except NameError:
-	    DebugObject = Debug(True)
+	    DebugObject = Debug(True, "Actuator.py")
 	    Debug.Dprint(DebugObject, "WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
 	    print("END ACTUATOR.PY MAIN")
 
