@@ -4,8 +4,8 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-29"
-__doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
+__date__    = "Late Updated: 2020-06-20"
+__doc__     = "Logic to run Tapomatic back-end services for v2020.1 (i.e. not GUI)"
 """
 
 # Useful standard Python system jazz
@@ -22,9 +22,6 @@ from datetime import datetime, timezone, timedelta
 #import pynput.keyboard
 #from pynput.keyboard import Key, Controller
 
-# Create array
-#TODO REMOVE import numpy as np
-
 # Custom CocoTaps and Robotic Beverage Technologies Inc code
 from CocoDrink2 import *        # Store valid CoCoTaps drink configurations
 from Actuator import *         	# Modular plug and play control of motors, servos, and relays
@@ -33,7 +30,7 @@ from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup 
 #from LASER import *		        # Enable LASER movement and image warping around coconut
 
 # Over The Air (OTA) Updating Configurations
-VERSION = "2020.0"
+VERSION = "2020.1"
 PRODUCT_MODE = "PRODUCT"        		# Final product configuration
 FIELD_MODE   = "FIELD"					# Non-Techanical repair person configuration
 TESTING_MODE = "TESTING"				# Internal developer configuration
@@ -84,11 +81,13 @@ Z_LINEAR_LASER_MOTOR = 17
 Y_LINEAR_LASER_MOTOR = 18
 X_LINEAR_LASER_MOTOR = 19
 
+
 # Tool change CONSTANTS
 NO_TOOL = 0
 DRILL_BIT_TOOL = -1
 TAPPING_SOCKET_TOOL = -2
 LASER_BRANDING_TOOL = -3
+
 
 # If force on topping off knife is greater than DULL_KNIFE_FORCE it is probably dull
 DULL_KNIFE_FORCE = 100	# Units are Newtons
@@ -96,11 +95,9 @@ SHARP = 1
 DULL = 0
 DULL_KNIFE = -1
 NUM_OF_KNIFE_CUTTING_AREAS = 6
-#FIX ARRAY CREATION KNIVE_SECTIONS[NUM_OF_KNIFE_CUTTING_AREAS] = [SHARP, SHARP, SHARP, SHARP, SHARP, SHARP]
-# [Side A Section 1, Side A Section 2, Side A Section 3, Side B Section 4, Side B Section 5, Side B Section 6]
+
 
 # Global variables in the Driver.py
-
 previousCuttingForce = SHARP    # 
 currentKnifeSectionInUse = 0    # Interger 0 to (NUM_OF_KNIFE_CUTTING_AREAS - 1) describing part of knife being used
 
@@ -285,16 +282,11 @@ def ActuateFlavorPump(flavorType, flavorLevel, actuatorObjects):
 	    actuatorObjects[0].run(actuationTime, Actuator.N_A, 0.5, Actuator.FORWARD) #PROBABLY CORRECT
     elif(flavorType == CoCoDrink.PINA_COLADA):
         Debug.Dprint("Pumping PINA COLADA into coconut for " + actuationTime  +" seconds")
-        #actuatorObjects[1].
         self.run(actuationTime, Actuator.N_A, 0.5, Actuator.FORWARD) #PROBABLY WRONG
     elif(flavorType == CoCoDrink.CBD):
         Debug.Dprint("Pumping CBD into coconut for " + actuationTime  +" seconds")
-        #actuatorObjects[2].
-        #time.sleep(actuationTime)
     elif(flavorType == Drink.CHOCOLATE):
         print("TODO")
-	    #actuatorObjects[1].
-	    #ONE OF ABOVE METHODS
     elif(sugarLevel == Drink.NONE):
 	    time.sleep(0.001) # DO NOTHING expect pause for 1 millisecond
     else:
@@ -350,10 +342,10 @@ def GetOrder(timeout):
                              socket.SOCK_DGRAM)  # UDP
         # Bind the udp socket to the HOST AND PORT.
         udpClientSocket.bind((UDP_HOST, UDP_PORT))
-        #TODO Debug.Dprint("Client is running to start receiving the order files.")
+        #TODO driverDebugObject.Dprint("Client is running to start receiving the order files.")
         logging.info('Client is running to start receiving the order files.')
     except udpClientSocket.error:
-        #TODO Debug.Dprint(driverDebugObject, "Error in creating the udpClientSocket.")
+        #TODO driverDebugObject.Dprint(driverDebugObject, "Error in creating the udpClientSocket.")
         logging.error('Error in creating the udpClientSocket')
 
     #TODO TIMESTAMP OBJECT
@@ -378,8 +370,6 @@ def GetOrder(timeout):
 if __name__ == "__main__":
 
     driverDebugObject = Debug(True, "Driver.py")
-
-    #actuatorObjects = np.array(MAX_NUM_OF_ACTUATORS)
 
     currentTool = NO_TOOL           # Default is having no tool attached to 3-axis system
     currentKnifeSectionInUse = 0    # Always attempt to used section 0 when code restarts
