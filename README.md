@@ -27,6 +27,8 @@ Static type checking was done using http://mypy-lang.org/
 
 Copy .nanorc in your home directory to use the best IDE every made NANO!
 
+Commit message standard shall follow https://www.conventionalcommits.org/en/v1.0.0/
+
 ***
 v2020.0:
 

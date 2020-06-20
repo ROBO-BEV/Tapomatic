@@ -231,32 +231,6 @@ class Sensor():
 		
 		return forceInNewtons
 
-	def FindLiquidForceSensor(lType):
-	    """
-	    Correlate a dynamic interger drink ID (from QR code scan) with static internal force sensor ID 
-	
-	    Keyword arguments:
-	    lType -- Type (name) of the liquid inside a 750 ml bottle
-
-	    Return value:
-	    ID -- ID number of the force sensor a bottle is pushing against
-	    """		
-	    
-	    if(lType == CocoDrink.CBD):
-	        ID = FORCE_SENSOR_1
-	    elif(lType == CocoDrink2.IMMUNITY_BOOST):
-	        ID = FORCE_SENSOR_2
-	    elif(lType == CocoDrink.DAILY_VITAMINS):
-	        ID = FORCE_SENSOR_3
-	    elif(lType == CocoDrink.RUM):
-	        ID = FORCE_SENSOR_4
-	    elif(lType == CocoDrink.PINA_COLADA):
-	        ID = FORCE_SENSOR_5 
-	    elif(lType == CocoDrink.ORANGE):
-	        ID = FORCE_SENSOR_6
-
-		return ID
-
 
 	def IsLaserSafetyGridSafe():
 	    """
