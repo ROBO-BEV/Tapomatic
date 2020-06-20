@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development" 
-__date__    = "Late Updated: 2020-05-26"
+__date__    = "Late Updated: 2020-06-03"
 __doc__     = "Class to control and move LASER system"
 """
 
@@ -16,7 +16,7 @@ import cv2
 #TODO ADD BACK? import cv
 
 #TODO REMOVE IF NOT USING ARRASY ANY MORE?
-import numpy as np
+#import numpy as np
 
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
@@ -46,7 +46,7 @@ class LASER:
 	
 	def __init__(self, gpioFirePin, supplierPartNumber, cocoPartNumber, powerLevel, maxPowerLevel, brandingArt):
 	    """
-	    Create a LASER object storing power, part number, and image data to used when fired
+	    Create a LASER object with power settings, part numbers, and image data to used when fired via GPIO pin
 	    
 	    Key arguments:
         gpioFirePin -- 5V GPIO pin used to control a LASER or a 12V relay connected to a LASER 
@@ -57,20 +57,31 @@ class LASER:
 	    brandingArt -- Black & White PNG image to brand / burn into an object
 	    
 	    Return value:
-	    Newly created LASER object
+	    New LASER() object
 	    """	    
 	    
 	    self.DebugObject = Debug(True, "LASER.py")
 	    
-	    self.gpioFirePin = gpiozero.DigitalOutputDevice(gpioPin)
+	    self.gpioFirePin = gpiozero.DigitalOutputDevice(gpioFirePin)
 	    
-	    self.powerLevel = powerLevel        # Initialize to 8.0 Watts
+	    self.supplierPartNumber = supplierPartNumber
+	    
+ 	    if(cocoPartNumber.length() != 10 ):
+	        self.DebugObject.Dprint("Invalid part number format, please verify part number looks like XXX-YYYYY-Z")
+
+	    # List of current valid internal LASER part numbers
+ 	    if(cocoPartNumner == "?00-????-?" or cocoPartNumber == "?00-????-?"):
+	        self.cocoPartNumber = cocoPartNumber	    
+	    else:
+	        self.DebugObject.Dprint("nvalid part number format")
+	    
 	    if(0 > powerLevel or powerLevel > self.maxPowerLevel):
 	        # Check for valid power level and default to 10 Watts if invalid
-	        Debug.Dprint(DebugOject, "Invalid power. I'm  setting the LASER power to " + repr(self.maxPowerLevel) + " Watts")
-	        self.powerLevel = self.maxPowerLevel
+	        Debug.Dprint(DebugOject, "Invalid power. I'm  setting the LASER power to " + repr(self.maxPowerLevel/2) + " Watts")
+	        self.powerLevel = self.maxPowerLevel/2
+	    else:
+	        self.powerLevel = powerLevel       
 	    
-	    self.partNumber = partNumber
 	    
 	    self.brandingArt = WarpImage(LoadImage(COCOTAPS_LOGO), SIZE_100MM) # Initialize to standard CocoTaps logo
 
@@ -94,14 +105,15 @@ class LASER:
 	    	img = cv2.imread(path)
 	    	
 	    	# Convert to gray scale first to apply better thresholding which will create a better black and white image
-		    grayImg = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
-		
-		    # Anything above 127 on a scale from 0 to 255 is WHITE  
-		    (thresh, bwImg) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
-		    return bwImg
-
-		else:
-		    Debug.Dprint("Please pass a .png file to the LoadImage() function in LASER.py code")		
+	    	grayImg = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
+	    	
+	    	# Anything above 127 on a scale from 0 to 255 is WHITE
+	    	(thresh, bwImg) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+	    		
+        else:
+	        self.DebugObject.Dprint("Please pass a .png file to the LoadImage() function in LASER.py code")		
+	    	
+	    return bwImg
 
 
 	def WarpImage(currentImage, coconutSize):

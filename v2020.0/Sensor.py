@@ -281,28 +281,28 @@ class Sensor():
 	    Return value:
 	    safe -- True if danger zones are clear; Otherwise False
 	    """
-	
-    	safe = True	
-    	# Zone (15,0) to (60,-29) cm 
-    	# Flip between X-axis S#1 and S#2
-		# Check (ZS#1, YS#1) then (ZS#2, YS#1) 
-		# Check (ZS#5, YS#2) 
-		# Check (ZS#9, YS#3) then (ZS#10, YS#3)
-    	for xAxisSensor in range(0, NUM_X_AXIS_PING_SENSORS): 
-    		for yAxix in range(0, NUM_Y_AXIS_PING_SENSORS):
-			    xDist = GetLASERpingDistance(PING_Xaxis_Pin)
-			    yDist = GetLASERpingDistance(PING_Yaxis_Pin)
-			    zDist = GetLASERpingDistance(PING_Zaxis_Pin)
-			    if(xDist <= 29): # 29 cm
-					if(15 <= yDist and yDisy <= 60):
-						if(zDist <= 22):
-							safe = False 
-							Debug.Dprint("X-Axis LASER pin: " + PING_Xaxis_Pin)
-							Debug.Dprint("Y-Axis LASER pin: " + PING_Yaxis_Pin) 
-							Debug.Dprint("Z-Axis LASER pin: " + PING_Zaxis_Pin)
-
-		return safe		
-
+        
+        safe = True	
+        # Zone (15,0) to (60,-29) cm 
+        # Flip between X-axis S#1 and S#2
+        # Check (ZS#1, YS#1) then (ZS#2, YS#1) 
+        # Check (ZS#5, YS#2) 
+        # Check (ZS#9, YS#3) then (ZS#10, YS#3)
+        for xAxisSensor in range(0, NUM_X_AXIS_PING_SENSORS): 
+            for yAxix in range(0, NUM_Y_AXIS_PING_SENSORS):
+                xDist = GetLASERpingDistance(PING_Xaxis_Pin)
+                yDist = GetLASERpingDistance(PING_Yaxis_Pin)
+                zDist = GetLASERpingDistance(PING_Zaxis_Pin)
+                if(xDist <= 29): # 29 cm
+			        if(15 <= yDist and yDisy <= 60):
+				        if(zDist <= 22):
+					        safe = False
+					        self.DebugObject.Dprint("X-Axis LASER pin: " + PING_Xaxis_Pin)
+					        self.DebugObject.Dprint("Y-Axis LASER pin: " + PING_Yaxis_Pin) 
+					        self.DebugObject.Dprint("Z-Axis LASER pin: " + PING_Zaxis_Pin)
+	    return safe
+        
+        
 	def GetLASERpingDistance(pingPinNumber, units):
 	    """
 	    Get distance to the closet object in direct line of sight of a PING LASER or ultrasonic rangefinder
@@ -319,5 +319,5 @@ class Sensor():
 		    range = Ping.GetInches(pingPinNumber) 
     	else:
     	    range = Ping.GetMillimeters(pingPinNumber) 
-    	
-    	return range
+    	    
+    	return rangee
