@@ -7,6 +7,10 @@ __status__  = "Development"
 __date__    = "Late Updated: 2020-06-22"
 __doc__     = "Logic to run Flask based GUI front-end for CoCoTaps"
 
+# If you get "OSError: [Errno 98] Address already in use" run the next two commands
+# sudo lsof -t -i tcp:5000
+# sudo kill -9 7076
+
 # Useful system jazz
 import sys, traceback, argparse, string
 
