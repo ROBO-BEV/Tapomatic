@@ -28,7 +28,8 @@
 /* Global  */
 h1, p, .button{
     color: var(--text-color);
-    font-family: 'Roboto', sans-serif;
+    font-family: Graphik, Arial, Courier New, Source Sans Pro; 
+    /* font-family: 'Roboto', sans-serif; */
 }
 h1 {
     font-weight: lighter;
