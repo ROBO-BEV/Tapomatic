@@ -4,7 +4,7 @@ ___author__ = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-04-17"
+__date__    = "Late Updated: 2020-06-22"
 __doc__     = "Install script to setup development enviroment for CoCoTaps Tapomatic v2020.0"
 """
 
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     	# raise CalledProcessError(retcode, cmd)
 		# subprocess.CalledProcessError: Command 'clear' returned non-zero exit status 1.
 		# TODO Fix above ```try: except CalledProcessError: ``` around the windows code
-		
+
 		# @link https://stackoverflow.com/questions/46041719/windows-reports-error-when-trying-to-install-package-using-pipenv
 		# @link https://medium.com/@mahmudahsan/how-to-use-python-pipenv-in-mac-and-windows-1c6dc87b403e
 		print("Please install Python3.7 or higher from www.python.org/downloads/windows/ before running install.py")
@@ -54,7 +54,7 @@ if __name__ == "__main__":
 		filepath = 'c:\\users\\' + args.PC_username + '\\appdata\\local\\programs\\python\\python36-32\\Scripts'
 		check_call("set PATH=%PATH%;set PATH=%PATH%;'" + filepath +"'", shell=True) #TODO Does this work with PowerShell?
 
-	# When using Linux / Rapsberry Pi code flows here 
+	# When using Linux / Rapsberry Pi code flows here
 	if(args.Computer_Type == "Pi" or args.Computer_Type == "pi"):
 		check_call("clear",shell=True)              # Clear terminal
 		check_call("sudo apt update", shell=True) 	# Check and update your system
@@ -62,13 +62,12 @@ if __name__ == "__main__":
 		sleep(5) 			                        # Pause program to allow user to read upgrade output
 		check_call("clear",shell=True)
 		check_call("sudo apt install python3-pip", shell=True) 	# Flask requires Python 3 to work
-		check_call("pip install pipenv", shell=True)
+		#check_call("pip install pipenv", shell=True)
 
-	# When using Mac code flows here 
+	# When using Mac code flows here
 	if(args.Computer_Type == "Mac" or args.Computer_Type == "mac" or args.Computer_Type == "MAC"):
 		# Install a real package manager (Homebrew) on the Mac :) https://brew.sh
-		check_call("/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-", shell=True)
+		#check_call("/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)", shell=True)
 		#check_call("git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew", shell=True)
 		#check_call("mkdir ~/.linuxbrew/bin", shell=True)
 		#check_call("vn -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin", shell=True)
@@ -84,26 +83,26 @@ if __name__ == "__main__":
 	# @link https://pipenv.readthedocs.io/en/latest/basics/
 	# Communicate with sensors
 	# TODO DO WE NEEDED THIS? check_call("pipenv install pyserial", shell=True)
-	
+
 	# Flask is the GUI front-end to that runs in parallel with python back-end controlling pumps
 	# Remember to run flask with "python3" NOT "python" command, or you will get weird errors :)
 	# @link https://aryaboudaie.com/python/technical/educational/web/flask/2018/10/17/flask.html
-	check_call("pipenv install flask", shell=True) 		# Python microframework for GUI creation 
+	check_call("pip install flask", shell=True) 		# Python microframework for GUI creation 
 	check_call("export FLASK_APP=GUI.py", shell=True)   # Set enviroment variable to select GUI.py file as the Flask application
 
 	# Install a documentation library
-	check_call("pipenv install docutils", shell=True) 	
-	
+	check_call("pip install docutils", shell=True) 	
+
 	# Install a numby library for array creation
-	check_call("pipenv install numpy", shell=True)		
+	#check_call("pipenv install numpy", shell=True)		
 
 	# Install computer vision library to wrap images around coconuts and load photos
-	check_call("pip install opencv-python", shell=True)
+	check_call("pip3 install opencv-python", shell=True)
 	
 	# Activate PIPENV
-	check_call("pipenv shell", shell=True) 				
+	#check_call("pipenv shell", shell=True) 				
 	
 	# Start GUI
-	check_call("pipenv run python GUI.py", shell=True)	
+	#check_call("pipenv run python GUI.py", shell=True)	
 	
 	# exit # deactivate and quit
