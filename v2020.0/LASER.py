@@ -8,8 +8,8 @@ __date__    = "Late Updated: 2020-06-03"
 __doc__     = "Class to control and move LASER system"
 """
 
-# Allow program to create GMT and local timestamps
-from time import gmtime, strftime
+# Allow program to create GMT and local timestamps and pause program execution 
+from time import gmtime, strftime, sleep
 
 # Computer Vision modules to edit / warp images  
 import cv2
@@ -84,6 +84,8 @@ class LASER:
 	    
 	    
 	    self.brandingArt = WarpImage(LoadImage(COCOTAPS_LOGO), SIZE_100MM) # Initialize to standard CocoTaps logo
+	    
+	 ConfigureLaserForNewImage()
 
 
 	def LoadImage(fileName):
@@ -289,3 +291,23 @@ class LASER:
 		print("TODO I2C sensor")
 		moisturePercentage = 100
 		return moisturePercentage
+		
+		
+	if __name__ == "__main__":
+		LaserDebugObject = Debug(True, "LASER.py")
+		
+		LaserDebugObject.Dprint("Running LASER.py main unit test")
+		
+		
+		TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", STANDARD_POWER, 10, COCOTAPS_LOGO)
+		
+		
+		#TestLASERobject.ConfigureLaserForNewImage()
+		
+		
+		BurnImage()
+		sleep(10.0) #Pause 10 seconds
+		
+		StopLASER()
+		
+    

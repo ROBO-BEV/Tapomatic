@@ -36,7 +36,7 @@ FIELD_MODE   = "FIELD"					# Non-Techanical repair person configuration
 TESTING_MODE = "TESTING"				# Internal developer configuration
 
 # Create a command line parser
-parser = argparse.ArgumentParser(prog = "Tapomatic v2020.0", description = __doc__, add_help=True)
+parser = argparse.ArgumentParser(prog = "Tapomatic v2020.1", description = __doc__, add_help=True)
 parser.add_argument("-i", "--piIP_Address", type=str, default="127.168.1.42", help="IPv4 address of the Tapomatic V0 ID0 backend Raspberry Pi 4.")
 parser.add_argument("-r", "--rx_Socket", type=int, default=505, help="UDP port / socket number for connected Ethernet device.")
 parser.add_argument("-s", "--tx_Socket", type=int, default=505, help="UDP port / socket number for connected Ethernet device.")
