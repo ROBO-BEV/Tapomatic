@@ -4,7 +4,7 @@ ___author__ = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-06-22"
+__date__    = "Late Updated: 2020-06-26"
 __doc__     = "Install script to setup development enviroment for CoCoTaps Tapomatic v2020.0"
 """
 
@@ -76,10 +76,10 @@ if __name__ == "__main__":
 		check_call("brew install python3", shell=True)
 		check_call("brew install pipenv", shell=True)
 		check_call("brew install docutils", shell=True)
-		check_call("brew install numpy", shell=True) 
-		check_call("brew install opencv-python", shell=True) 
+		check_call("brew install numpy", shell=True)
+		check_call("brew install opencv-python", shell=True)
 
-	# Start PIPENV Python Virtual Environment packaging tool installs 
+	# Start PIPENV Python Virtual Environment packaging tool installs
 	# @link https://pipenv.readthedocs.io/en/latest/basics/
 	# Communicate with sensors
 	# TODO DO WE NEEDED THIS? check_call("pipenv install pyserial", shell=True)
@@ -91,18 +91,18 @@ if __name__ == "__main__":
 	check_call("export FLASK_APP=GUI.py", shell=True)   # Set enviroment variable to select GUI.py file as the Flask application
 
 	# Install a documentation library
-	check_call("pip install docutils", shell=True) 	
+	check_call("pip install docutils", shell=True)
 
 	# Install a numby library for array creation
-	#check_call("pipenv install numpy", shell=True)		
+	#check_call("pipenv install numpy", shell=True)
 
 	# Install computer vision library to wrap images around coconuts and load photos
 	check_call("pip3 install opencv-python", shell=True)
-	
+
 	# Activate PIPENV
-	#check_call("pipenv shell", shell=True) 				
-	
+	#check_call("pipenv shell", shell=True)
+
 	# Start GUI
-	#check_call("pipenv run python GUI.py", shell=True)	
-	
+	#check_call("pipenv run python GUI.py", shell=True)
+
 	# exit # deactivate and quit

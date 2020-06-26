@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
@@ -19,8 +19,11 @@ from time import gmtime, strftime, sleep
 #TODO REMOVE IF NOT USING ARRASY ANY MORE?
 #import numpy as np
 
-# Robotic Beverage Technologies code for custom data logging and terminal debugging output
-from Debug import *
+# Custom CocoTaps and Robotic Beverage Technologies Inc code
+from Debug import *             # Configure datalogging parameters and debug printing control
+from CocoDrink2 import *        # TODO CHANGE BACK TO CocoDrink Store valid CoCoTaps drink configurations
+from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
+
 
 class LASER:
 
@@ -73,7 +76,7 @@ class LASER:
 	        self.DebugObject.Dprint("Invalid part number format, please verify part number looks like XXX-YYYYY-Z")
 
 	    # List of current valid internal LASER part numbers
-	    if(cocoPartNumner == "?00-????-?" or cocoPartNumber == "?00-????-?"):
+	    if(cocoPartNumner == "205-0003-A" or cocoPartNumber == "???-????-?"):
 	        self.cocoPartNumber = cocoPartNumber
 	    else:
 	        self.DebugObject.Dprint("Invalid part number format")
@@ -91,7 +94,7 @@ class LASER:
 	    ConfigureLaserForNewImage()
 
 
-	def LoadImage(fileName):
+	def LoadImage(self, fileName):
 		"""
 		Load a PNG image on the local harddrive into RAM
 
@@ -181,7 +184,7 @@ class LASER:
 		elif(self.powerLevel >= STANDARD_POWER):
 			laserConstant = DEFAULT_LASER_CONSTANT * 1.5
 		else:
-			Debug.Lprint("ERROR: Invalid power level choosen in ConfigureLaserForNewImage() function")
+			self.DebugObject.Lprint("ERROR: Invalid power level choosen in ConfigureLaserForNewImage() function")
 		pixelBurnDuration = laserConstant * moistureLevel/100.0 * numOfPixels/1000000
 
 		return pixelBurnDuration
@@ -227,7 +230,7 @@ class LASER:
 		imageBurnComplete = MoveLaserStepperMotor(pixelDwellDuration, frequency)
 
 
-	def MoveLaserStepperMotor(frequency, motorID):
+	def MoveLaserStepperMotor(self, frequency, motorID):
 		"""
 
 		Return value:
@@ -239,7 +242,7 @@ class LASER:
 			#TODO if(pixelNum = )
 
 
-	def SetPowerLevel(watts, cocoPartNumber):
+	def SetPowerLevel(self, watts, cocoPartNumber):
 		"""
 		Set the power level based on LASER part number being used
 
@@ -250,14 +253,14 @@ class LASER:
 
 		if(cocoPartNumber == "205-00003-A"):
 		    if(0 > watts or watts > 10):
-		        Debug.Dprint(self.DebugObject, "The 400067260113 LASER must have power level between or equal to 0.1 and 10 Watts")
+		        self.DebugObject.Dprint(self.DebugObject, "The 400067260113 LASER must have power level between or equal to 0.1 and 10 Watts")
 		    else:
 		        self.powerLevel = watts
 		else:
 		    self.DebugObject.Dprint("This LASER supplier part number is not supported in LASER.py code base")
 
 
-	def GetNumOfPixels():
+	def GetNumOfPixels(self):
 		"""
 		Calculate the total number of (pixels / 1,000,000) that is in an image file
 
@@ -277,7 +280,7 @@ class LASER:
 		return totalNumOfPixels
 
 
-	def GetCoconutMoistureLevel():
+	def GetCoconutMoistureLevel(self):
 		"""
 		Moisture level from 0 to 100 corresponing to % humidity
 
@@ -294,15 +297,16 @@ class LASER:
 		return moisturePercentage
 
 
-	if __name__ == "__main__":
-		LaserDebugObject = Debug(True, "LASER.py")
-		LaserDebugObject.Dprint("Running LASER.py main unit test")
+if __name__ == "__main__":
+	LaserDebugObject = Debug(True, "LASER.py")
+	LaserDebugObject.Dprint("Running LASER.py main unit test")
 
-		laserConfig = 1
-		#TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", STANDARD_POWER, 10, COCOTAPS_LOGO)
+	laserConfig = 1
+	TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrinks2.COCOTAPS_LOGO)
 
-		TestLASERobject.ConfigureLaserForNewImage()
-		TestLASERobject.BurnImage(laserConfig)
-		time.sleep(10) 										# Pause 10 seconds
 
-		StopLASER()
+	TestLASERobject.ConfigureLaserForNewImage()
+	TestLASERobject.BurnImage(laserConfig)
+	time.sleep(10) 										# Pause 10 seconds
+
+	StopLASER()
