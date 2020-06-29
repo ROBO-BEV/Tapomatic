@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
 __author__  = "Blaze Sanders"
-__email__   = "blaze.d.a.sanders@gmail.mvp"
-__company__ = "Robotic Beverage Technologies, Inc"
+__email__   = "blaze@cocotaps.com"
+__company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-06-26"
+__date__    = "Late Updated: 2020-06-29"
 __doc__     = "Class to control and move LASER system"
 """
 
@@ -19,6 +19,10 @@ from time import gmtime, strftime, sleep
 #TODO REMOVE IF NOT USING ARRASY ANY MORE?
 #import numpy as np
 
+# Allow control of output devices such as LEDs and Relays
+from gpiozero import LED, OutputDevice
+#from gpiozero import Energenize #TODO REMOVE SINCE TOO SPECIFIC???
+
 # Custom CocoTaps and Robotic Beverage Technologies Inc code
 from Debug import *             # Configure datalogging parameters and debug printing control
 from CocoDrink2 import *        # TODO CHANGE BACK TO CocoDrink Store valid CoCoTaps drink configurations
@@ -32,14 +36,6 @@ class LASER:
 	STANDARD_POWER = 5.00
 	LOW_POWER = 2.50
 	DEFAULT_LASER_CONSTANT = 0.05264472  	#TODO Adjust this until LASER branding looks good
-
-	# LASER branding PNG filename CONSTANTS
-	RESORT_WORLD_LOGO = "ResortWorldLogoV0.png"
-	COCOTAPS_LOGO = "CocoTapsLogoV0.png"
-	WYNN_HOTEL_LOGO = "WynnHotelLogoV0.png"
-	RED_BULL_LOGO = "RedBullLogoV0.png"
-	BACARDI_LOGO = "BacardiLogoV0.png"
-	ROYAL_CARRIBBEAN_LOGO = "RoyalCarribbeanLogoV0.png"
 
 	# Coconut sizing CONSTANTS
 	SIZE_102MM = 102
@@ -68,7 +64,7 @@ class LASER:
 
 	    self.DebugObject = Debug(True, "LASER.py")
 
-	    self.gpioFirePin = gpiozero.DigitalOutputDevice(gpioFirePin)
+	    self.gpioFirePin = OutputDevice(gpioFirePin)
 
 	    self.supplierPartNumber = supplierPartNumber
 
@@ -185,6 +181,7 @@ class LASER:
 			laserConstant = DEFAULT_LASER_CONSTANT * 1.5
 		else:
 			self.DebugObject.Lprint("ERROR: Invalid power level choosen in ConfigureLaserForNewImage() function")
+
 		pixelBurnDuration = laserConstant * moistureLevel/100.0 * numOfPixels/1000000
 
 		return pixelBurnDuration
@@ -200,7 +197,9 @@ class LASER:
 	    Return value:
 	    NOTHING
 	    """
-	    gpiozero.off(self.gpioFirePin)
+	    self.gpioFirePin.off()
+	    #gpiozero.off(self.gpioFirePin)
+
 
 	def BurnImage(self, laserConfig):
 		"""
@@ -223,9 +222,9 @@ class LASER:
 			# laserConstant is a class variable
 			highTime = 1/frequency  * dutyCycle * laserConstant
 			sleep(highTime)                                     # Sleep upto 10 ms and keep LASER ON
-			gpiozero.on(self.gpioFirePin)
+			self.gpioFirePin.on()
 			sleep(0.010 - highTime)                             # Sleep 10 ms minus time is HIGH
-			gpiozero.off(self.gpioFirePin)
+			self.gpioFirePin.off()
 
 		imageBurnComplete = MoveLaserStepperMotor(pixelDwellDuration, frequency)
 
@@ -303,7 +302,6 @@ if __name__ == "__main__":
 
 	laserConfig = 1
 	TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrinks2.COCOTAPS_LOGO)
-
 
 	TestLASERobject.ConfigureLaserForNewImage()
 	TestLASERobject.BurnImage(laserConfig)
