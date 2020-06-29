@@ -23,12 +23,13 @@ except ImportError:
 	TempDebugObject = Debug(True, "ImportError Try/Catch")
 	TempDebugObject.Dprint("WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
 
-class CocoDrink2:
+class CocoDrink:
 
 	# Drink Name CONSTANTS
 	NONE = 0
 	NO_DRINK = 0
 	COCONUT = 1
+	MAX_DRINK_NAME = COCONUT
 
 	# Addon Name CONSTANTS
 	IMMUNITY_BOOST = 1
@@ -94,15 +95,15 @@ class CocoDrink2:
 		self.tapOrCutFlow = tapOrCutFlow
 		self.brandingArt = brandingArt
 
-		if(addOnFlavorLevel > MAX_ADD_ON_LEVEL or addOnHealthAdditiveLevel > MAX_ADD_ON_LEVEL):
+		if(addOnFlavorLevel > CocoDrink.MAX_ADD_ON_LEVEL or addOnHealthAdditiveLevel > CocoDrink.MAX_ADD_ON_LEVEL):
 			self.DebugObject.Dprint("OBJECT CREATION ERROR: You created a CocoDrink() object with add-on level greater then " + MAX_ADD_ON_LEVEL)
 			__exit__() # Destructor / memory clean up
 
-		if(addOnFlavorLevel < 0 or addOnHewlthAdditiveLevel < 0):
+		if(addOnFlavorLevel < 0 or addOnHealthAdditiveLevel < 0):
 			self.DebugObject.Dprint( "OBJECT CREATION ERROR: You created a CocoDrink() object with add-on level less then " + MIN_ADD_ON_LEVEL)
 			__exit__() # Destructor / memory clean up
 
-		if(NO_DRINK > drinkName or drinkName > MAX_DRINK_NAME):
+		if(CocoDrink.NO_DRINK > drinkName or drinkName > CocoDrink.MAX_DRINK_NAME):
 			self.DebugObject.Dprint("OBJECT CREATION ERROR: You created a CocoDrink() object with a frink name that doesn't exist. Why did you do that genius?")
 			__exit__() # Destructor / memory clean up
 
@@ -276,4 +277,4 @@ if __name__ == "__main__":
 	CocoDrinkDebugObject = Debug(True, "CocoDrink.py")
 	CocoDrinkDebugObject.Dprint("Running CocoDrink.py main unit test")
 
-	TestCocoDrinkObject = CocoDrink2(CocoDrink2.COCONUT, CocoDrink2.NONE, 0, CocoDrink2.DAILY_VITAMINS, 5, CocoDrink2.TAPPED, CocoDrink2.COCOTAPS_LOGO)
+	TestCocoDrinkObject = CocoDrink(CocoDrink.COCONUT, CocoDrink.NONE, 0, CocoDrink.DAILY_VITAMINS, 5, CocoDrink.TAPPED, CocoDrink.COCOTAPS_LOGO)
