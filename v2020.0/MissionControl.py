@@ -1,12 +1,11 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
 """
 __author__  = "Blaze Sanders"
-__email__   = "blaze.d.a.sanders@gmail.mvp"
+__email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-06-13"
-__doc__     = "Class to define OTA commuications architecture of 30K+ Tapomatic kiosk"
+__date__    = "Late Updated: 2020-06-30"
+__doc__     = "Class to define OTA commuications architecture for 30K+ Tapomatic kiosk"
 """
 
 # Allow program to create GMT and local timestamps
@@ -29,6 +28,7 @@ class MissionControl():
 	totalFlavorOzUsed = 0
 	totalHealthOzUsed = 0
 	totalCoirFiberRemoved = 0
+	currentHealthPercentage = 100.0
 	
 
     def __init__(self, kioskID, version, key):
@@ -43,7 +43,7 @@ class MissionControl():
 		New MissionControl() object
 		"""
 
-        self.DebugObject = Debug(True)
+        self.DebugObject = Debug(True, "MissionControl.py")
 
 		self.kioskID = kioskID    
 		self.version = version
@@ -106,18 +106,23 @@ kioskID -- Unique ID for every prototype or production Tapomatic manufactured
     	print("TODO RavenDB or TextFile?")
     	
     
-    def GetKioskLocationName():
+    def GetKioskLocationName(kioskID):
         """
-    	
+    
     	
     	Key arguments:
+    	kioskID -- Unique ID for every prototype or production Tapomatic manufactured
     	
     	Return value:
-    	
+    	locationName -- Human readable String variable describing the location
     	"""
+    	#Read CVS and take 2nd entry (0, Vinny's Home, 2728 Brookstone Court Las Vegas NV 89117, 36.1416584, -115.2958079;)
+    	
+    	return locationName
     	
     	
-    def ReportDamage():
+    	
+    def ReportHealthPercentage():
 	    """
     	
     	
@@ -126,6 +131,8 @@ kioskID -- Unique ID for every prototype or production Tapomatic manufactured
     	Return value:
     	
     	"""
+    	
+    	return currentHealthPercentage
     	
     def ReportPowerState():
     	"""
@@ -158,18 +165,23 @@ kioskID -- Unique ID for every prototype or production Tapomatic manufactured
     def ReportKnifeStatus():
     	"""
     	
-    	
+  
     	Key arguments:
     	
     	Return value:
     	
     	"""
+    	#TODO Jan 2021
     	
 	def ConnectToDSDservive():
 		"""
-		Rob's sale CRM and accounting sysytem 
-		https://www.laceupsolutions.com/dsd-software-1
+		Rob's sale CRM and accounting sysytem EDI 944
+		https://www.jobisez.com/edi/tp/guide.aspx?doc=/edi-igs/3m/Wins-944-3060.pdf
 		"""
+		
+	def SetEDI944():
+	
+	def GetEDI944():
 		
 		
     def StartOTA(verison):
