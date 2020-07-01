@@ -13,8 +13,8 @@ from time import gmtime, strftime, sleep
 
 # Computer Vision modules to edit / warp images
 #import numpy as np
-#import cv2 as cv
-#TODO ADD BACK? import cv
+import cv2 as cv
+#import cv2
 
 #TODO REMOVE IF NOT USING ARRASY ANY MORE?
 #import numpy as np
@@ -25,7 +25,7 @@ from gpiozero import LED, OutputDevice
 
 # Custom CocoTaps and Robotic Beverage Technologies Inc code
 from Debug import *             # Configure datalogging parameters and debug printing control
-from CocoDrink2 import *        # TODO CHANGE BACK TO CocoDrink Store valid CoCoTaps drink configurations
+from CocoDrink import *        	# Stores valid CoCoTaps drink configurations
 from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
 
 
@@ -35,6 +35,7 @@ class LASER:
 	HIGH_POWER = 10.00
 	STANDARD_POWER = 5.00
 	LOW_POWER = 2.50
+	MAX_POWER_LEVEL = HIGH_POWER
 	DEFAULT_LASER_CONSTANT = 0.05264472  	#TODO Adjust this until LASER branding looks good
 
 	# Coconut sizing CONSTANTS
@@ -68,29 +69,28 @@ class LASER:
 
 	    self.supplierPartNumber = supplierPartNumber
 
-	    if(cocoPartNumber.length() != 10):
+	    if(len(cocoPartNumber) != 10):
 	        self.DebugObject.Dprint("Invalid part number format, please verify part number looks like XXX-YYYYY-Z")
 
 	    # List of current valid internal LASER part numbers
-	    if(cocoPartNumner == "205-0003-A" or cocoPartNumber == "???-????-?"):
+	    if(cocoPartNumber == "205-0003-A" or cocoPartNumber == "???-????-?"):
 	        self.cocoPartNumber = cocoPartNumber
 	    else:
 	        self.DebugObject.Dprint("Invalid part number format")
 
-	    if(0 > powerLevel or powerLevel > self.maxPowerLevel):
+	    if(0 > powerLevel or powerLevel > LASER.MAX_POWER_LEVEL):
 	        # Check for valid power level and default to 10 Watts if invalid
 	        Debug.Dprint(DebugOject, "Invalid power. I'm  setting the LASER power to " + repr(self.maxPowerLevel/2) + " Watts")
-	        self.powerLevel = self.maxPowerLevel/2
+	        self.powerLevel = self.MAX_POWER_LEVEL/2
 	    else:
 	        self.powerLevel = powerLevel
 
-
-	    self.brandingArt = WarpImage(LoadImage(COCOTAPS_LOGO), SIZE_100MM) # Initialize to standard CocoTaps logo
+	    self.brandingArt = LASER.__WarpImage(LASER.LoadImage(CocoDrink.COCOTAPS_LOGO), LASER.SIZE_100MM) # Initialize to standard CocoTaps logo
 
 	    ConfigureLaserForNewImage()
 
 
-	def LoadImage(self, fileName):
+	def LoadImage(fileName):
 		"""
 		Load a PNG image on the local harddrive into RAM
 
@@ -101,11 +101,12 @@ class LASER:
 		bwImg -- Black & White PNG image
 		"""
 
-		filenameLength = len(filename)
-		fileExtension = substring((filenameLength - 3), filenameLength)
+		fileNameLength = len(fileName)
+		periodIndex = fileNameLength - 3
+		fileExtension = fileName[periodIndex:]
 
-		if(fileExtension.toLower() == png):
-			path = "../static/images/" + fileNam
+		if(fileExtension.lower() == "png"):
+			path = "../static/images/" + fileName
 			img = cv.imread(path)
 
 			# Convert to gray scale first to apply better thresholding which will create a better black and white image
@@ -119,7 +120,7 @@ class LASER:
 		return bwImg
 
 
-	def WarpImage(self, currentImage, coconutSize):
+	def __WarpImage(currentImage, coconutSize):
 		"""
 		Wrap a straight / square image so that after LASER branding on coconut its straight again
 
@@ -301,7 +302,7 @@ if __name__ == "__main__":
 	LaserDebugObject.Dprint("Running LASER.py main unit test")
 
 	laserConfig = 1
-	TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrinks2.COCOTAPS_LOGO)
+	TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrink.COCOTAPS_LOGO)
 
 	TestLASERobject.ConfigureLaserForNewImage()
 	TestLASERobject.BurnImage(laserConfig)
