@@ -4,7 +4,7 @@ ___author__ = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-06-26"
+__date__    = "Late Updated: 2020-07-01"
 __doc__     = "Install script to setup development enviroment for CoCoTaps Tapomatic v2020.0"
 """
 
@@ -62,6 +62,20 @@ if __name__ == "__main__":
 		sleep(5) 			                        # Pause program to allow user to read upgrade output
 		check_call("clear",shell=True)
 		check_call("sudo apt install python3-pip", shell=True) 	# Flask requires Python 3 to work
+
+		# Uninstall LibreOffice and Wolfram Alpha Engine to free up 1 GB for openCV code
+		# https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-raspbian-buster/
+		check_call("sudo apt-get purge libreoffice", shell=True)
+		check_call("sudo apt-get purge wolfram-engine", shell=True)
+
+		#Install computer vision library to wrap images around coconuts and load photos
+		check_call("pip3 install opencv-python", shell=True)
+
+		# Install Docker for enviroment configuration
+		# https://phoenixnap.com/kb/docker-on-raspberry-pi
+		check_call("curl -fsSL https://get.docker.com -o get-docker.sh", shell=True)
+		check_call("sudo sh get-docker.sh", shell=True)
+		check_call("sudo sh get-docker.sh", shell=True)
 		#check_call("pip install pipenv", shell=True)
 
 	# When using Mac code flows here
@@ -95,9 +109,6 @@ if __name__ == "__main__":
 
 	# Install a numby library for array creation
 	#check_call("pipenv install numpy", shell=True)
-
-	# Install computer vision library to wrap images around coconuts and load photos
-	check_call("pip3 install opencv-python", shell=True)
 
 	# Activate PIPENV
 	#check_call("pipenv shell", shell=True)
