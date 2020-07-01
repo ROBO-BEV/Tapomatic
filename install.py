@@ -36,7 +36,7 @@ args = parser.parse_args()
 if __name__ == "__main__":
 
 	# When using Windows 10 code flows here
-	if(args.Computer_Type == "PC" or args.Computer_Type == "pc"):
+	if(args.Computer_Type.lower() == "pc"):
 		# Tapomatic v2020.0: error: the following arguments are required: PC_username
 		# PS C:\Users\Owner\OneDrive\Documents\GitHub\Tapomatic> python .\install.py Owner
 		# 'clear' is not recognized as an internal or external command, operable program or batch file. Traceback (most recent call last):
@@ -55,7 +55,7 @@ if __name__ == "__main__":
 		check_call("set PATH=%PATH%;set PATH=%PATH%;'" + filepath +"'", shell=True) #TODO Does this work with PowerShell?
 
 	# When using Linux / Rapsberry Pi code flows here
-	if(args.Computer_Type == "Pi" or args.Computer_Type == "pi"):
+	if(args.Computer_Type.lower() == "pi" or args.Computer_Type.lower() = "linux"):
 		check_call("clear",shell=True)              # Clear terminal
 		check_call("sudo apt update", shell=True) 	# Check and update your system
 		check_call("sudo apt upgrade", shell=True)
@@ -79,7 +79,7 @@ if __name__ == "__main__":
 		#check_call("pip install pipenv", shell=True)
 
 	# When using Mac code flows here
-	if(args.Computer_Type == "Mac" or args.Computer_Type == "mac" or args.Computer_Type == "MAC"):
+	if(args.Computer_Type.lower() == "mac"):
 		# Install a real package manager (Homebrew) on the Mac :) https://brew.sh
 		#check_call("/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)", shell=True)
 		#check_call("git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew", shell=True)
