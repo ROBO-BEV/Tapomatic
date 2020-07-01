@@ -399,37 +399,41 @@ if __name__ == "__main__":
     GuiPi = RaspPi()
     BackendPi = RaspPi()
 
-
     # Actuators as define in schematic tab at https://upverter.com/design/blazesandersinc/tapomatic-v2020-1
-    immunityHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD7]
-    vitaminsHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD11]
-    actuatorList = [Actuator('S', IMMUNITY_ADDITIVE_SERVO, immunityHealthAdditivePins, "Immunity Boost Servo: Seamuing MG996R", Actuator.CW)]
-    actuatorList.append(Actuator('S', VITAMIN_ADDITIVE_SERVO, vitaminsHealthAdditivePins, "Daily Vitamins Servo: Seamuing MG996R", Actuator.CW))
-    powderActuatorList = actuatorList
+    immunityHealthAdditivePins  = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    #immunityHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD7]
+    vitaminHealthAdditivePins  = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+    #vitaminsHealthAdditivePins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.BOARD11]
+    #TODO SWITCHED TO PUMPS actuatorList = [Actuator('S', IMMUNITY_ADDITIVE_SERVO, immunityHealthAdditivePins, "Immunity Boost Servo: Seamuing MG996R", Actuator.CW)]
+	#actuatorList.append(Actuator('S', VITAMIN_ADDITIVE_SERVO, vitaminsHealthAdditivePins, "Daily Vitamins Servo: Seamuing MG996R", Actuator.CW))
+    #powderActuatorList = actuatorList
 
-    rumFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    pinaColadaFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    pineappleFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    orangeFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    fluidActuatorList =  [Actuator('R', RUM_PUMP, rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)]
-    fluidActuatorList.append(Actuator('R', PINA_COLADA_FLAVOR_PUMP, pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW))
-    fluidActuatorList.append(Actuator('R', PINEAPPLE_FLAVOR_PUMP, pineappleFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
-    fluidActuatorList.append(Actuator('R', ORANGE_FLAVOR_PUMP, orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
-    # Add fluid actuators to the full system actuator list
-    actuatorList.append(fluidActuatorList)
+	rumFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+	pinaColadaFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+	pineappleFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+	orangeFlavorPins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+	fluidActuatorList =  [Actuator('R', RUM_PUMP, rumFlavorPins, "Rum Flavor Motor: Zjchao 202", Actuator.CW)]
+	fluidActuatorList.append(Actuator('R', PINA_COLADA_FLAVOR_PUMP, pinaColadaFlavorPins, "Pina Colada Flavor Motor: Zjchao 202", Actuator.CW))
+	fluidActuatorList.append(Actuator('R', PINEAPPLE_FLAVOR_PUMP, pineappleFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
+	fluidActuatorList.append(Actuator('R', ORANGE_FLAVOR_PUMP, orangeFlavorPins, "Orange Flavor Motor: Zjchao 202", Actuator.CW))
+	fluidActuatorList.append(Actuator('R', IMMUNITY_ADDITIVE_PUMP, immunityHealthAdditivePins, "Immunity Boost Pump: Zjchao 202", Actuator.CW))
+	fluidActuatorList.append(Actuator('R', VITMAN_ADDITIVE_PUMP, vitaminHealthAdditivePins, "Daily Vitamins Pump: Zjchao 202", Actuator.CW))
 
-    liftMotor1Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
-    liftMotor2Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
-    liftingActuatorList = [Actuator('L', Z1_LINEAR_LIFT_MOTOR, liftMotor1Pins, "Lift Motor 1: PA-07-12-5V", Actuator.LINEAR_OUT)]
-    liftingActuatorList.append(Actuator('L', Z2_LINEAR_LIFT_MOTOR, liftMotor2Pins, "Lift Motor 2: PA-07-12-5V", Actuator.LINEAR_OUT))
-    # Add lifting actuators to the full system actuator list
-    actuatorList.append(liftingActuatorList)
+	# Add fluid actuators to the full system actuator list
+	actuatorList.append(fluidActuatorList)
 
-    cuttingMotor1Pins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    cuttingMotor2Pins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    knifePositionMotorPins = [Actuator.HIGH_PWR_5V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
-    cuttingActuatorList = [Actuator('L', X1_CUTTING_MOTOR, cuttingMotor1Pins, "Cutting Motor 1: PA-04-6-100", Actuator.LINEAR_OUT)]
-    cuttingActuatorList.append(Actuator('L', X2_CUTTING_MOTOR, cuttingMotor2Pins, "Cutting Motor 2: PA-04-6-100", Actuator.LINEAR_OUT))
+	liftMotor1Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
+	liftMotor2Pins = [Actuator.HIGH_PWR_12V, Actuator.GND]
+	liftingActuatorList = [Actuator('L', Z1_LINEAR_LIFT_MOTOR, liftMotor1Pins, "Lift Motor 1: PA-07-12-5V", Actuator.LINEAR_OUT)]
+	liftingActuatorList.append(Actuator('L', Z2_LINEAR_LIFT_MOTOR, liftMotor2Pins, "Lift Motor 2: PA-07-12-5V", Actuator.LINEAR_OUT))
+	# Add lifting actuators to the full system actuator list
+	actuatorList.append(liftingActuatorList)
+
+	cuttingMotor1Pins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+	cuttingMotor2Pins = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+	knifePositionMotorPins = [Actuator.HIGH_PWR_5V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]
+	cuttingActuatorList = [Actuator('L', X1_CUTTING_MOTOR, cuttingMotor1Pins, "Cutting Motor 1: PA-04-6-100", Actuator.LINEAR_OUT)]
+	cuttingActuatorList.append(Actuator('L', X2_CUTTING_MOTOR, cuttingMotor2Pins, "Cutting Motor 2: PA-04-6-100", Actuator.LINEAR_OUT))
     cuttingActuatorList.append(Actuator('L', Y1_CUTTING_MOTOR, knifePositionMotorPins, "Knife Position Motor: PA-07-?TODO?-5V", Actuator.LINEAR_OUT))
     # Add cutting actuators to the full system actuator list
     actuatorList.append(cuttingActuatorList)
