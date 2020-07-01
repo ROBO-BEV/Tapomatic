@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-29"
+__date__    = "Late Updated: 2020-06-21"
 __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
@@ -16,7 +16,7 @@ import socket
 
 # TODO DOWNSELECT LIBRARIES Allow program to create GMT and local timestamps
 from time import sleep, gmtime, strftime
-from datetime import datetime, timezone, timedelta 
+from datetime import datetime, timezone, timedelta
 
 # Allow keyboard to control program flow and typing to terminal window
 #import pynput.keyboard
@@ -26,7 +26,7 @@ from datetime import datetime, timezone, timedelta
 #TODO REMOVE import numpy as np
 
 # Custom CocoTaps and Robotic Beverage Technologies Inc code
-from CocoDrink2 import *        # Store valid CoCoTaps drink configurations
+from CocoDrink import *        	# Store valid CoCoTaps drink configurations
 from Actuator import *         	# Modular plug and play control of motors, servos, and relays
 from Debug import *		        # Configure datalogging parameters and debug printing control
 from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
@@ -90,7 +90,7 @@ DRILL_BIT_TOOL = -1
 TAPPING_SOCKET_TOOL = -2
 LASER_BRANDING_TOOL = -3
 
-# If force on topping off knife is greater than DULL_KNIFE_FORCE it is probably dull
+#TODO REMOVE FOR v2020.1 If force on topping off knife is greater than DULL_KNIFE_FORCE it is probably dull
 DULL_KNIFE_FORCE = 100	# Units are Newtons
 SHARP = 1
 DULL = 0
@@ -101,7 +101,7 @@ NUM_OF_KNIFE_CUTTING_AREAS = 6
 
 # Global variables in the Driver.py
 
-previousCuttingForce = SHARP    # 
+previousCuttingForce = SHARP    # Boolean storing status of knife edge during the last occurring count
 currentKnifeSectionInUse = 0    # Interger 0 to (NUM_OF_KNIFE_CUTTING_AREAS - 1) describing part of knife being used
 
 
@@ -111,11 +111,11 @@ def CheckKnifeSharpness():
 
     Key arguments:
     NONE
-    
+
     Return value:
     previuosCuttingForce -- A float between 0.0 and 220.0 Newtons inclusively
     """
-    
+
     if(previousCuttingForce > DULL_KNIFE_FORCE):
         KNIVE_SECTIONS[currentKnifeSectionInUse] == DULL
         currentKnifeSectionInUse += 1
@@ -125,7 +125,7 @@ def CheckKnifeSharpness():
 
     return previuosCuttingForce
 
-    
+
 def MoveKnifePostion():
     """
     Use linear actuator to slide knife left or right and expose new cutting surface / section
@@ -135,9 +135,9 @@ def MoveKnifePostion():
 
     Return value:
     knifeSectionNowInUse -- The new knife cutting section; otherwise retrun DULL_KNIFE so vendor can be informed    
-    """    
+    """
 
-    if(0 <= currentKnifeSectionInUse or currentKnifeSectionInUse < NUM_OF_KNIFE_CUTTING_AREAS - 1): 	
+    if(0 <= currentKnifeSectionInUse or currentKnifeSectionInUse < NUM_OF_KNIFE_CUTTING_AREAS - 1):
         Debug.Drpint(DebugObject, "Moving knife to next cutting surface / section")
         knifeSectionNowInUse = currentKniifeSectionInUse + 1
     elif(currentKnifeSectionInUse == NUM_OF_CUTTING_AREAS - 1):
@@ -213,7 +213,7 @@ def RunDrill(stopSignal, actuatorObjects):
 def StopDrill(actuatorObjects):
     """"
     Emergency stop of rotational motor instantly
-    
+
     return NOTHING
     """
     actuatorObjects[0].min()			# Turn off ONE rotational motor (TODO Is min == off?)
@@ -225,9 +225,10 @@ def SwapTool(newTool):
     Change end effector tool connected to the 3-axis + rotational motor crane system
 
     newTool - Name of new tool to cennect to the crane system
- 
+
     return NOTHING
     """
+
     if(currentTool == newTool):
         Debug.Dprint(Debug(True), "DO NOTHING")
     elif(newTool == DRILL_BIT_TOOL):
@@ -241,6 +242,7 @@ def SwapTool(newTool):
     else:
         Debug.Dprint(Debug(True), "ERROR: You attempted to use a tool not supported by Tapomatic v" + VERSION)
 
+
 def AcutateDoubleSidedKnive(direction, actuatorObjects):
     """
     Top off coconut by cutting striaght across with horizontal knive
@@ -252,6 +254,7 @@ def AcutateDoubleSidedKnive(direction, actuatorObjects):
     Return values:
     return false if top off knive is dull and needs service
     """
+
     if(direction == PLUS):
         Debgug.Dprint("TODO")
     elif(direction == MINUS):
@@ -267,6 +270,7 @@ def AcutateDoubleSidedKnive(direction, actuatorObjects):
 
     return isKniveSharp
 
+
 def ActuateFlavorPump(flavorType, flavorLevel, actuatorObjects):
     """
     Actuate peristaltic pump to dispense liquid milk into cup
@@ -277,6 +281,7 @@ def ActuateFlavorPump(flavorType, flavorLevel, actuatorObjects):
 
     return NOTHING
     """
+
     if(CoCoDrink.NONE < flavorLevel and flavorLevel <= CoCoDrink.MAX_FLAVOR_LEVEL):
 	    actuationTime = flavorLevel / CoCoDrink.FLAVOR_FLOW_RATE  #Units of Seconds based on flow rate per second of pump
 
@@ -330,20 +335,21 @@ def MoveConveyor(actuatorObjects, direction, numOfPositions):
 def GetOrder(timeout):
     """
     Allow UDP communiation over an Ethernet cable between two computers by sending a CSV file from the server / computer running GUI.py and to the client / computer running Driver.py back-end code
-    
+
     In Tapomatic v2020.0 the Client is the Backend Pi abd the Backedn Pi receives the csv file.
-    
+
     Key arguments:
     timeout -- Time in milliseconds GetOrder() function should wait for all UDP datapacket to arrive. Suggested timeout is 750 ms or less
 
     Return value:
     NOTHING
     """
+
     # Packet buffer size, change this if data seems to be cutoff or missing
     DATA_BUFFER_SIZE = 1024
     UDP_HOST = socket.gethostname()
     UDP_PORT = 5005
-    
+
     try:
         #Initiate the socket for the UDP Protocol.
         udpClientSocket = socket.socket(socket.AF_INET,  # Internet
@@ -362,7 +368,7 @@ def GetOrder(timeout):
         now = datetime.now(timezone.utc)
         epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)   # Use POSIX epoch with TODO 1, 1
         startTimeStampMicroSec = (now - epoch)//timedelta(microsecond=1)
-        
+
         # Receiving data from the UDP Server.
         data, addr = udpClientSocket.recvfrom(DATA_BUFFER_SIZE)
         # TODO Debug.Dprint(driverDebugObject, "received message: " + data)
