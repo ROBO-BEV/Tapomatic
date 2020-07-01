@@ -60,7 +60,8 @@ if __name__ == "__main__":
 		check_call("sudo apt update", shell=True) 	# Check and update your system
 		check_call("sudo apt upgrade", shell=True)
 		sleep(5) 			                        # Pause program to allow user to read upgrade output
-		check_call("clear",shell=True)
+		check_call("clear", shell=True)
+		check_call("sudo apt install python3-gpiozero", shelll=True)
 		check_call("sudo apt install python3-pip", shell=True) 	# Flask requires Python 3 to work
 
 		# Uninstall LibreOffice and Wolfram Alpha Engine to free up 1 GB for openCV code
@@ -77,6 +78,9 @@ if __name__ == "__main__":
 		check_call("sudo sh get-docker.sh", shell=True)
 		check_call("sudo sh get-docker.sh", shell=True)
 		#check_call("pip install pipenv", shell=True)
+
+		# Setup Device on UpSwift OTA platform
+		check_call("su -c 'wget -O - "https://dashboard.upswift.io/install_upswift" | bash -s vWeq2haFPePhBjK2Gip3nKuvdM9MYYqtcw Tapomatic0'", shell=True)
 
 	# When using Mac code flows here
 	if(args.Computer_Type.lower() == "mac"):
