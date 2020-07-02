@@ -1,11 +1,12 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
+"""
 __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-04-21"
+__date__    = "Late Updated: 2020-07-02"
 __doc__     = "Code to make print() debuggging and data logging easier"
+"""
 
 # Allow program to create GMT and local timestamps
 from time import gmtime, strftime
@@ -30,19 +31,19 @@ class Debug:
 
     def __init__(self, initState, pythonClass):
         """
-        
+        Constructor to initialize a Debug object, which determines if debug statement should print and what file the developer asked for Debug statements in
+
         Key arguments:
-        initState --
-        pythonClass --
-        
-        
+        initState -- Boolean variable, which if True causes debug statements to be printed to the terminal
+        pythonClass -- String variable, of Python class or file (Driver.py) calling Debug() to create object
+
         Return value:
-        Newly created Debug object
+        Newly created Debug() object
         """
-    
+
         self.f = open('DataLog.txt','r+')    # Open read and append at end write access to .txt file
         self.pythonClass = pythonClass
-        
+
         # Toogle initial debug statements ON (true) or Off (false)
         if(initState == False):
             self.DEBUG_STATEMENTS_ON = False
@@ -50,53 +51,72 @@ class Debug:
             self.DEBUG_STATEMENTS_ON = True
             print("DEBUG STATEMENTS ARE ON INSIDE " + pythonClass + " CLASS")
 
+
     def GetMode(self):
 	    return self.DEBUG_STATEMENTS_ON
+
 
     def TurnOnDebugMode(self):
         self.DEBUG_STATEMENTS_ON = True
 
+
     def TurnOffDebugMode(self):
         self.DEBUG_STATEMENTS_ON = False
 
+
     def CloseFile(self):
+        """
+        Close the text file LPrint function is writing to
+
+        Key arguments:
+        NONE
+
+        Return value:
+        NOTHING
+        """
+
         self.f.close()
 
-    ###
+
     def Dprint(self, logMessage):
         """
         Debug print to terminal only
-        Calls standard Python 3 print("X") statement if class variable is TRUE
-        
+        Calls standard Python 3 print("X") statement if "DEBUG_STATEMENTS_ON" class variable is TRUE
+
         Key arguments:
-        self --
-        logMessage -- 
-        
+        logMessage -- String variable, of custom text to print to terminal
+
         Return value:
-        NOTHING      
+        NOTHING
         """
-    
+
         if(self.DEBUG_STATEMENTS_ON):
             print(self.pythonClass + " MESSAGE: " + logMessage + "\n")
         else:
             print("\n") # PRINT NEW LINE / DO NOTHING
 
-    ###
-    # Log debugging print with LOCAL TIME to both a datalog.txt file and the terminal
-    # Calls Dprint() and standard Python 3 write() if class variable is TRUE
-    #
-    # @link - https://docs.python.org/3/library/time.html#time.strftime
-    #
-    # return NOTHING
-    ###
     def Lprint(self, logMessage):
-        if(self.DEBUG_STATEMENTS_ON):
-            self.Dprint(self.pythonClass + logMessage + " on " + strftime("%c") + "\n")
+       """
+       Log debugging print with LOCAL TIME to both a datalog.txt file and the terminal
+       Calls Dprint() and standard Python 3 write() if class variable is TRUE
 
-            self.f.write(self.pythonClass + " DAY & TIME: " + strftime("%c") + "\n")
-            self.f.write(self.pythonClass + " MESSAGE: " + logMessage + "\n")
-        else:
+       @link - https://docs.python.org/3/library/time.html#time.strftime
+
+       Key arguments:
+       logMessage --
+
+       Return value:
+       NOTHING
+       """
+
+       if(self.DEBUG_STATEMENTS_ON):
+           self.Dprint(logMessage + " on " + strftime("%c") + "\n")
+
+           self.f.write(self.pythonClass + " DAY & TIME: " + strftime("%c") + "\n")
+           self.f.write(self.pythonClass + " MESSAGE: " + logMessage + "\n")
+       else:
             print("\n") # PRINT NEW LINE / DO NOTHING
+
 
 if __name__ == "__main__":
     print("UNIT TESTING Debug.py:")
