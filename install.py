@@ -55,7 +55,7 @@ if __name__ == "__main__":
 		check_call("set PATH=%PATH%;set PATH=%PATH%;'" + filepath +"'", shell=True) #TODO Does this work with PowerShell?
 
 	# When using Linux / Rapsberry Pi code flows here
-	if(args.Computer_Type.lower() == "pi" or args.Computer_Type.lower() = "linux"):
+	if(args.Computer_Type.lower() == "pi" or args.Computer_Type.lower() == "linux"):
 		check_call("clear",shell=True)              # Clear terminal
 		check_call("sudo apt update", shell=True) 	# Check and update your system
 		check_call("sudo apt upgrade", shell=True)
@@ -80,7 +80,7 @@ if __name__ == "__main__":
 		#check_call("pip install pipenv", shell=True)
 
 		# Setup Device on UpSwift OTA platform
-		check_call("su -c 'wget -O - "https://dashboard.upswift.io/install_upswift" | bash -s vWeq2haFPePhBjK2Gip3nKuvdM9MYYqtcw Tapomatic0'", shell=True)
+		#check_call("su -c 'wget -O - "https://dashboard.upswift.io/install_upswift" | bash -s vWeq2haFPePhBjK2Gip3nKuvdM9MYYqtcw Tapomatic0'", shell=True)
 
 	# When using Mac code flows here
 	if(args.Computer_Type.lower() == "mac"):
@@ -92,9 +92,9 @@ if __name__ == "__main__":
 		#check_call("eval $(~/.linuxbrew/bin/brew shellenv)", shell=True)
 		# Flask requires Python 3 to work
 		check_call("brew install python3", shell=True)
-		check_call("brew install pipenv", shell=True)
+		#check_call("brew install pipenv", shell=True)
 		check_call("brew install docutils", shell=True)
-		check_call("brew install numpy", shell=True)
+		#check_call("brew install numpy", shell=True)
 		check_call("brew install opencv-python", shell=True)
 		# Install CV libs
 		check_call("pip3 install cv2", shell=True)
