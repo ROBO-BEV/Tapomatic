@@ -23,19 +23,20 @@ try:
 
 except ImportError:
 	#TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
-	TempDebugObject = Debug(True, "ImportError Try/Catch")
-	TempDebugObject.Dprint("WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
+	currentProgramFilename = os.path.basename(__file__)
+	TempDebugObject = Debug(True, "Try/Catch ImportError in " + currentProgramFilename)
+	TempDebugObject.Dprint("WARNING - You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
 
 
 class CocoDrink:
 
 	# Drink Name CONSTANTS
-	NONE = 0
+	NONE = "NONE"
 	NO_DRINK = 0
 	COCONUT = 1
 	MAX_DRINK_NAME = COCONUT
 
-	# Addon Name CONSTANTS
+	# Addon Name CONSTANTS                  #TODO CONVERT INTERGERS TO STRINGS???
 	IMMUNITY_BOOST = 1
 	DAILY_VITAMINS = 2
 	ENERGY_BOOST = 3
@@ -58,7 +59,7 @@ class CocoDrink:
 	TAPPED = 0
 	TOPPED_OFF = 1  #TODO REMOVE - LIKELY NOT GOING TO BE SUPPORTED IN v2020.1
 	FLAVOR = 2
-	HEALTH_ADDITTIVE = 3
+	HEALTH_ADDITIVE = 3
 
 	# LASER branding PNG filename CONSTANTS
 	RESORT_WORLD_LOGO = "ResortWorldLogoV0.png"
@@ -69,13 +70,13 @@ class CocoDrink:
 	ROYAL_CARRIBBEAN_LOGO = "RoyalCarribbeanLogoV0.png"
 
 
-	def __init__(self, drinkName, addOnFlavor, addOnFlavorLevel, addOnHealthAdditive, addOnHealthAdditiveLevel, tapOrCutFlow, brandingArt):
+	def __init__(self, drinkNameID, addOnFlavor, addOnFlavorLevel, addOnHealthAdditive, addOnHealthAdditiveLevel, tapOrCutFlow, brandingArt):
 		"""
 		Constructor to initialize an CocoDrink() object, which stores add-ons and artwork
 
 		Key arguments:
 		self -- Newly created CocoDrink object
-		drinkName -- CONSTANT product name of drink
+		drinkNameID -- CONSTANT product name of drink
 		addOnFlavor -- CONSTANT product name of flavoring being added to base drink (e.g. IMMUNITY_BOOST, PINA_COLADA, etc)
 		addOnFlavorLevel -- The unit step amount of flavor to be added to a drink from 0 to MAX_ADD_ON_LEVEL
 							Each unit is a different but constant volume (in milliLiters) for each flavor
@@ -88,11 +89,11 @@ class CocoDrink:
 		Return value:
 		New CocoDrink() object
 		"""
-
-        currentProgramFilename = os.path.basename(__file__)
+		
+		currentProgramFilename = os.path.basename(__file__)
 		self.DebugObject = Debug(True, currentProgramFilename) 
         
-		self.drinkName = drinkName
+		self.drinkNameID = drinkNameID
 		self.addOnFlavor = addOnFlavor
 		self.addOnFlavorLevel = addOnFlavorLevel
 		self.addOnHealthAdditive = addOnHealthAdditive
@@ -108,8 +109,8 @@ class CocoDrink:
 			self.DebugObject.Dprint( "OBJECT CREATION ERROR: You created a CocoDrink() object with add-on level less then " + MIN_ADD_ON_LEVEL)
 			__exit__() # Destructor / memory clean up
 
-		if(CocoDrink.NO_DRINK > drinkName or drinkName > CocoDrink.MAX_DRINK_NAME):
-			self.DebugObject.Dprint("OBJECT CREATION ERROR: You created a CocoDrink() object with a frink name that doesn't exist. Why did you do that genius?")
+		if(CocoDrink.NO_DRINK > drinkNameID or drinkNameID > CocoDrink.MAX_DRINK_NAME):
+			self.DebugObject.Dprint("OBJECT CREATION ERROR: You created a CocoDrink() object with a drink name that doesn't exist. Why did you do that genius?")
 			__exit__() # Destructor / memory clean up
 
 
@@ -158,10 +159,10 @@ class CocoDrink:
 		addOn -- CocoDrink CONSTANT based on user selection
 		"""
 
-		if(lType == FLAVOR):
-			addOn = self.GetFlavorType()   #TODO Is this correct call format???
-		elif(lType == HEALTH_ADDITTIVE):
-			addOn = GetHealthAdditiveType(self) #TODO OR is this???
+		if(lType == CocoDrink.FLAVOR):
+			addOn = self.GetFlavorType()  
+		elif(lType == CocoDrink.HEALTH_ADDITIVE):
+			addOn = self.GetHealthAdditiveType() #TODO OR (self)
 
 		return addOn
 		
@@ -299,22 +300,28 @@ class CocoDrink:
 	    seconds = volume * oneMilloLiterToSecondFactor * thiccBoiFactor
 	    
 	    return seconds
+	
+	
+	def UnitTest():
+	    print("START CocoDrink.py UnitTest()")
+	    
+	    TestCocoDrinkObject = CocoDrink(CocoDrink.COCONUT, CocoDrink.NONE, 0, CocoDrink.DAILY_VITAMINS, 5, CocoDrink.TAPPED, CocoDrink.COCOTAPS_LOGO)
+	    print("AddOn flavor ID # is: ", TestCocoDrinkObject.GetAddOn(CocoDrink.FLAVOR))
+	    print("Flavor LEVEL (in User Interface units) selected was: ", TestCocoDrinkObject.GetFlavorLevel())
 
+	    print("AddOn health additive ID # is: ", TestCocoDrinkObject.GetAddOn(CocoDrink.HEALTH_ADDITIVE))
+	    print("Health additive LEVEL (in Use Interface units) selected was: ", TestCocoDrinkObject.GetHealthAdditiveLevel())
+
+	    print("END CocoDrink.py UnitTest()")
 	
 if __name__ == "__main__":
 
     try:
-        UnitTest()
+        CocoDrink.UnitTest()
     except NameError:
         print("UnitTest() failed - Have a nice day :)")            
     
     print("END CocoDrink.py MAIN")
 
 
-def UnitTest():
-    print("START CocoDrink.py UnitTest()")
-    
-    TestCocoDrinkObject = CocoDrink(CocoDrink.COCONUT, CocoDrink.NONE, 0, CocoDrink.DAILY_VITAMINS, 5, CocoDrink.TAPPED, CocoDrink.COCOTAPS_LOGO)
-
-    print("END CocoDrink.py UnitTest()")
     
