@@ -94,10 +94,13 @@ if __name__ == "__main__":
 		check_call("brew install python3", shell=True)
 		#check_call("brew install pipenv", shell=True)
 		check_call("brew install docutils", shell=True)
-		#check_call("brew install numpy", shell=True)
-		check_call("brew install opencv-python", shell=True)
 		# Install CV libs
-		check_call("pip3 install cv2", shell=True)
+		check_call("pip3 install opencv-python", shell=True)
+		# The above line of code replaces the next three??? Blaze tests say so....
+		#check_call("brew install opencv-python", shell=True)
+		#check_call("brew install numpy", shell=True)
+		#check_call("brew install opencv-python", shell=True)
+
 		check_call("pip3 install scikit-image", shell=True)
 
 	# Start PIPENV Python Virtual Environment packaging tool installs
