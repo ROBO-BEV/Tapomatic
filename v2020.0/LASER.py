@@ -8,27 +8,35 @@ __date__    = "Late Updated: 2020-06-29"
 __doc__     = "Class to control and move LASER system"
 """
 
+# Allow program to extract filename of the current file
+import os
+
 # Allow program to create GMT and local timestamps and pause program execution
 from time import gmtime, strftime, sleep
 
-# Computer Vision modules to edit / warp images
-#import numpy as np
-import cv2 as cv
-#import cv2
-
-#TODO REMOVE IF NOT USING ARRASY ANY MORE?
-#import numpy as np
-
-# Allow control of output devices such as LEDs and Relays
-from gpiozero import LED, OutputDevice
-#from gpiozero import Energenize #TODO REMOVE SINCE TOO SPECIFIC???
-
-# Custom CocoTaps and Robotic Beverage Technologies Inc code
+# Custom CocoTaps and Robotic Beverage Technologies code
 from Debug import *             # Configure datalogging parameters and debug printing control
 from CocoDrink import *        	# Stores valid CoCoTaps drink configurations
 from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
 
+# Computer Vision modules to edit / warp images
+#import numpy as np     #TODO REMOVE SINCE IM NOT USE ARRAY ANY MORE
+#import cv2 as cv       #TODO REMOVE SINCE MAKING SIMPLER IS DUMB!
+import cv2
 
+
+try:
+    # Allow control of output devices such as LEDs and Relays
+    from gpiozero import LED, OutputDevice
+    #from gpiozero import Energenize #TODO REMOVE SINCE TOO SPECIFIC???
+
+except ImportError:
+    #TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
+    currentProgramFilename = os.path.basename(__file__)
+    TempDebugObject = Debug(True, "Try/Catch ImportError in " + currentProgramFilename)
+    TempDebugObject.Dprint("WARNING - You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
+    
+    
 class LASER:
 
 	# Preset LASER power level CONSTANTS (units are Watts)
@@ -62,10 +70,11 @@ class LASER:
 	    Return value:
 	    New LASER() object
 	    """
-
-	    self.DebugObject = Debug(True, "LASER.py")
-
-	    self.gpioFirePin = OutputDevice(gpioFirePin)
+	    
+	    currentProgramFilename = os.path.basename(__file__)
+	    self.DebugObject = Debug(True, currentProgramFilename)
+	    
+	    #self.gpioFirePin = gpiozero.OutputDevice(gpioFirePin)
 
 	    self.supplierPartNumber = supplierPartNumber
 
@@ -107,13 +116,13 @@ class LASER:
 
 		if(fileExtension.lower() == "png"):
 			path = "../static/images/" + fileName
-			img = cv.imread(path)
+			originalImage = cv2.imread(path)
 
 			# Convert to gray scale first to apply better thresholding which will create a better black and white image
-			grayImg = cv.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
+			grayImg = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
 
 			# Anything above 127 on a scale from 0 to 255 is WHITE
-			(thresh, bwImg) = cv.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+			(thresh, bwImg) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
 		else:
 			self.DebugObject.Dprint("Please pass a .png file to the LoadImage() function in LASER.py code")
 
