@@ -94,9 +94,9 @@ class LASER:
 	    else:
 	        self.powerLevel = powerLevel
 
-	    self.brandingArt = LASER.__WarpImage(LASER.LoadImage(CocoDrink.COCOTAPS_LOGO), LASER.SIZE_100MM) # Initialize to standard CocoTaps logo
-
-	    ConfigureLaserForNewImage()
+	    #TODO ADD BACK self.brandingArt = LASER.__WarpImage(LASER.LoadImage(CocoDrink.COCOTAPS_LOGO), LASER.SIZE_100MM) # Initialize to standard CocoTaps logo
+	    
+	    LASER.__ConfigureLaserForNewImage()
 
 
 	def LoadImage(fileName):
@@ -167,7 +167,7 @@ class LASER:
 					xPixel = xPixel + 8		# Skip EIGHT pixels since ends wraps more at ends
 
 
-	def __ConfigureLaserForNewImage(self):
+	def __ConfigureLaserForNewImage():
 		"""
 		PRIVATE FUNCATION (See __)
 
@@ -180,7 +180,7 @@ class LASER:
         pixelBurnDuration -- Time in seconds that LASER should dwell on coconut pixel
 		"""
 
-		numOfPixels = GetNumOfPixels()
+		numOfPixels = LASER.__GetNumOfPixels(self.bra)
 		moistureLevel = GetCoconutMoistureLevel()
 
 		if(0 < self.powerLevel or self.powerLevel <= LOW_POWER):
@@ -269,19 +269,19 @@ class LASER:
 		    self.DebugObject.Dprint("This LASER supplier part number is not supported in LASER.py code base")
 
 
-	def GetNumOfPixels(self):
+	def __GetNumOfPixels(inputImage):
 		"""
 		Calculate the total number of (pixels / 1,000,000) that is in an image file
 
 		Key argument:
-        NONE
+        inputImage
 
 		Return value:
 		totalNumOfPixels -- Total number of megapixels (million pixels) in an image
 		"""
 
 		#img = LoadLImage(self.brandingArt #TODO DOES LoadImage RETURN a img variable)
-		img = cv.imread(self.brandingArt)
+		img = cv2.imread(inputImage)
 		imgWidth = img.width
 		imgHeight = img.height
 		totalNumOfPixels = imgWidth * imgHeight
