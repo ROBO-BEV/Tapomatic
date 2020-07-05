@@ -19,7 +19,7 @@ try:
 	from Actuator import *
 
 	# Robotic Beverage Technologies code for controlling the physical movement and power output of a LASER
-	#TODO REMOVE from LASER import *
+	from LASER import *
 
 except ImportError:
 	#TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
