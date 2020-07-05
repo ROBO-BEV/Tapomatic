@@ -115,14 +115,14 @@ class LASER:
 		fileExtension = fileName[periodIndex:]
 
 		if(fileExtension.lower() == "png"):
-			path = "../static/images/" + fileName
+			path = "static/images/" + fileName
 			originalImage = cv2.imread(path)
 
 			# Convert to gray scale first to apply better thresholding which will create a better black and white image
 			grayImg = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
 
 			# Anything above 127 on a scale from 0 to 255 is WHITE
-			(thresh, bwImg) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+			(thresh, bwImg) = cv2.threshold(grayImg, 127, 255, cv2.THRESH_BINARY)
 		else:
 			self.DebugObject.Dprint("Please pass a .png file to the LoadImage() function in LASER.py code")
 
