@@ -4,7 +4,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-07-03"
+__date__ =    "Late Updated: 2020-07-05"
 __doc__ =     "Class to define flavors and health additivies in a CocoTaps coconut drink"
 """
 
@@ -35,7 +35,11 @@ class CocoDrink:
 	NO_DRINK = 0
 	COCONUT = 1
 	MAX_DRINK_NAME = COCONUT
-
+	
+	# Coconut sizing CONSTANTS
+	SIZE_102MM = 102
+	SIZE_88MM = 88
+	
 	# Addon Name CONSTANTS                  #TODO CONVERT INTERGERS TO STRINGS???
 	IMMUNITY_BOOST = 1
 	DAILY_VITAMINS = 2
