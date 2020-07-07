@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-06-29"
+__date__    = "Late Updated: 2020-07-05"
 __doc__     = "Class to control and move LASER system"
 """
 
@@ -45,10 +45,6 @@ class LASER:
 	LOW_POWER = 2.50
 	MAX_POWER_LEVEL = HIGH_POWER
 	DEFAULT_LASER_CONSTANT = 0.05264472  	#TODO Adjust this until LASER branding looks good
-
-	# Coconut sizing CONSTANTS
-	SIZE_102MM = 102
-	SIZE_80MM = 88
 
     # Global class variable
 	laserConstant = -1
@@ -94,14 +90,13 @@ class LASER:
 	    else:
 	        self.powerLevel = powerLevel
 
-	    #TODO ADD BACK self.brandingArt = LASER.__WarpImage(LASER.LoadImage(CocoDrink.COCOTAPS_LOGO), LASER.SIZE_100MM) # Initialize to standard CocoTaps logo
+	    self.brandingArt = LASER.__WarpImage(CocoDrink.COCOTAPS_LOGO, CocoDrink.SIZE_102MM) # Initialize to standard CocoTaps logo
 	    
-	    LASER.__ConfigureLaserForNewImage()
+	    LASER.__ConfigureLaserForNewImage(self.brandingArt)
 
 
 	def LoadImage(fileName):
 		"""
-		Load a PNG image on the local harddrive into RAM
 
 		Key arguments:
 		filename -- PNG file to load into memory
@@ -109,6 +104,25 @@ class LASER:
 		Return value:
 		bwImg -- Black & White PNG image
 		"""
+
+		return bwImg
+
+
+	def __WarpImage(fileName, coconutSize):
+		"""
+		Load a PNG image on the local harddrive into RAM
+		Wrap a straight / square image so that after LASER branding on coconut its straight again
+
+		Key arguments:
+		fileName -- PNG file to load into memory (TODO max size in ? x ? pixels / ?? MB)
+		coconutSize -- Horizontal diameter of coconut in millimeters
+
+		Return value:
+		newImage -- A new image that has been warpped to to display correctly after LASER branding 
+		"""
+		
+		# https://docs.opencv.org/2.4/doc/tutorials/core/mat_the_basic_image_container/mat_the_basic_image_container.html
+        # https://pythonprogramming.net/loading-images-python-opencv-tutorial/
 
 		fileNameLength = len(fileName)
 		periodIndex = fileNameLength - 3
@@ -126,61 +140,47 @@ class LASER:
 		else:
 			self.DebugObject.Dprint("Please pass a .png file to the LoadImage() function in LASER.py code")
 
-		return bwImg
 
+		imgWidth = originalImage.size
+		imgHeight = originalImage.size
 
-	def __WarpImage(currentImage, coconutSize):
-		"""
-		Wrap a straight / square image so that after LASER branding on coconut its straight again
-
-		Key arguments:
-		currentImage -- Starting PNG image (TODO max size in ? x ? pixels / ?? MB)
-		coconutSize -- Horizontal diameter of coconut in millimeters
-
-		Return value:
-		newImage -- A new image that has been warpped to to display correctly after LASER branding 
-		"""
-		# https://docs.opencv.org/2.4/doc/tutorials/core/mat_the_basic_image_container/mat_the_basic_image_container.html
-        # https://pythonprogramming.net/loading-images-python-opencv-tutorial/
-
-		img = cv.imread(currentImage)
-		imgWidth = img.width
-		imgHeight = img.height
 
 		for xPixel in range(imgWidth):
-			for yPixel in range(imgHeight):
-				rgbColor = img.at<Vec3b>(xPixel,yPixel)
+		    print("xPixel = ", xPixel)
+		    for yPixel in range(imgHeight):
+   			    print("yPixel = ", yPixel)
+   			    print(" of ", imgHeight)
+   			    #TODO rgbColor = originalImage.at<Vec3b>(xPixel,yPixel)
 				# Split image into three part vertically and horizonatlly
-				##TODO Why we need the below line? Blaze?
-				### Murali this makes a new image which will be warped and we can NOT use img variable name
-				# img.at<Vec3b>(xPixel,yPixel) = rgbColor
-				#warppedImg.at<Vec3b>(xPixel,yPixel) = rgbColor
-				if(xPixel < (imgWidth/5)):
-					xPixel = xPixel + 8		# Skip EIGHT pixels since ends warps more at ends
-				elif((imgWidth/5) <= xPixel and xPixel < (imgWidth*2/5)):
-					xPixel = xPixel + 4		# Skip FOUR pixels since ends warps more at ends
-				elif((imgWidth*2/5) <= xPixel and xPixel < (imgWidth*3/5)):
-					xPixel = xPixel + 0
-				elif((imgWidth*3/5) <= xPixel and xPixel < (imgWidth*4/5)):
-					xPixel = xPixel + 4		# Skip FOUR pixels since ends warps more at ends
-				elif((imgWidth*4/5) <= xPixel and xPixel < (imgWidth)):
-					xPixel = xPixel + 8		# Skip EIGHT pixels since ends wraps more at ends
+				### TODO SyntaxError: can't assign to comparison 
+				# warppedImg.at<Vec3b>(xPixel,yPixel) = rgbColor
+
+   			    if(xPixel < (imgWidth/5)):
+   			        xPixel = xPixel + 8		# Skip EIGHT pixels since ends warps more at ends
+   			    elif((imgWidth/5) <= xPixel and xPixel < (imgWidth*2/5)):
+   			    	xPixel = xPixel + 4		# Skip EIGHT pixels since ends wraps more at ends
+   			    elif((imgWidth*2/5) <= xPixel and xPixel < (imgWidth*3/5)):
+   			    	xPixel = xPixel + 0		# Skip EIGHT pixels since ends wraps more at ends
+   			    elif((imgWidth*3/5) <= xPixel and xPixel < (imgWidth*4/5)):
+   			    	xPixel = xPixel + 4		# Skip EIGHT pixels since ends wraps more at ends
+   			    elif((imgWidth*4/5) <= xPixel and xPixel < (imgWidth)):
+   			        xPixel = xPixel + 8		# Skip EIGHT pixels since ends wraps more at ends
 
 
-	def __ConfigureLaserForNewImage():
+	def __ConfigureLaserForNewImage(img):
 		"""
 		PRIVATE FUNCATION (See __)
 
 		Calculate pixel dwell duration based on LASER power level and image size
 
         Key arguments:
-        filename -- PNG file to load into memory
+        img -- PNG file to load into memory
 
         Return value:
         pixelBurnDuration -- Time in seconds that LASER should dwell on coconut pixel
 		"""
 
-		numOfPixels = LASER.__GetNumOfPixels(self.bra)
+		numOfPixels = LASER.__GetNumOfPixels(img)
 		moistureLevel = GetCoconutMoistureLevel()
 
 		if(0 < self.powerLevel or self.powerLevel <= LOW_POWER):
@@ -304,17 +304,34 @@ class LASER:
 		print("TODO I2C sensor")
 		moisturePercentage = 100
 		return moisturePercentage
-
+		
+	
+	def CompileImageAndStoreToEMMC():
+	    """
+	    
+	    Key arguments:
+	    NONE
+	    
+	    Return value:
+	    NOTHING
+	    """
+	    
+	    LASER.__WarpImage()
+                
+        
+        
 
 if __name__ == "__main__":
-	LaserDebugObject = Debug(True, "LASER.py")
-	LaserDebugObject.Dprint("Running LASER.py main unit test")
 
-	laserConfig = 1
-	TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrink.COCOTAPS_LOGO)
-
-	TestLASERobject.ConfigureLaserForNewImage()
-	TestLASERobject.BurnImage(laserConfig)
-	time.sleep(10) 										# Pause 10 seconds
-
-	StopLASER()
+    currentProgramFilename = os.path.basename(__file__)
+    LaserDebugObject = Debug(True, currentProgramFilename)
+    LaserDebugObject.Dprint("Running LASER.py main unit test")
+    
+    #laserConfig = -1
+    TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrink.COCOTAPS_LOGO)
+    
+    TestLASERobject.ConfigureLaserForNewImage()
+    TestLASERobject.BurnImage(laserConfig)
+    time.sleep(10) 										# Pause 10 seconds
+    
+    StopLASER()
