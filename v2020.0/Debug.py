@@ -18,14 +18,16 @@ PUMP_CONFIGURATION_ERROR = 2
 LINEAR_ACTUATOR_CONFIGURATION_ERROR = 3
 DISPLAY_CONFIGURATION_ERROR = 4
 
+# TODO Create more error codes
+API_ERROR = 5
+USER_ERROR = 6
+
 # Exit case CONSTANTS for debug logs
+OK = 0
 TORQUE_EXIT_CASE = -1
 DEPTH_EXIT_CASE  = -2
 TIME_EXIT_CASE   = -3
 
-# TODO Create more error codes
-API_ERROR = 5
-USER_ERROR = 6
 
 class Debug:
 
