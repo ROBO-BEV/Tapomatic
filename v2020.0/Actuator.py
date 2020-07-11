@@ -4,7 +4,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-06-01"
+__date__ =    "Late Updated: 2020-07-11"
 __doc__ =     "Class to operate at least 64 servos, 16 relays, and 32 motors at once with latency less then 100 ms"
 """
 
@@ -26,12 +26,15 @@ __doc__ =     "Class to operate at least 64 servos, 16 relays, and 32 motors at 
 # Allow program to pause operation and create local timestamps
 from time import sleep
 
+# Allow program to extract filename of the current file
+import os
+
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
 
 # Create an array of specific length to restrict resizing and appending (like Pythom list) to improve performance
-import numpy as np
-from numpy import ndarray, empty #Pick the one that is faster
+#TODO REMOVE? import numpy as np
+#TODO REMOVE? from numpy import ndarray, empty #Pick the one that is faster
 
 try:
 	# The following imports do NOT work in a Mac oor PC dev enviroment (but are needed for Pi product) 
@@ -54,17 +57,17 @@ try:
 
 	# Useful for controlling devices based on date and time
 	from gpiozero import TimeOfDay
-
-except ImportError:
-	#TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
-	ImportDebugObject = Debug(True, "ImportError: ")
-	Debug.Dprint(ImportDebugObject, "WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
-
+	
 	# Allow control of output devices such as Motors, Servos, LEDs, and Relays
 	from gpiozero import Motor, Servo, LED, Energenie, OutputDevice
 
+except ImportError:
+	#TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
+	currentProgramFilename = os.path.basename(__file__)
+		ImportDebugObject = Debug(True, currentProgramFilename) 
+	ImportDebugObject.Dprint("WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
 
-
+	
 class Actuator:
 
 	# Class attributes that can be accessed using ActuatorControl.X (not actuatorcontrol.X)
@@ -120,8 +123,9 @@ class Actuator:
 		Return value:
 		Newly created Actuator() object
 	    """
-
-		self.DebugObject = Debug(True, "Actuator.py")
+		
+		currentProgramFilename = os.path.basename(__file__)
+		self.DebugObject = Debug(True, currentProgramFilename) 
 
 		self.actuatorID = actuatorID
 		self.actuatorType = aType
@@ -260,22 +264,26 @@ class Actuator:
 	def setAngle(self, angle):
 		print("TODO")
 
-
-if __name__ == "__main__":
-	try:
-		UnitTest()
-		relay = gpiozero.OutputDevice(8) #BCM-8
-		relay.on()
-		time.sleep(20) # seconds or milliseconds?
-		relay.off()
-	except NameError:
-		DebugObject = Debug(True, "Actuator.py")
-		Debug.Dprint(DebugObject, "WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
-		print("END ACTUATOR.PY MAIN")
-
 def UnitTest():
 	pins = [HIGH_PWR_12V, GND, I2C_SDA, I2C_SCL]
 	coconutLiftingLinearMotor1 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
 	coconutLiftingLinearMotor2 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
 	coconutLiftingLinearMotor1.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
 	coconutLiftingLinearMotor2.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
+
+
+
+if __name__ == "__main__":
+	try:
+		Actuator.UnitTest()
+		relay = gpiozero.OutputDevice(8) #BCM-8
+		relay.on()
+		time.sleep(20) # seconds or milliseconds?
+		relay.off()
+	except NameError:
+		currentProgramFilename = os.path.basename(__file__)
+		NameDebugObject = Debug(True, currentProgramFilename) 
+
+		NameDebugObject.Dprint(DebugObject, "WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
+		print("END ACTUATOR.PY MAIN")
+
