@@ -63,7 +63,7 @@ if __name__ == "__main__":
 		check_call("clear", shell=True)
 
         # Install General Purpose Input / Output (GPIO) control library
-		check_call("sudo apt install python3-gpiozero", shelll=True)
+		check_call("sudo apt install python3-gpiozero", shell=True)
 
 		# Install pip3 (A Python Package Installer) and not pip, since Flask requires Python3
 		check_call("sudo apt install python3-pip", shell=True)
@@ -78,13 +78,14 @@ if __name__ == "__main__":
 
 		# Install screenshot, keyboard and mouse control library
         check_call("sudo apt-get install python3-tk python3-dev", shell=True)
-		check_call("pip3 install pyautogui", shell=True)
+        check_call("pip3 install pyautogui", shell=True)
+
 
 		# Install Docker for enviroment configuration
 		# https://phoenixnap.com/kb/docker-on-raspberry-pi
-		check_call("curl -fsSL https://get.docker.com -o get-docker.sh", shell=True)
-		check_call("sudo sh get-docker.sh", shell=True)
-		check_call("sudo sh get-docker.sh", shell=True)
+        #check_call("curl -fsSL https://get.docker.com -o get-docker.sh", shell=True)
+        #check_call("sudo sh get-docker.sh", shell=True)
+        #check_call("sudo sh get-docker.sh", shell=True)
 		#check_call("pip install pipenv", shell=True)
 
 		# Setup Device on UpSwift OTA platform
