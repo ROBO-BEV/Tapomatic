@@ -33,7 +33,7 @@ import os
 from Debug import *
 
 # Create an array of specific length to restrict resizing and appending (like Pythom list) to improve performance
-#TODO REMOVE? import numpy as np
+import numpy as np
 #TODO REMOVE? from numpy import ndarray, empty #Pick the one that is faster
 
 try:
@@ -57,17 +57,17 @@ try:
 
 	# Useful for controlling devices based on date and time
 	from gpiozero import TimeOfDay
-	
+
 	# Allow control of output devices such as Motors, Servos, LEDs, and Relays
 	from gpiozero import Motor, Servo, LED, Energenie, OutputDevice
 
 except ImportError:
 	#TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
 	currentProgramFilename = os.path.basename(__file__)
-		ImportDebugObject = Debug(True, currentProgramFilename) 
+	ImportDebugObject = Debug(True, currentProgramFilename)
 	ImportDebugObject.Dprint("WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
 
-	
+
 class Actuator:
 
 	# Class attributes that can be accessed using ActuatorControl.X (not actuatorcontrol.X)
@@ -123,9 +123,9 @@ class Actuator:
 		Return value:
 		Newly created Actuator() object
 	    """
-		
+
 		currentProgramFilename = os.path.basename(__file__)
-		self.DebugObject = Debug(True, currentProgramFilename) 
+		self.DebugObject = Debug(True, currentProgramFilename)
 
 		self.actuatorID = actuatorID
 		self.actuatorType = aType
@@ -194,7 +194,8 @@ class Actuator:
 				# NEAR to new position DO NOTHING
 				self.actuatotObject.dettach()
 		elif(type == "M"):
-			self.DebugObject.Dprint("Write motor control code")
+			#TODO Write motor control code
+
 			Motor.enable() #TODO CHANGE TO self.acutatorObject
 			currentPosition = actuatorObject.value
 
@@ -216,7 +217,8 @@ class Actuator:
 		else:
 			self.DebugObect.Dprint("INVALID Actutator Type sent to Run method, please use S, M, R as first parameter to Actuator() Object")
 
-		print("Run function completed!") #TODO REMOVE AFTER DEBUGGING
+		self.DebugObject.Dprint("Run function completed!")
+
 
 	def setAngularPosition(self, newAngle):
 		"""
@@ -239,6 +241,7 @@ class Actuator:
 		else:
 			self.DebugObject.Dprint("INVALID Actutator Type sent to SetAngularPosition method, please use S, M, R as first parameter to Actuator() Object")
 
+
 	def getPosition(self):
 		"""
 		Read the linear or rotational positon on an actuator
@@ -251,6 +254,7 @@ class Actuator:
 			print("TODO")
 			#TODO return self.value
 
+
 	def isActive(self):
 		"""
 		Determine if actuator is moving
@@ -261,29 +265,31 @@ class Actuator:
 
 		return self.actuatorOjbect.isActive
 
+
 	def setAngle(self, angle):
 		print("TODO")
 
-def UnitTest():
-	pins = [HIGH_PWR_12V, GND, I2C_SDA, I2C_SCL]
-	coconutLiftingLinearMotor1 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
-	coconutLiftingLinearMotor2 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
-	coconutLiftingLinearMotor1.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
-	coconutLiftingLinearMotor2.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
 
+    def UnitTest():
+	    pins = [HIGH_PWR_12V, GND, I2C_SDA, I2C_SCL]
+	    coconutLiftingLinearMotor1 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
+	    coconutLiftingLinearMotor2 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
+	    coconutLiftingLinearMotor1.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
+	    coconutLiftingLinearMotor2.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
 
 
 if __name__ == "__main__":
+
 	try:
 		Actuator.UnitTest()
-		relay = gpiozero.OutputDevice(8) #BCM-8
+		relay = OutputDevice(8) #BCM-8
 		relay.on()
 		time.sleep(20) # seconds or milliseconds?
 		relay.off()
 	except NameError:
 		currentProgramFilename = os.path.basename(__file__)
-		NameDebugObject = Debug(True, currentProgramFilename) 
+		NameDebugObject = Debug(True, currentProgramFilename)
+    	NameDebugObject.Dprint(DebugObject, "WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
 
-		NameDebugObject.Dprint(DebugObject, "WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
-		print("END ACTUATOR.PY MAIN")
+	self.DebugObject.Dprint("END ACTUATOR.PY MAIN")
 
