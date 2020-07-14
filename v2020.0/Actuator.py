@@ -267,10 +267,10 @@ class Actuator:
 
 
 	def setAngle(self, angle):
-		print("TODO")
+			print("TODO")
 
-
-    def UnitTest():
+	
+	def UnitTest():
 	    pins = [HIGH_PWR_12V, GND, I2C_SDA, I2C_SCL]
 	    coconutLiftingLinearMotor1 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
 	    coconutLiftingLinearMotor2 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
@@ -289,7 +289,8 @@ if __name__ == "__main__":
 	except NameError:
 		currentProgramFilename = os.path.basename(__file__)
 		NameDebugObject = Debug(True, currentProgramFilename)
-    	NameDebugObject.Dprint(DebugObject, "WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
-
-	self.DebugObject.Dprint("END ACTUATOR.PY MAIN")
+		NameDebugObject.Dprint("WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
+		
+		
+	print("END ACTUATOR.PY MAIN")
 
