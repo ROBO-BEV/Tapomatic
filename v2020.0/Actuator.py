@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
 __author__ =  "Blaze Sanders"
-__email__ =   "blaze.d.a.sanders@gmail.mvp"
+__email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-07-11"
+__date__ =    "Late Updated: 2020-07-14"
 __doc__ =     "Class to operate at least 64 servos, 16 relays, and 32 motors at once with latency less then 100 ms"
 """
 
@@ -110,6 +110,9 @@ class Actuator:
 	# wires are on the actuator side of hardwrae schematic. While pins are on the CPU side, but often have similar names
 	wires = [NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE, NO_WIRE]
 
+    # Class variable
+	actuatorID = 0
+
 
 	def __init__(self, aType, actuatorID, pins, partNumber, direction):
 		"""
@@ -130,7 +133,9 @@ class Actuator:
 		currentProgramFilename = os.path.basename(__file__)
 		self.DebugObject = Debug(True, currentProgramFilename)
 
-		self.actuatorID = actuatorID
+		self.actuatorID = Actuator.actuatorID
+		Actuator.actuatorID = Actuator.actuatorID + 1
+
 		self.actuatorType = aType
 
 		numOfWires = len(pins)
@@ -218,7 +223,7 @@ class Actuator:
 			sleep(duration) 	#TODO signal.pause(duration)
 			relay.off()
 		else:
-			self.DebugObect.Dprint("INVALID Actutator Type sent to Run method, please use S, M, R as first parameter to Actuator() Object")
+			self.DebugObject.Dprint("INVALID Actutator Type sent to Run method, please use S, M, R as first parameter to Actuator() Object")
 
 		self.DebugObject.Dprint("Run function completed!")
 
@@ -273,12 +278,15 @@ class Actuator:
 		print("TODO")
 
 
-    def UnitTest():
+	def UnitTest():
 	    pins = [Actuator.HIGH_PWR_12V, Actuator.GND, Actuator.I2C_SDA, Actuator.I2C_SCL]
-	    coconutLiftingLinearMotor1 = Actuator("L", "ID" , pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
-	    coconutLiftingLinearMotor2 = Actuator("L", "ID" , pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
-	    coconutLiftingLinearMotor1.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
-	    coconutLiftingLinearMotor2.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
+	    coconutLiftingLinearMotor1 = Actuator('M', Actuator.actuatorID, pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
+	    coconutLiftingLinearMotor2 = Actuator('M', Actuator.actuatorID, pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
+
+	    pins = [Actuator.HIGH_PWR_5V, RaspPi.PWM0, Actuator.GND]
+	    tapHolderServo.Run('S', Actuator.actuatorID, pins, Actuator.FORWARD)
+
+	    TODO.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
 
 
 if __name__ == "__main__":
@@ -292,6 +300,7 @@ if __name__ == "__main__":
 	except NameError:
 		currentProgramFilename = os.path.basename(__file__)
 		NameDebugObject = Debug(True, currentProgramFilename)
-    		NameDebugObject.Dprint("WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
-		NameDebugObject.Dprint("END ACTUATOR.PY MAIN")
+		NameDebugObject.Dprint("WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
+
+	NameDebugObject.Dprint("END ACTUATOR.PY MAIN")
 
