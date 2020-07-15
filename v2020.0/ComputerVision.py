@@ -1,15 +1,18 @@
-# !/usr/bin/env python
+# !/usr/bin/env python3
 """
 __author__  = "Blaze Sanders"
-__email__   = "blaze.d.a.sanders@gmail.mvp"
+__email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
 __date__    = "Late Updated: 2020-07-15"
-__doc__     = "Script to analyze the size of coconuts, so that we make 99% reliable Tapomatic"
+__doc__     = "Script to analyze the size of coconuts & scan QR codes, so that we make 99% reliable Tapomatic"
 """
 
 # Useful standard Python system jazz
 import sys, time, traceback, argparse, string
+
+# Allow program to extract filename of the current file
+import os
 
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
@@ -21,8 +24,9 @@ try:
     import numpy as np
 
 except ImportError:
-    ImportDebugObject = Debug(True, "ComputerVision.py")
-    Debug.Dprint(ImportDebugObject, "Run ComputerVision.py with python not PYTHON3")
+    currentProgramFilename = os.path.basename(__file__)
+	ImportDebugObject = Debug(True, currentProgramFilename)
+    ImportDebugObject.Dprint("Run ComputerVision.py with python not PYTHON3")
 
 
 # Create a command line parser
