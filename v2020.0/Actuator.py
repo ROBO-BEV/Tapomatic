@@ -4,7 +4,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-07-11"
+__date__ =    "Late Updated: 2020-07-12"
 __doc__ =     "Class to operate at least 64 servos, 16 relays, and 32 motors at once with latency less then 100 ms"
 """
 
@@ -40,11 +40,11 @@ try:
 	# The following imports do NOT work in a Mac oor PC dev enviroment (but are needed for Pi product) 
 
 	# CircuitPython library for the DC & Stepper Motor Pi Hat kits using I2C interface
-	from adafruit_motorkit import MotorKit
+	#from adafruit_motorkit import MotorKit
 
 	# Allow asynchrous event to occur in parallel and pause threads as needed
 	# MAY  work on Windows sometime in the future https://github.com/vibora-io/vibora/issues/126
-	from signal import pause
+	#from signal import pause
 
 	# Allow control of input devices such as Buttons
 	from gpiozero import Button
@@ -270,26 +270,27 @@ class Actuator:
 		print("TODO")
 
 
-    def UnitTest():
-	    pins = [HIGH_PWR_12V, GND, I2C_SDA, I2C_SCL]
-	    coconutLiftingLinearMotor1 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
-	    coconutLiftingLinearMotor2 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
-	    coconutLiftingLinearMotor1.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
-	    coconutLiftingLinearMotor2.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
+	def UnitTest():
+		pins = [HIGH_PWR_12V, GND, I2C_SDA, I2C_SCL]
+		coconutLiftingLinearMotor1 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
+		coconutLiftingLinearMotor2 = Actuator("L", pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
+		coconutLiftingLinearMotor1.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
+		coconutLiftingLinearMotor2.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
 
 
 if __name__ == "__main__":
 
 	try:
-		Actuator.UnitTest()
-		relay = OutputDevice(8) #BCM-8
-		relay.on()
-		time.sleep(20) # seconds or milliseconds?
-		relay.off()
+		#Actuator.UnitTest()
+		#relay = OutputDevice(8) #BCM-8
+		#relay.on()
+		#time.sleep(20) # seconds or milliseconds?
+		#relay.off()
+		print("THIS CANT FAIL?")
 	except NameError:
 		currentProgramFilename = os.path.basename(__file__)
 		NameDebugObject = Debug(True, currentProgramFilename)
-    	NameDebugObject.Dprint(DebugObject, "WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
+		NameDebugObject.Dprint("Try fail in __main__ of " + str(currentProgramFilename))
 
-	self.DebugObject.Dprint("END ACTUATOR.PY MAIN")
+	print("END ACTUATOR.PY MAIN")
 
