@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-21"
+__date__    = "Late Updated: 2020-07-15"
 __doc__     = "Script to analyze the size of coconuts, so that we make 99% reliable Tapomatic"
 """
 
@@ -229,6 +229,19 @@ class ComputerVision():
         """
 
         return numOfPixels
+    
+    def ScanQRcode():
+        """
+        Used MyQR https://github.com/sylnsfar/qrcode and/or https://www.qrcode-monkey.com/#text to made Image QR codes with return intergers 
+        
+        Key arguments:
+        NONE
+        
+        Return value:
+        qrCodeInt -- Interger, corresponding to the CocoDrink.py CONSTANT for each bottle flavor and/or health additiive
+        """
+        
+        return qrCodeInt
 
 
 if __name__ == "__main__":
