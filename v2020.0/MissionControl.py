@@ -101,12 +101,18 @@ class MissionControl():
 
 	    # Hard coded locations that have TERRIBLE cell service
 	    try:
-	        f = open(kioskLocation.csv, 'rb')  # open only in read mode.
-	        data = f.read(DATA_BUFFER_SIZE) # Read for Buffer Size.
+	        print("TODO RavenDB or TextFile?")
+            f = open(kioskLocation.csv, 'rb')   # Open only in read mode.
+	        data = f.read(DATA_BUFFER_SIZE)     # Read for Buffer Size.
+	        if(data[0] == kioskID):
+	            gpsData = [data[3],  data[4]]   # Latitude & Longitude
+	        else:
+	            gpsData = Sensor.GetLocation()
 	    except:
-	        this.DebugObject.Dprint("Could not open {}, ensure the filepath is correct.")
-
-	    print("TODO RavenDB or TextFile?")
+	        this.DebugObject.Dprint("Could not open {kioskLocation.txt}, ensure the filepath is correct.")
+            gpsDATA = [Debug.BAD, DEBUG.BAD]
+	    
+        return gpsData	    
 
 
 	def GetKioskLocationName(self, kioskID):
