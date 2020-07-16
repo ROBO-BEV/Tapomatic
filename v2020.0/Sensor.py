@@ -1,58 +1,63 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
 """
 __author__ =  "Blaze Sanders"
-__email__ =   "blaze.d.a.sanders@gmail.mvp"
+__email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-06-02"
-__doc__ =     "Class to communicate with all sensors inside the Tapomatic kiosk" 
+__date__ =    "Late Updated: 2020-07-16"
+__doc__ =     "Class to communicate with all sensors inside the Tapomatic kiosk"
 """
 
 # TODO DOWNSELECT LIBRARIES Allow program to pause operation and  create GMT and local timestamps
 from time import sleep, gmtime, strftime
 from datetime import datetime, timezone, timedelta
 
-# Allow communication (Read and write) to senors via the serial port 
-#TODO import serial if gpiozero or RPi.GPIO as GPIO doesn't support 
+# Allow program to extract filename of the current file
+import os
+
+# Allow communication (Read and write) to senors via the serial port
+#TODO import serial if gpiozero or RPi.GPIO as GPIO doesn't support
 
 # Allow communication between one or more kiosks with central server
-#TODO from MissionControl import *
+from MissionControl import *
 
+# Custom CocoTaps code for measuring coconut sizes and control webcams
+from ComputerVision import *
+
+# Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
 
 try:
-	# The following imports do NOT work in a Mac or PC dev enviroment 
+	# The following imports do NOT work in a Mac or PC dev enviroment
 	# But are needed for a Raspberry Pi controlled kiosk
 
 	# Allow control of input and output devices such as Sensors
 	from gpiozero import InputDevice, OutputDevice, Energenie
-	
+
 	# Allow control of  HC-SR04 ultrasonic distance sensor (See CamJam #3 EduKit)
 	# http://camjam.me/?page_id=1035
 	from gpiozero import DistanceSensor
-	
-	# Library to scan and create custom QR codes 
+
+	# Library to scan and create custom QR codes
 	from MyQR.terminal import main
 
 
 except ImportError:
-	
 	"""
-	# TODO MOVE THIS TO install.py file 
-	# Allow BASH command to be run inside Python3 code like this file
 	import subprocess
 	from subprocess import Popen, PIPE
 	from subprocess import check_call
 
-	# This import SHOULD work on both Mac & PC to allow software dev work (no hardware in the loop testing)
+	# This import SHOULD work on both Linux, Mac & PC to allow software dev work (no hardware in the loop testing)
 	check_call("pip3 install gpiozero pigpio", shell=True)
 	"""
-	
-	DebugObject = Debug(True)
-	Debug.Dprint(DebugObject, "WARNING: You are running code on Mac or PC (NOT a Raspberry Pi)")
 
-class Sensor():	
+	currentProgramFilename = os.path.basename(__file__)
+	ImportDebugObject = Debug(True, currentProgramFilename)
+	ImportDebug.Dprint("WARNING: You are running code on Mac or PC (NOT a Raspberry Pi)")
+
+
+class Sensor():
 	# TODO Compare how many taps have been used vs the number of coconuts drill to
 	# make sure vendor is buying from us
 
@@ -67,16 +72,16 @@ class Sensor():
 	VITAMINS_DENSITY = 1.3      	# Units grams/mL
 	PINA_COLADA_FORCE_SENSOR = 3
 	PINA_COLADA_DENSITY = 1.5      	# Units grams/mL
-	ORANGE_FORCE_SENSOR = 4	
+	ORANGE_FORCE_SENSOR = 4
 	ORANGE_DENSITY = 1.01      		# Units grams/mL
 	PINEAPPLE_FORCE_SENSOR = 5
 	PINEAPPLE_DENSITY = 1.12      	# Units grams/mL
-	
+
 	LIFTING_PLATFORM_FORCE_SENSOR = 6
-	CUTTING_FORCE_SENSOR = 7
-    	
-	LOW_LEVEL = 10.0 				# 10.0% 
-	
+	#CUTTING_FORCE_SENSOR = 7
+
+	LOW_LEVEL = 10.0 				# 10.0%
+
 	# TODO Define all pins in schematic
 	NUM_X_AXIS_PING_SENSORS = 6
 	NUM_Y_AXIS_PING_SENSORS = 4
@@ -89,42 +94,49 @@ class Sensor():
 	PING_Zaxis_Pin_Name = "Board14"
 	PING_GPIO_TRIGGER = -1
 	PING_GPIO_ECHO = -1
-	
+
 	def __init__(self, currentNumOfSensors, sType, pins, partNumber, currentCount):
 		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 		for i in pins:
 			self.wires[i] = pins[i]
-		
-		self.DebugObject = Debug(True, "Sensor.py")
+
+	    currentProgramFilename = os.path.basename(__file__)
+	    self.DebugObject = Debug(True, currentProgramFilename)
+
         self.sensorType = sType
         currentNumOfActuators = currentNumOfActuators + 1
         self.sensorID = currentNumOfSensors                 # Auto-incremented interger class variable
         self.partNumber = partNumber
         self.currentCount = 0
-		
+
+
 	def StartFullDuplexSerial():
 		print("TODO")
 		#Serial.
-		
+
+
 	def SendSerialCommand():
 		print("TODO")
-	
+
+
 	def ReceiveSerialCommand():
 		print("TODO")
-		
+
+
 	def StartI2C():
 		print("TODO")
 		#gpio. 
-		
+
+
 	def SendI2C():
 		print("TODO")
-		
-	def GetLiftPlatformCount(self):
+
+
+	def SetLiftPlatformCount(self):
 		"""
-		Update the number of times coconuts have been lifted into the Tapomatic 
+		Update the number of times coconuts have been lifted into the Tapomatic
 		
 		Key arguments:
-		self --
 		
 		Return value:
 		NONE
