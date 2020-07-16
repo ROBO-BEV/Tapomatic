@@ -35,11 +35,11 @@ class CocoDrink:
 	NO_DRINK = 0
 	COCONUT = 1
 	MAX_DRINK_NAME = COCONUT
-	
+
 	# Coconut sizing CONSTANTS
 	SIZE_102MM = 102
 	SIZE_88MM = 88
-	
+
 	# Addon Name CONSTANTS                  #TODO CONVERT INTERGERS TO STRINGS???
 	IMMUNITY_BOOST = 1
 	DAILY_VITAMINS = 2
