@@ -4,7 +4,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-07-14"
+__date__ =    "Late Updated: 2020-07-15"
 __doc__ =     "Class to operate at least 64 servos, 16 relays, and 32 motors at once with latency less then 100 ms"
 """
 
@@ -63,6 +63,7 @@ try:
 	import gpiozero
 	from gpiozero.pins.mock import MockFactory
 	gpiozero.Device.pin_factory = MockFactory()
+
 except ImportError:
 	#TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
 	currentProgramFilename = os.path.basename(__file__)
@@ -279,28 +280,29 @@ class Actuator:
 
 
 	def UnitTest():
-	    pins = [Actuator.HIGH_PWR_12V, Actuator.GND, Actuator.I2C_SDA, Actuator.I2C_SCL]
-	    coconutLiftingLinearMotor1 = Actuator('M', Actuator.actuatorID, pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
-	    coconutLiftingLinearMotor2 = Actuator('M', Actuator.actuatorID, pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
-	    
-	    pins = [Actuator.HIGH_PWR_5V, RaspPi.PWM0, Actuator.GND]
-	    tapHolderServo.Run('S', Actuator.actuatorID, pins, Actuator.FORWARD)
-	    
-	    TODO.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
+		pins = [HIGH_PWR_12V, GND, I2C_SDA, I2C_SCL]
+		coconutLiftingLinearMotor1 = Actuator('M', Actuator.actuatorID, pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
+		coconutLiftingLinearMotor2 = Actuator('M', Actuator.actuatorID, pins, "PA-07-12-5V", Actuator.LINEAR_OUT)
+
+		pins = [Actuator.HIGH_PWR_5V, RaspPi.PWM0, Actuator.GND]
+		tapHolderServo.Run('S', Actuator.actuatorID, pins, Actuator.FORWARD)
+
+		TODO.Run(Actuator.N_A, 1, Actuator.N_A, Actuator.FORWARD)
 
 
 if __name__ == "__main__":
 
 	try:
-		Actuator.UnitTest()
-		relay = OutputDevice(8) #BCM-8
-		relay.on()
-		sleep(20) # seconds or milliseconds?
-		relay.off()
+		#Actuator.UnitTest()
+		#relay = OutputDevice(8) #BCM-8
+		#relay.on()
+		#time.sleep(20) # seconds or milliseconds?
+		#relay.off()
+		print("THIS CANT FAIL?")
+
 	except NameError:
 		currentProgramFilename = os.path.basename(__file__)
 		NameDebugObject = Debug(True, currentProgramFilename)
-		NameDebugObject.Dprint("WARNING: IDIOT! You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
+		NameDebugObject.Dprint("Try fail in __main__ of " + str(currentProgramFilename))
 
-	NameDebugObject.Dprint("END ACTUATOR.PY MAIN")
-
+	print("END ACTUATOR.PY MAIN")

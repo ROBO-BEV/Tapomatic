@@ -4,7 +4,7 @@ ___author__ = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.mvp"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-11"
+__date__    = "Late Updated: 2020-07-16"
 __doc__     = "Install script to setup development enviroment for CoCoTaps Tapomatic v2020.0"
 """
 
@@ -105,6 +105,8 @@ if __name__ == "__main__":
 		check_call("brew install docutils", shell=True)
 		# Install CV libs
 		check_call("pip3 install opencv-python", shell=True)
+		# This import SHOULD work on both Mac & PC to allow software dev work (no hardware)
+		check_call("pip3 install gpiozero pigpio", shell=True)
 		# The above line of code replaces the next three??? Blaze tests say so....
 		#check_call("brew install opencv-python", shell=True)
 		#check_call("brew install numpy", shell=True)
