@@ -1,16 +1,19 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
 """
 __author__  = "Blaze Sanders"
-__email__   = "blaze@cocotaps.mvp"
+__email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-08"
+__date__    = "Late Updated: 2020-07-16"
 __doc__     = "Class to document the configurations of the multiple Raspberry Pi 4 inside the Tampomatic"
 """
 
 # Robotic Beverage Technologies code for custom data logging and terminal debugging output
 from Debug import *
+
+# Allow program to extract filename of the current file
+import os
+
 
 class RaspPi:
     # Internal local network IP addresses and ports
@@ -21,7 +24,11 @@ class RaspPi:
     # External network IP addresses
     LINODE_MYSQL_IP = "45.79.104.34"
     RAVEN_DB_IP = "TODO"
-
+    
+    # GPIO group configuration CONSTANTS
+    GPIO_MODE_1 = 1
+    GPIO_MODE_2 = 2
+    
     # TODO Raspberry Pi 4B refernce pin constants as defined in rc.local script at ~/usr/??? 
     NUM_PI_GPIO_PINS = 8              	    # Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
     MAX_NUM_PI_A_OR_B_PLUS_GPIO_PINS = 40 	# Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
@@ -84,12 +91,32 @@ class RaspPi:
     BOARD38 = "GPIO20"
     BOARD40 = "GPIO21"
 
-class Raspi:
+
+class RaspPi:
     
-    def __init__(self):
-        self.DebugObject = Debug(True)
-
-
+    def __init__(self, gpioMode):
+        """
+        
+        Key arguments:
+        gpioModes --Interger CONSTANT, that
+        
+        Return value:
+        New RaspPi() object
+        """
+        
+        currentProgramFilename = os.path.basename(__file__)
+        self.DebugObject = Debug(True, currentProgramFilename)
+        
+        self.gpioMode = gpioMode
+        
+        if(gpioMode == GPIO_MODE_1):
+            #TODO
+        elif(gpioMOde == GPIO_MODE_2):
+            #TODO
+        else:
+            self.DebugObject.Dprint("ERROR: Invalid GPIO mode, see RaspPi.py line ??")
+        
+        
 #    ROTATAIIONAL_MOTOR_
 #    Z_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[1]
 #    X_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[2]
@@ -106,3 +133,19 @@ class Raspi:
 #    Y2_LINEAR_COVER_MOTOR = actuatorObjects[10]
 
 #    ROTATIONAL_DISK_STEPPER_MOTOR = actuatorObjects[19]
+
+
+    def UnitTest():
+        """
+        
+        """
+        
+        return DEBUG.OK
+
+if __name__ == "__main__":
+
+    try:
+        RaspPi.UnitTest()
+    
+    except:
+
