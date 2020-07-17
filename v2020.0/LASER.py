@@ -45,6 +45,12 @@ class LASER:
 	LOW_POWER = 2.50
 	MAX_POWER_LEVEL = HIGH_POWER
 	DEFAULT_LASER_CONSTANT = 0.05264472  	#TODO Adjust this until LASER branding looks good
+	
+	# Motor CONSTANTS
+	ONE_PIXEL = 1
+	CARRIAGE_RETURN = 20
+	CARRIAGE_RETURN_DELAY = 1.420 # 1420 milliseconds
+	
 
     # Global class variable
 	laserConstant = -1
@@ -142,7 +148,7 @@ class LASER:
 
 
 		imgWidth = originalImage.size
-		imgHeight = originalImage.size
+		imgHeight = originalImage.size(H)
 
 
 		for xPixel in range(imgWidth):
@@ -239,16 +245,22 @@ class LASER:
 		imageBurnComplete = MoveLaserStepperMotor(pixelDwellDuration, frequency)
 
 
-	def MoveLaserStepperMotor(self, frequency, motorID):
+	def MoveLaserStepperMotor(self, frequency):
 		"""
 
 		Return value:
 		NOTHING
 		"""
+		pins = []
+		horizontalMotor = gpiozero.Motor(pins)
+		pins = []
+		verticallMotor = gpiozero.Motor(pins)
 
-		for pixelNum in range (0, GetNumOfPixels(filename) - 1):
+		for pixelNum in range (0, GetNumOfPixels(self.brandingArt) - 1):
 			sleep(pixelDwellDuration + 1/frequency)
-			#TODO if(pixelNum = )
+			horizontalMotor.run(ONE_PIXEL)
+	if(pixelNum%self.brandingArt.width() == 0):
+		sleep(CARRIAGE_RETURN_DELAY)horizontalMotor.run(CARRIAGE_RETURN)
 
 
 	def SetPowerLevel(self, watts, cocoPartNumber):
