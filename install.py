@@ -118,6 +118,8 @@ if __name__ == "__main__":
 		check_call("pip3 install pyautogui", shell=True)
 
 		check_call("pip3 install scikit-image", shell=True)
+        #Install MYQR code
+	    check_call("pip3 install myqr", shell=True)
 
 	# Start PIPENV Python Virtual Environment packaging tool installs
 	# @link https://pipenv.readthedocs.io/en/latest/basics/
