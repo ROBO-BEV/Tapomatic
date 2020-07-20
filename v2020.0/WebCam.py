@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-__author__ =  "Blaze Sanders"
-__email__ =   "blaze.d.a.sanders@gmail.com"
-__company__ = "Robotic Beverage Technologies Inc"
+__author__ =  "Murali ???"
+__email__ =   "m@beepbeeptechinc.com"
+__company__ = "CocoTaps"
 __status__ =  "Development"
 __date__ =    "Late Updated: 2020-07-19"
 __doc__ =     "Class to create QR codes for drinks and control USB camera to scan them"
 """
 
-# See https://github.com/????
+# See https://github.com/sylnsfar/qrcode
 from MyQR import myqr
 
 # Allow program to extract filename of the current file
@@ -20,7 +20,7 @@ from CocoDrink import *         # Store valid CoCoTaps drink configurations
 
 class WebCam:
 
-	#COCOTAPS URL
+	# CocoTaps  URL
 	COCOTAPS_URL = 'https://www.cocotaps.com/'
 
 	# QR Strings
@@ -63,15 +63,29 @@ class WebCam:
 
 	def generateQRCodeForImmunityBoost(self):
 		"""
+		I think we can delete all these functions and add swtich statement to main generateQR function -BLAZE
 		
+		Generate QR code with CONSTANT INT IMMUNITY_BOOST encoded into dots
+		
+		Key argmuments:
+		NONE
+		
+		Return value:
+		immunity_boost.png -- Image created and stored in "static/QRImages" directory 
 		"""
+		
 		self.generateQR(CocoDrink.IMMUNITY_BOOST,'static/QRImages/'+'immunity_boost.png')
+		
 		return
 
 
 	def generateQRCodeForDailyVitamins(self):
+		"""
+		Adding URL makes data more ???
+		
+		"""
 		self.generateQR(self.COCOTAPS_URL + CocoDrink.DAILY_VITAMINS,'static/QRImages/'+'daily_vitamins.jpg')
-		return
+		return          #WHY EMPTY RETURN
 
 	def generateQRCodeForEnergyBoost(self):
 		self.generateQR(self.COCOTAPS_URL + CocoDrink.ENERGY_BOOST,'static/QRImages/'+'energy_boost.jpg')
@@ -89,15 +103,21 @@ class WebCam:
 		self.generateQR(self.COCOTAPS_URL + CocoDrink.ORANGE_FLAVOR,'static/QRImages/'+'orange_flavor.jpg')
 		return
 
+
 if __name__ == "__main__":
 	
 	object = WebCam()
+
 	object.generateQRCodeForImmunityBoost()
 	object.generateQRCodeForDailyVitamins()
 	object.generateQRCodeForEnergyBoost()
 	object.generateQRCodeForPinaColada()
 	object.generateQRCodeForPineappleFlavor()
 	object.generateQRCodeForOrangeFlavor()
+
+
+    testObject2 = WebCam()
+	testObject2.generateQR(CocoDrink.ORANGE_FLAVOR,'static/QRImages/'+'orange_flavor2.jpg')
 
 
 
