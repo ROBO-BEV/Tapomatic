@@ -14,45 +14,38 @@ from MyQR import myqr
 # Allow program to extract filename of the current file
 import os
 
-from CocoDrink import *
+# Custom CocoTaps and Robotic Beverage Technologies Inc code
+from CocoDrink import *         # Store valid CoCoTaps drink configurations
 
-class WebCam():
+
+class WebCam:
 
 	#COCOTAPS URL
 	COCOTAPS_URL = 'https://www.cocotaps.com/'
 
-	# Drink Name CONSTANTS
-	NONE = "NONE"
-	NO_DRINK = 0
-	COCONUT = 1
-	MAX_DRINK_NAME = COCONUT
-	
-	# Coconut sizing CONSTANTS
-	SIZE_102MM = 102
-	SIZE_88MM = 88
-	
-	# Addon Name CONSTANTS                  #TODO CONVERT INTERGERS TO STRINGS???
-	IMMUNITY_BOOST = 1
-	DAILY_VITAMINS = 2
-	ENERGY_BOOST = 3
-	PINA_COLADA = 4
-	PINEAPPLE_FLAVOR = 5
-	ORANGE_FLAVOR = 6
-	MAX_ADD_ON_NAME = ORANGE_FLAVOR
-
 	# QR Strings
-	IMMUNITY_BOOST = 'IMMUNITY_BOOST'
-	DAILY_VITAMINS = 'DAILY_VITAMINS'
-	ENERGY_BOOST = 'ENERGY_BOOST'
-	PINA_COLADA = 'PINA_COLADA'
-	PINEAPPLE_FLAVOR = 'PINEAPPLE_FLAVOR'
-	ORANGE_FLAVOR = 'ORANGE_FLAVOR'
+	# IMMUNITY_BOOST = 'IMMUNITY_BOOST'
+	# DAILY_VITAMINS = 'DAILY_VITAMINS'
+	# ENERGY_BOOST = 'ENERGY_BOOST'
+	# PINA_COLADA = 'PINA_COLADA'
+	# PINEAPPLE_FLAVOR = 'PINEAPPLE_FLAVOR'
+	# ORANGE_FLAVOR = 'ORANGE_FLAVOR'
 
 	QRCODES_DIR = os.getcwd()+'/QRCodes'
 
 
-	def generateQR(self, QRWord, picture):
-		#Generate the MYQR code word based.
+	def generateQR(self, QRword, picture):
+		"""
+		Generate a word based  MYQR code 
+		
+		Key arguments:
+		QRword -- Data to encode into QR code dots
+		picture -- Background image to embed behind QR code dots 
+		
+		Return value:
+		??? --
+		"""
+		
 		version, level, qr_name = myqr.run(
 			QRWord,
 			version=10,
@@ -64,10 +57,14 @@ class WebCam():
 			save_name=None,
 			save_dir=self.QRCODES_DIR
 		)
+		
 		return
 
 
 	def generateQRCodeForImmunityBoost(self):
+		"""
+		
+		"""
 		self.generateQR(CocoDrink.IMMUNITY_BOOST,'static/QRImages/'+'immunity_boost.png')
 		return
 
@@ -93,6 +90,7 @@ class WebCam():
 		return
 
 if __name__ == "__main__":
+	
 	object = WebCam()
 	object.generateQRCodeForImmunityBoost()
 	object.generateQRCodeForDailyVitamins()
