@@ -4,15 +4,21 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-16"
+__date__    = "Late Updated: 2020-07-17"
 __doc__     = "Class to document the configurations of the multiple Raspberry Pi 4 inside the Tampomatic"
 """
 
-# Robotic Beverage Technologies code for custom data logging and terminal debugging output
-from Debug import *
-
 # Allow program to extract filename of the current file
 import os
+
+# Allow BASH command to be run inside Python3 code like this file
+import subprocess
+from subprocess import Popen, PIPE
+from subprocess import check_call
+
+# Custom CocoTaps and Robotic Beverage Technologies Inc code
+from Actuator import *          # Modular plug and play control of motors, servos, and relays
+from Debug import *             # Configure datalogging parameters and debug printing control
 
 
 class RaspPi:
@@ -25,9 +31,11 @@ class RaspPi:
     LINODE_MYSQL_IP = "45.79.104.34"
     RAVEN_DB_IP = "TODO"
     
-    # GPIO group configuration CONSTANTS
-    GPIO_MODE_1 = 1
-    GPIO_MODE_2 = 2
+    # GPIO & POWER configuration CONSTANTS
+    GPIO_MODE_1 = 1         # Enable all ??? GPIO pins to allow max relay control
+    GPIO_MODE_2 = 2         # Enable all ??? PWM pins to allow max servo control
+    HIGH_POWER = 1          # Use all CPU cores, high screen brightness, and all motors
+    LOW_POWER = 0           # Use only one CPU core, low screen brightness, and disable main motor relay to reduce phathom drain while on battery power
     
     # TODO Raspberry Pi 4B refernce pin constants as defined in rc.local script at ~/usr/??? 
     NUM_PI_GPIO_PINS = 8              	    # Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
@@ -74,7 +82,7 @@ class RaspPi:
 
     # General Purpose Input / Output (GPIO) pins that work in default mode 
     # Format for following pin "BCM mode pin name= BOARD mode pin name":
-    BOARD7 = "GPIO4"
+    BOARD7  = "GPIO4"
     BOARD11 = "GPIO17"
     BOARD13 = "GPIO27"
     BOARD15 = "GPIO22"  
@@ -94,11 +102,13 @@ class RaspPi:
 
 class RaspPi:
     
-    def __init__(self, gpioMode):
+    def __init__(self, gpioMode, cpuPowerMode):
         """
+        Create Raspberry Pi 4 GPIO and power configuration
         
         Key arguments:
         gpioModes --Interger CONSTANT, that
+        cpuPowerMode -- Interger CONSTANT, that defines CPU computation power
         
         Return value:
         New RaspPi() object
@@ -108,14 +118,26 @@ class RaspPi:
         self.DebugObject = Debug(True, currentProgramFilename)
         
         self.gpioMode = gpioMode
+        self.cpuPowerMode = cpuPowerMode
+        
         
         if(gpioMode == GPIO_MODE_1):
-            #TODO
+            gpiozero.pinmode()
         elif(gpioMOde == GPIO_MODE_2):
-            #TODO
+            gpiozero.pinmode()
         else:
-            self.DebugObject.Dprint("ERROR: Invalid GPIO mode, see RaspPi.py line ??")
+            self.DebugObject.Dprint("ERROR: Invalid GPIO mode, see RaspPi.py CONSTANTS")
         
+        
+        if(cpuPowerMode == HIGH_POWER)):
+            check_call("TODO Max Screen brightness", shell=True)
+        elif(cpuPowerMode == LOW_POWER)):
+            check_call("TODO Min Screen brightness", shell=True)
+            mainMotorRelay = OutputDevice(BOARD?)
+            #TODO ADD THIS TO ACTUATOR PinsInUse()
+        else:
+            self.DebugObject.Dprint("ERROR: Invalid CPU power  mode, see RaspPi.py CONSTANTS")
+            
         
 #    ROTATAIIONAL_MOTOR_
 #    Z_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[1]

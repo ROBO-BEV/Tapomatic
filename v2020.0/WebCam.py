@@ -4,19 +4,22 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-07-05"
-__doc__ =     "Class to define flavors and health additivies in a CocoTaps coconut drink"
+__date__ =    "Late Updated: 2020-07-19"
+__doc__ =     "Class to create QR codes for drinks and control USB camera to scan them"
 """
+
+# See https://github.com/????
 from MyQR import myqr
+
 # Allow program to extract filename of the current file
 import os
 
+from CocoDrink import *
+
 class WebCam():
+
 	#COCOTAPS URL
 	COCOTAPS_URL = 'https://www.cocotaps.com/'
-
-
-
 
 	# Drink Name CONSTANTS
 	NONE = "NONE"
@@ -63,28 +66,30 @@ class WebCam():
 		)
 		return
 
+
 	def generateQRCodeForImmunityBoost(self):
-		self.generateQR(self.COCOTAPS_URL + self.IMMUNITY_BOOST,'static/QRImages/'+'immunity_boost.png')
+		self.generateQR(CocoDrink.IMMUNITY_BOOST,'static/QRImages/'+'immunity_boost.png')
 		return
 
+
 	def generateQRCodeForDailyVitamins(self):
-		self.generateQR(self.COCOTAPS_URL + self.DAILY_VITAMINS,'static/QRImages/'+'daily_vitamins.jpg')
+		self.generateQR(self.COCOTAPS_URL + CocoDrink.DAILY_VITAMINS,'static/QRImages/'+'daily_vitamins.jpg')
 		return
 
 	def generateQRCodeForEnergyBoost(self):
-		self.generateQR(self.COCOTAPS_URL + self.ENERGY_BOOST,'static/QRImages/'+'energy_boost.jpg')
+		self.generateQR(self.COCOTAPS_URL + CocoDrink.ENERGY_BOOST,'static/QRImages/'+'energy_boost.jpg')
 		return
 
 	def generateQRCodeForPinaColada(self):
-		self.generateQR(self.COCOTAPS_URL + self.PINA_COLADA,'static/QRImages/'+'pina_colada.jpg')
+		self.generateQR(self.COCOTAPS_URL + CocoDrink.PINA_COLADA,'static/QRImages/'+'pina_colada.jpg')
 		return
 
 	def generateQRCodeForPineappleFlavor(self):
-		self.generateQR(self.COCOTAPS_URL + self.PINEAPPLE_FLAVOR,'static/QRImages/'+'pineapple_flavor.jpg')
+		self.generateQR(self.COCOTAPS_URL + CocoDrink.PINEAPPLE_FLAVOR,'static/QRImages/'+'pineapple_flavor.jpg')
 		return
 
 	def generateQRCodeForOrangeFlavor(self):
-		self.generateQR(self.COCOTAPS_URL + self.ORANGE_FLAVOR,'static/QRImages/'+'orange_flavor.jpg')
+		self.generateQR(self.COCOTAPS_URL + CocoDrink.ORANGE_FLAVOR,'static/QRImages/'+'orange_flavor.jpg')
 		return
 
 if __name__ == "__main__":
