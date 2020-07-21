@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-17"
+__date__    = "Late Updated: 2020-07-21"
 __doc__     = "Class to document the configurations of the multiple Raspberry Pi 4 inside the Tampomatic"
 """
 
@@ -17,16 +17,18 @@ from subprocess import Popen, PIPE
 from subprocess import check_call
 
 # Custom CocoTaps and Robotic Beverage Technologies Inc code
-from Actuator import *          # Modular plug and play control of motors, servos, and relays
 from Debug import *             # Configure datalogging parameters and debug printing control
 
+# TODO
+# from gpiozero import *
 
 class RaspPi:
+
     # Internal local network IP addresses and ports
     GUI_PI_IP = "69.69.1.69"
     VEND_PI_IP = "69.69.1.42"
     UDP_PORT = 5005
-
+    
     # External network IP addresses
     LINODE_MYSQL_IP = "45.79.104.34"
     RAVEN_DB_IP = "TODO"
@@ -43,14 +45,14 @@ class RaspPi:
     MAX_NUM_PI_A_OR_B_GPIO_PINS = 26      	# Pins 1 to 26 on Raspberry Pi A or B
     NUM_PI_OUTPUT_PINS = 4                	# This software instance of Raspberry Pi can have up to four output pins
     NUM_PI_INPUT_PINS = 4                 	# This software instance of Raspberry Pi can have up to four input pins
-
+    
     # Wire value CONTSTANTS 
     # Raspberry Pi 4 Pin Layout https://pinout.xyz/pinout 
     # https://www.element14.com/community/docs/DOC-92640/l/raspberry-pi-4-model-b-default-gpio-pinout-with-poe-header
     # BOARDX pin names are preferred in this code but in BCM mode GPIOX can SOMETIMES be used
     NO_PIN = -1  				#TODO This constant may not be needed :)
     NO_WIRE = 0
-
+    
     # 3.3 Volts @ upto 0.050 Amps = 0.165 Watts https://pinout.xyz/pinout/pin1_3v3_power
     # 5 Volts @ upto ~1.5 Amps (Power Adapter - Pi usgae) = 7.5 Watts https://pinout.xyz/pinout/pin2_5v_power
     VCC_3_3V = 1
@@ -107,8 +109,10 @@ class RaspPi:
         Create Raspberry Pi 4 GPIO and power configuration
         
         Key arguments:
+        self --
         gpioModes --Interger CONSTANT, that
         cpuPowerMode -- Interger CONSTANT, that defines CPU computation power
+
         
         Return value:
         New RaspPi() object
@@ -119,7 +123,7 @@ class RaspPi:
         
         self.gpioMode = gpioMode
         self.cpuPowerMode = cpuPowerMode
-        
+        self.PiInfo = gpiozero.PiBoardInfo
         
         if(gpioMode == GPIO_MODE_1):
             gpiozero.pinmode()
@@ -129,45 +133,49 @@ class RaspPi:
             self.DebugObject.Dprint("ERROR: Invalid GPIO mode, see RaspPi.py CONSTANTS")
         
         
-        if(cpuPowerMode == HIGH_POWER)):
+        if(cpuPowerMode == HIGH_POWER):
             check_call("TODO Max Screen brightness", shell=True)
-        elif(cpuPowerMode == LOW_POWER)):
+        elif(cpuPowerMode == LOW_POWER):
             check_call("TODO Min Screen brightness", shell=True)
-            mainMotorRelay = OutputDevice(BOARD?)
-            #TODO ADD THIS TO ACTUATOR PinsInUse()
+            mainPowerRelay = gpiozero.OutputDevice(RaspPi.BOARD7)
+            #pin = [RaspPi.BOARD7]
+            #mainPowerRelay = Actuator('R', 0, pin, "Main Motor Relay: P/N?TODO?", Actuator.CW)
         else:
             self.DebugObject.Dprint("ERROR: Invalid CPU power  mode, see RaspPi.py CONSTANTS")
-            
         
-#    ROTATAIIONAL_MOTOR_
-#    Z_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[1]
-#    X_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[2]
-#    Y_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[3]
-
-#    Z1_LINEAR_LIFT_MOTOR = actuatorObjects[4]
-#    Z2_LINEAR_LIFT_MOTOR = actuatorObjects[5]
-
-#    Y1_LINEAR_CUT_MOTOR = actuatorObjects[6]
-#    Y2_LINEAR_CUT_MOTOR = actuatorObjects[7]
-#    X1_LINEAR_KNIFE_POSITION_MOTOR = actuatorObjects[8]
-
-#    Y1_LINEAR_COVER_MOTOR = actuatorObjects[9]
-#    Y2_LINEAR_COVER_MOTOR = actuatorObjects[10]
-
-#    ROTATIONAL_DISK_STEPPER_MOTOR = actuatorObjects[19]
-
+            
+    def DevPinConfigError(TempDebugObject):
+        """
+        Inform programmer that control of Raspberry Pi pins from a Mac or PC is not possible without advance settings
+        
+        Key arguments:
+        TempDebugObject -- Debug() Object from python Class where error occured
+        
+        Return value:
+        NONE
+        """
+        
+        TempDebugObject.Dprint("WARNING - You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
+        TempDebugObject.Dprint("Try using Mock pin fatory setting https://gpiozero.readthedocs.io/en/stable/api_pins.html#mock-pins")
+        TempDebugObject.Dprint("Or Remote GPIO setup https://gpiozero.readthedocs.io/en/stable/remote_gpio.html")
 
     def UnitTest():
         """
-        
+                
         """
-        
+        print("START RaspPi.py UnitTest()")
+
+
+        print("END RaspPi.py UnitTest()")
+                
         return DEBUG.OK
+
 
 if __name__ == "__main__":
 
     try:
         RaspPi.UnitTest()
-    
+        self.UnitTest()         #TODO DO THIS WORK?
+        
     except:
-
+        print("END RaspPi.py __main__")
