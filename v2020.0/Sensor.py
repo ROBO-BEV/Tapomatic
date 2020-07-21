@@ -4,7 +4,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-07-16"
+__date__ =    "Late Updated: 2020-07-21"
 __doc__ =     "Class to communicate with all sensors inside the Tapomatic kiosk"
 """
 
@@ -56,6 +56,9 @@ except ImportError:
 	ImportDebugObject = Debug(True, currentProgramFilename)
 	ImportDebug.Dprint("WARNING: You are running code on Mac or PC (NOT a Raspberry Pi)")
 
+# Global Class variable 
+currentNumOfSensors = 0
+usedPins = [False]
 
 class Sensor():
 	# TODO Compare how many taps have been used vs the number of coconuts drill to
@@ -64,17 +67,19 @@ class Sensor():
 	BOTTLE_WEIGHT = 1.5 #Units Newtons TODO WEIGHT EMPTY BOTTLE
 
 	# TODO Define all pins in schematic and measure density of each liquid
-	RED_BULL_FORCE_SENSOR = 0
-	RED_BULL_DENSITY = 1.1      	# Units grams/mL
-	IMMUNITY_FORCE_SENSOR = 1
-	IMMUNITY__DENSITY = 1.001      	# Units grams/mL
-	VITAMINS_FORCE_SENSOR = 2
-	VITAMINS_DENSITY = 1.3      	# Units grams/mL
-	PINA_COLADA_FORCE_SENSOR = 3
+	FORCE_SENSOR = 0
+	FORCE_SENSOR_PN = 'TODO'
+	# Units grams/mL
+	
+	ENERGY_BOOST_DENSITY = 1.005
+	IMMUNITY_BOOST_DENSITY = 1.001      	# Units grams/mL
+	
+	VITAMINS_BOOST_DENSITY = 1.3      	# Units grams/mL
+	
 	PINA_COLADA_DENSITY = 1.5      	# Units grams/mL
-	ORANGE_FORCE_SENSOR = 4
+	
 	ORANGE_DENSITY = 1.01      		# Units grams/mL
-	PINEAPPLE_FORCE_SENSOR = 5
+	
 	PINEAPPLE_DENSITY = 1.12      	# Units grams/mL
 
 	LIFTING_PLATFORM_FORCE_SENSOR = 6
@@ -95,7 +100,7 @@ class Sensor():
 	PING_GPIO_TRIGGER = -1
 	PING_GPIO_ECHO = -1
 
-	def __init__(self, currentNumOfSensors, sType, pins, partNumber, currentCount):
+	def __init__(self, sType, pins, partNumber):
 		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 		for i in pins:
 			self.wires[i] = pins[i]
@@ -104,10 +109,9 @@ class Sensor():
 	    self.DebugObject = Debug(True, currentProgramFilename)
 
         self.sensorType = sType
-        currentNumOfActuators = currentNumOfActuators + 1
+        currentNumOfSensors = currentNumOfSensors + 1
         self.sensorID = currentNumOfSensors                 # Auto-incremented interger class variable
         self.partNumber = partNumber
-        self.currentCount = 0
 
 
 	def StartFullDuplexSerial():
@@ -141,6 +145,7 @@ class Sensor():
 		Return value:
 		NONE
 		"""
+		#TODO WHY SHOULD THIS COUNT BE STORED???
 		self.currentCount = self.currentCount + 1
 
 
