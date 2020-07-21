@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-05"
+__date__    = "Late Updated: 2020-07-21"
 __doc__     = "Class to control and move LASER system"
 """
 
@@ -18,6 +18,7 @@ from time import gmtime, strftime, sleep
 from Debug import *             # Configure datalogging parameters and debug printing control
 from CocoDrink import *        	# Stores valid CoCoTaps drink configurations
 from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
+from Actuator import *          # Modular plug and play control of motors, servos, and relays
 
 # Computer Vision modules to edit / warp images
 #import numpy as np     #TODO REMOVE SINCE IM NOT USE ARRAY ANY MORE
@@ -34,8 +35,8 @@ except ImportError:
     #TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
     currentProgramFilename = os.path.basename(__file__)
     TempDebugObject = Debug(True, "Try/Catch ImportError in " + currentProgramFilename)
-    TempDebugObject.Dprint("WARNING - You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
-    
+    RaspPi.DevPinConfigError(TempDebugObject)
+        
     
 class LASER:
 
@@ -251,16 +252,19 @@ class LASER:
 		Return value:
 		NOTHING
 		"""
-		pins = []
+		pins = [Actuator.HIGH_PWR_12V, ACtuator.GND, Actuator.I2C_SDA, Actuator.I2C_SCL]
 		horizontalMotor = gpiozero.Motor(pins)
-		pins = []
+		pins = [Actuator.HIGH_PWR_12V, ACtuator.GND, Actuator.I2C_SDA, Actuator.I2C_SCL]
 		verticallMotor = gpiozero.Motor(pins)
 
 		for pixelNum in range (0, GetNumOfPixels(self.brandingArt) - 1):
 			sleep(pixelDwellDuration + 1/frequency)
 			horizontalMotor.run(ONE_PIXEL)
-	if(pixelNum%self.brandingArt.width() == 0):
-		sleep(CARRIAGE_RETURN_DELAY)horizontalMotor.run(CARRIAGE_RETURN)
+			
+			
+			if(pixelNum%self.brandingArt.width() == 0):
+			    sleep(CARRIAGE_RETURN_DELAY)
+			    verticalMotor.run(CARRIAGE_RETURN)
 
 
 	def SetPowerLevel(self, watts, cocoPartNumber):
