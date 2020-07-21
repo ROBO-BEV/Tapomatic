@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-14"
+__date__    = "Late Updated: 2020-07-21"
 __doc__     = "Class to define OTA commuications architecture for 30K+ Tapomatic kiosk"
 """
 
@@ -14,34 +14,43 @@ from time import gmtime, strftime
 # Allow program to READ Comma Separated Value files
 import csv
 
-LOW_LIQUID_MESSAGE = 0
+
+class MissionControl():
+
+	# Reporting CONSTANSTS
+	LOW_LIQUID_MESSAGE = 0
 PHYSICAL_DAMAGE_MESSAGE = 1
 LOW_POWER_MESSAGE = 2
 DULL_KNIFE_MESSAGE = 3
 VERISON_MESSAGE = 4
 
-# Power CONSTANTS
-ON = 1
-OFF = 0
+	# EDI 944 Interface CONSTANTS
+	W7_HEADER = "TODO"
 
 
-class MissionControl():
+	# Power CONSTANTS
+	ON = 1
+	OFF = 0
 
+
+	# Global Class Variables
 	totalCoconutsVended = 0
 	totalTapsUsed = 0
-	totalFlavorOzUsed = 0
-	totalHealthOzUsed = 0
-	totalCoirFiberRemoved = 0
+	totalFlavorOzUsed = 0.0
+	totalHealthOzUsed = 0.0
+	totalCoirFiberRemoved = 0.0
 	currentHealthPercentage = 100.0
+
 
 	def __init__(self, kioskID, version, key):
 		"""
         Constructor to setup a data connection between centrol server (Mission Control) and robot out in field
 
 		Key arguments:
+		self -- 
 		kioskID -- Unique ID for every prototype or production Tapomatic manufactured
-		version -- Verison on software that should be running on a Tapomatic
-		key -- Security key for ALL Tapoamtics to allow Over-The-Air (OTA) updates
+		version -- Verison of software that is running on remote device
+		key -- Security key for devices to allow Over-The-Air (OTA) updates
 
 		Return value:
 		New MissionControl() object
@@ -53,6 +62,9 @@ class MissionControl():
 		self.kioskID = kioskID
 		self.version = version
 		self.key = key
+		
+		pins = [Actuator.VCC_?V, RaspPi, 3, Actuator.GND]
+		self.ForceSensorObject = Sensor(FORCE_SENSOR,pins, FORCE_SENSOR_PN)
 
 
 	def ReportLiquidLevel(self, lType, internalBottleLocation, kioskID):
@@ -67,7 +79,7 @@ class MissionControl():
     	Return value:
     	liqPercentage -- Percent that a 750 mL botle is full
     	"""
-
+		
 	    return liqPercentage
 
 
@@ -199,6 +211,17 @@ class MissionControl():
         https://www.jobisez.com/edi/tp/guide.aspx?doc=/edi-igs/3m/Wins-944-3060.pdf
 
 	    """
+
+            f = open(CocoEDI944.txt, 'rb')   # Open only in read mode.
+	        data = f.read(DATA_BUFFER_SIZE)     # Read for Buffer Size.
+	        if(data[0] == W7_HEADER):
+	            stockData = [data[3],  data[4]]   # Latitude & Longitude
+	        else:
+	            TODO
+	    except:
+	        this.DebugObject.Dprint("Could not open {CocoEDI944.txt}, ensure the filepath is correct.")
+            stockData = [Debug.BAD, DEBUG.BAD]
+	    
 
 	    return -1
 
