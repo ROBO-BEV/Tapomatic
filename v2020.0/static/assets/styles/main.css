@@ -24,11 +24,21 @@
 *,*::after,*::before{
     box-sizing: border-box;
 }
+/*default version*/
+@font-face {
+	font-family: 'Graphik Semibold';
+	src: url('Graphik Fonts/Graphik-Semibold.ttf');
+	src:
+		local('Graphik Semibold Font'),
+		local('Graphik-Semibold-Font'),
+		url('Graphik Fonts/Graphik-Semibold.ttf')
+		format('opentype');
+}
 
 /* Global  */
 h1, p, .button{
     color: var(--text-color);
-    font-family: Graphik, Arial, Courier New, Source Sans Pro; 
+    font-family: Graphik Semibold;
     /* font-family: 'Roboto', sans-serif; */
 }
 h1 {
