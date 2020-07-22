@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-11"
+__date__    = "Late Updated: 2020-07-21"
 __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
@@ -395,8 +395,8 @@ if __name__ == "__main__":
     #TODO tempDrink = CocoDrink(CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE, CocoDrink.NONE)
     vendQueue = np.array(MAX_VEND_QUEUE_SIZE)
 
-    GuiPi = RaspPi()
-    BackendPi = RaspPi()
+    GuiPi = RaspPi(RaspPi.GPIO_MODE_1, RaspPi.HIGH_POWER)
+    BackendPi = RaspPi(RaspPi.GPIO_MODE_1, RaspPi.LOW_POWER)
 
     # Actuators as define in schematic tab at https://upverter.com/design/blazesandersinc/tapomatic-v2020-1
     immunityHealthAdditivePins  = [Actuator.HIGH_PWR_12V, Actuator.GND, BackendPi.I2C_SDA1_NAME, BackendPi.I2C_SCL1_NAME]

@@ -19,19 +19,17 @@ class MissionControl():
 
 	# Reporting CONSTANSTS
 	LOW_LIQUID_MESSAGE = 0
-PHYSICAL_DAMAGE_MESSAGE = 1
-LOW_POWER_MESSAGE = 2
-DULL_KNIFE_MESSAGE = 3
-VERISON_MESSAGE = 4
-
+	PHYSICAL_DAMAGE_MESSAGE = 1
+	LOW_POWER_MESSAGE = 2
+	DULL_KNIFE_MESSAGE = 3
+	VERISON_MESSAGE = 4
+	
 	# EDI 944 Interface CONSTANTS
 	W7_HEADER = "TODO"
-
 
 	# Power CONSTANTS
 	ON = 1
 	OFF = 0
-
 
 	# Global Class Variables
 	totalCoconutsVended = 0
@@ -47,7 +45,7 @@ VERISON_MESSAGE = 4
         Constructor to setup a data connection between centrol server (Mission Control) and robot out in field
 
 		Key arguments:
-		self -- 
+		self -- Newly created object 
 		kioskID -- Unique ID for every prototype or production Tapomatic manufactured
 		version -- Verison of software that is running on remote device
 		key -- Security key for devices to allow Over-The-Air (OTA) updates
@@ -63,10 +61,14 @@ VERISON_MESSAGE = 4
 		self.version = version
 		self.key = key
 		
-		pins = [Actuator.VCC_?V, RaspPi, 3, Actuator.GND]
-		self.ForceSensorObject = Sensor(FORCE_SENSOR,pins, FORCE_SENSOR_PN)
-
-
+		
+		# Definition for sensors sending data back to Mission Control (internal sensors not included)
+		pins = [Actuator.VCC_?V, RaspPi.BOARD?, ?, Actuator.GND]
+		self.ForceSensorObject = Sensor(Sensor.FORCE_SENSOR,pins, Sensor.FORCE_SENSOR_PART_NUMBER)
+        pins =[Actuator.VCC_?V, RaspPi.BOARD?, ?, Actuator.GND]
+        self.laserRangerFinderObject = Sensor(Sensor.LASER_RANGE_SENSOR, pins, Sensor.LASER_RANGE_PART_NUMBER)
+        
+        
 	def ReportLiquidLevel(self, lType, internalBottleLocation, kioskID):
 	    """
 	    Report the current liquid level as percentage
@@ -170,6 +172,7 @@ VERISON_MESSAGE = 4
 
 	    return totalTapsUsed
 
+
 	def ReportCoconutUsage(self):
 	    """
         #TODO Description
@@ -272,6 +275,7 @@ VERISON_MESSAGE = 4
 	        self.DebugObject.Dprint("This is old code that ia on longer supported on this hardware.")	    
 	    else:
 	        self.DebugObject.Dprint("Invalid version number updating to v2020.0")
+
 
 	def StopOTA(self):
 	    """
