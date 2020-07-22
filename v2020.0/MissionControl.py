@@ -24,12 +24,25 @@ class MissionControl():
 	DULL_KNIFE_MESSAGE = 3
 	VERISON_MESSAGE = 4
 	
-	# EDI 944 Interface CONSTANTS
-	W7_HEADER = "TODO"
+
+	# EDI 944 Interface CONSTANTS from filepath:
+	# Tapomatic/v2020.0/static/apiDocumentation/Wins-944-3060.pdf
+	W7_HEADER = "TODO"    
+    ST_HEADER = "Transaction Set Header"
+    W17_HEADER = "Warehouse Receipt Identification"
+    N1_HEADER = "Name"
+
+	W7_DETAIL = "Item Detail For Stock Receipt"
+    N9_DETAIL = "Reference Identification"
+
+    W14_SUMMARY = "Total Receipt Information"
+    SE_SUMMARY = "Transaction Set Trailer"
+
 
 	# Power CONSTANTS
 	ON = 1
 	OFF = 0
+
 
 	# Global Class Variables
 	totalCoconutsVended = 0
