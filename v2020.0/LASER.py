@@ -17,7 +17,7 @@ from time import gmtime, strftime, sleep
 # Custom CocoTaps and Robotic Beverage Technologies code
 from Debug import *             # Configure datalogging parameters and debug printing control
 from CocoDrink import *        	# Stores valid CoCoTaps drink configurations
-from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
+from RaspPi import *        # Contains usefull GPIO pin CONSTANTS and setup configurations
 from Actuator import *          # Modular plug and play control of motors, servos, and relays
 
 # Computer Vision modules to edit / warp images
@@ -149,7 +149,7 @@ class LASER:
 
 
 		imgWidth = originalImage.size
-		imgHeight = originalImage.size(H)
+		imgHeight = originalImage.size
 
 
 		for xPixel in range(imgWidth):
@@ -333,16 +333,16 @@ class LASER:
 	    """
 	    
 	    LASER.__WarpImage()
-                
-        
-        
+
+
+
+
 
 if __name__ == "__main__":
 
     currentProgramFilename = os.path.basename(__file__)
     LaserDebugObject = Debug(True, currentProgramFilename)
     LaserDebugObject.Dprint("Running LASER.py main unit test")
-    
     #laserConfig = -1
     TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrink.COCOTAPS_LOGO)
     

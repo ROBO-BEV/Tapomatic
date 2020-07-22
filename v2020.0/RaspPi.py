@@ -101,8 +101,6 @@ class RaspPi:
     BOARD38 = "GPIO20"
     BOARD40 = "GPIO21"
 
-
-class RaspPi:
     
     def __init__(self, gpioMode, cpuPowerMode):
         """
