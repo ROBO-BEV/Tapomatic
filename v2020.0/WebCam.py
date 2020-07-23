@@ -4,7 +4,7 @@ __author__ =  "Muralikrishna Dulla"
 __email__ =   "m@beepbeeptechinc.com"
 __company__ = "CocoTaps"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-07-22"
+__date__ =    "Late Updated: 2020-07-23"
 __doc__ =     "Class to create QR codes for drinks and control USB camera to scan them"
 """
 
@@ -21,6 +21,7 @@ from CocoDrink import *         # Store valid CoCoTaps drink configurations
 class WebCam:
 	# CocoTaps  URL
 	COCOTAPS_URL = 'https://www.cocotaps.com/'
+
 	# Directory To Save the Generated QR Codes.
 	QRCODES_DIR = os.getcwd() + '/QRCodes'
 	# Directory where Source Images to embed behind the QR code.
@@ -46,14 +47,16 @@ class WebCam:
 
 	def generateQR(self, qrWord, picture):
 			"""
-			Generate a word based  MYQR code
+			Generate a word based MYQR code
+
 			Key arguments:
-			QRword -- Data to encode into QR code dots
+			qrWord -- Data to encode into QR code dots
 			picture -- Background image to embed behind QR code dots
 
 			Return value:
-			None
+			NONE
 			"""
+
 			version, level, qr_name = myqr.run(
 				qrWord,
 				version=10,
@@ -71,26 +74,24 @@ class WebCam:
 	def generateQRCode(self, drinkCode):
 		"""
 		Generate QR code with CONSTANT INT Drink Code and embed the mapped source images behind the code.
+
 		Key argmuments:
-		drinkCode: CocoDrink Code.
+		drinkCode -- CocoDrink Code.
+
 		Return value:
-		None.
+		NONE
 		"""
+
 		qrImage = self.QRImages_DIR + self.qrDictionary.get(drinkCode)
 		qrWord  = self.COCOTAPS_URL  + str(drinkCode)
 		self.generateQR(qrWord, qrImage)
 		return
 
+
 if __name__ == "__main__":
-	
+
 	object = WebCam()
-	## TODO : Blaze you can use this code block to generate the QR codes.
+
 	list = [CocoDrink.ORANGE_FLAVOR, CocoDrink.PINEAPPLE_FLAVOR, CocoDrink.PINA_COLADA, CocoDrink.ENERGY_BOOST, CocoDrink.IMMUNITY_BOOST, CocoDrink.DAILY_VITAMINS]
 	for i in list:
 		object.generateQRCode(i)
-	# testObject2 = WebCam()
-	# testObject2.generateQR(CocoDrink.ORANGE_FLAVOR,'static/QRImages/'+'orange_flavor2.jpg')
-
-
-
-
