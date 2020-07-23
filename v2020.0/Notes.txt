@@ -1,15 +1,1 @@
-python3 LASER.py
-Traceback (most recent call last):
-  File "LASER.py", line 347, in <module>
-      TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrink.COCOTAPS_LOGO)
-      AttributeError: type object 'RaspPi' has no attribute 'BOARD7'
 
-python3 Actuator.py
-Traceback (most recent call last):
-  File "Actuator.py", line 34, in <module>
-      from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
-        File "/Users/blazesanders/Tapomatic/v2020.0/RaspPi.py", line 20, in <module>
-            from Actuator import *          # Modular plug and play control of motors, servos, and relays
-              File "/Users/blazesanders/Tapomatic/v2020.0/Actuator.py", line 72, in <module>
-                  RaspPi.DevPinConfigError(TempDebugObject)
-                  NameError: name 'RaspPi' is not defined

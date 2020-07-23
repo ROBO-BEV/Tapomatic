@@ -20,7 +20,9 @@ from subprocess import check_call
 from Debug import *             # Configure datalogging parameters and debug printing control
 
 # TODO
-# from gpiozero import *
+from gpiozero import *
+#from gpiozero.pinmode impoty *
+#PiBoardInfo
 
 class RaspPi:
 
@@ -121,24 +123,29 @@ class RaspPi:
 
         self.gpioMode = gpioMode
         self.cpuPowerMode = cpuPowerMode
-        self.PiInfo = gpiozero.PiBoardInfo
+        #self.PiInfo = gpiozero.PiBoardInfo()
 
-        if(gpioMode == GPIO_MODE_1):
-            gpiozero.pinmode()
-        elif(gpioMOde == GPIO_MODE_2):
+        # Define each of the 24 to 40 pins to a specific type 
+        if(gpioMode == RaspPi.GPIO_MODE_1):
+            gpiozero.pinmode(1, GPIO)
+            if(self.PiInfo == A_B_PLUS):
+                self.pinUsageList = []   #TODO FILL IN 40 PINS AS FALSE
+            elif(self.PiInfo == A_B):
+                
+        elif(gpioMOde == RaspPi.GPIO_MODE_2):
             gpiozero.pinmode()
         else:
             self.DebugObject.Dprint("ERROR: Invalid GPIO mode, see RaspPi.py CONSTANTS")
 
         if(cpuPowerMode == HIGH_POWER):
-            check_call("TODO Max Screen brightness", shell=True)
+            check_call("TODO Max Screen brightness", shell=True)   #xrand -outpout LVDS --TODO 0.5
         elif(cpuPowerMode == LOW_POWER):
-            check_call("TODO Min Screen brightness", shell=True)
-            mainPowerRelay = gpiozero.OutputDevice(RaspPi.BOARD7)
-            #pin = [RaspPi.BOARD7]
-            #mainPowerRelay = Actuator('R', 0, pin, "Main Motor Relay: P/N?TODO?", Actuator.CW)
+            check_call("TODO Min Screen brightness", shell=True)   #xrand -outpout LVDS --TODO 0.5
+            pin = [RaspPi.BOARD7]
+            mainPowerRelay = Actuator('R', 0, pin, "Main 120VAC Tapomatic Relay: P/N?TODO?", Actuator.CW)
+            #mainPowerRelay = gpiozero.OutputDevice(RaspPi.BOARD7)
         else:
-            self.DebugObject.Dprint("ERROR: Invalid CPU power  mode, see RaspPi.py CONSTANTS")
+            self.DebugObject.Dprint("ERROR: Invalid CPU power mode, see RaspPi.py CONSTANTS")
 
 
     def DevPinConfigError(TempDebugObject):
@@ -156,12 +163,46 @@ class RaspPi:
         TempDebugObject.Dprint("Try using Mock pin fatory setting https://gpiozero.readthedocs.io/en/stable/api_pins.html#mock-pins")
         TempDebugObject.Dprint("Or Remote GPIO setup https://gpiozero.readthedocs.io/en/stable/remote_gpio.html")
 
+
+    def isPinFree(self, pin):
+        """
+        
+        """
+        
+        # TODO USE gpiozero CONSTANT
+        if(piType == A_B_PLUS):
+        
+        elif(piType == A_B):
+            state = self.pinUsageList[pin]
+        elif(piType == ZERO):
+        else():
+    MAX_NUM_PI_A_OR_B_PLUS_GPIO_PINS = 40 	# Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
+    MAX_NUM_PI_A_OR_B_GPIO_PINS = 26      	# Pins 1 to 26 on Raspberry Pi A or B
+
+
+        return state
+
+    
+    def usePin(self, pin):
+        """
+        Note use of a pin by  parts of aprogram 
+        """
+    
+    def releasePin(self, pin):
+        """
+        Release use of a pin for use by other parts of program 
+        """
+
     def UnitTest():
         """
 
         """
         print("START RaspPi.py UnitTest()")
 
+        testObject0 = RaspPi(GPIO_MODE_1, HIGH_POWER)
+        testObject1 = RaspPi(GPIO_MODE_1, LOW_POWER)
+        testObject2 = RaspPi(GPIO_MODE_2, HIGH_POWER)
+        testObject3 = RaspPi(GPIO_MODE_2, LOW_POWER)
 
         print("END RaspPi.py UnitTest()")
 
