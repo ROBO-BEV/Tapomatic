@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-21"
+__date__    = "Late Updated: 2020-07-23"
 __doc__     = "Class to define OTA commuications architecture for 30K+ Tapomatic kiosk"
 """
 
@@ -23,20 +23,21 @@ class MissionControl():
 	LOW_POWER_MESSAGE = 2
 	DULL_KNIFE_MESSAGE = 3
 	VERISON_MESSAGE = 4
-	
+
 
 	# EDI 944 Interface CONSTANTS from filepath:
 	# Tapomatic/v2020.0/static/apiDocumentation/Wins-944-3060.pdf
-	W7_HEADER = "TODO"    
-    ST_HEADER = "Transaction Set Header"
-    W17_HEADER = "Warehouse Receipt Identification"
-    N1_HEADER = "Name"
+	# Describes Warehouse Stock Transfer Receipt Advice Transaction Set (944)
+	# for use within the context of an Electronic Data Interchange (EDI) environment.
+    ST_HEADING  = "Transaction Set Header"
+    W17_HEADING = "Warehouse Receipt Identification"
+    N1_HEADING  = "Name"
 
-	W7_DETAIL = "Item Detail For Stock Receipt"
-    N9_DETAIL = "Reference Identification"
+	W07_DETAIL  = "Item Detail For Stock Receipt"
+    N9_DETAIL   = "Reference Identification"
 
     W14_SUMMARY = "Total Receipt Information"
-    SE_SUMMARY = "Transaction Set Trailer"
+    SE_SUMMARY  = "Transaction Set Trailer"
 
 
 	# Power CONSTANTS
