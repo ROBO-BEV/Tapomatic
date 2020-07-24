@@ -17,7 +17,7 @@ import csv
 
 class MissionControl():
 
-	# Reporting CONSTANSTS
+	# Message CONSTANTS
 	LOW_LIQUID_MESSAGE = 0
 	PHYSICAL_DAMAGE_MESSAGE = 1
 	LOW_POWER_MESSAGE = 2
@@ -50,7 +50,7 @@ class MissionControl():
 	totalTapsUsed = 0
 	totalFlavorOzUsed = 0.0
 	totalHealthOzUsed = 0.0
-	totalCoirFiberRemoved = 0.0
+	totalCoirFiberKgRemoved = 0.0
 	currentHealthPercentage = 100.0
 
 
@@ -59,7 +59,7 @@ class MissionControl():
         Constructor to setup a data connection between centrol server (Mission Control) and robot out in field
 
 		Key arguments:
-		self -- Newly created object 
+		self -- Newly created object
 		kioskID -- Unique ID for every prototype or production Tapomatic manufactured
 		version -- Verison of software that is running on remote device
 		key -- Security key for devices to allow Over-The-Air (OTA) updates
@@ -74,15 +74,14 @@ class MissionControl():
 		self.kioskID = kioskID
 		self.version = version
 		self.key = key
-		
-		
+
 		# Definition for sensors sending data back to Mission Control (internal sensors not included)
-		pins = [Actuator.VCC_?V, RaspPi.BOARD?, ?, Actuator.GND]
+		pins = [Actuator.VCC_3_3V, RaspPi.BOARD?, RaspPi.PWM0?, Actuator.GND]
 		self.ForceSensorObject = Sensor(Sensor.FORCE_SENSOR,pins, Sensor.FORCE_SENSOR_PART_NUMBER)
-        pins =[Actuator.VCC_?V, RaspPi.BOARD?, ?, Actuator.GND]
+        pins = [Actuator.VCC_3V, RaspPi.BOARD?, Actuator.GND]
         self.laserRangerFinderObject = Sensor(Sensor.LASER_RANGE_SENSOR, pins, Sensor.LASER_RANGE_PART_NUMBER)
-        
-        
+
+
 	def ReportLiquidLevel(self, lType, internalBottleLocation, kioskID):
 	    """
 	    Report the current liquid level as percentage
@@ -95,7 +94,7 @@ class MissionControl():
     	Return value:
     	liqPercentage -- Percent that a 750 mL botle is full
     	"""
-		
+
 	    return liqPercentage
 
 
@@ -139,8 +138,8 @@ class MissionControl():
 	    except:
 	        this.DebugObject.Dprint("Could not open {kioskLocation.txt}, ensure the filepath is correct.")
             gpsDATA = [Debug.BAD, DEBUG.BAD]
-	    
-        return gpsData	    
+
+        return gpsData
 
 
 	def GetKioskLocationName(self, kioskID):
@@ -172,9 +171,21 @@ class MissionControl():
 
 
 	def ReportPowerState(self):
+        """
+        TODO
+        
+        Key arguments:
 
-	    return 1
+        Return values:
+        ON -- if Tapomatic is plugged in and main relay is ON; OFF otherwise
+        """
 
+        if(gpiozero.mainPowerRelay.isActive()):
+            powerState = ON
+        else:
+            powerState = OFF
+
+        return powerState
 
 	def ReportTapUsage(self):
 	    """
