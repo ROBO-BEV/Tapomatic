@@ -5,7 +5,7 @@ __email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
 __date__    = "Late Updated: 2020-07-23"
-__doc__     = "Class to document the configurations of the multiple Raspberry Pi 4 inside the Tampomatic"
+__doc__     = "Class to document the internal configurations of the Raspberry Pi's 
 """
 
 # Allow program to extract filename of the current file
@@ -21,7 +21,7 @@ from Debug import *             # Configure datalogging parameters and debug pri
 
 # TODO
 from gpiozero import *
-#from gpiozero.pinmode impoty *
+#from gpiozero.pinmode import *
 #PiBoardInfo
 
 class RaspPi:
@@ -127,13 +127,13 @@ class RaspPi:
 
         # Define each of the 24 to 40 pins to a specific type 
         if(gpioMode == RaspPi.GPIO_MODE_1):
-            gpiozero.pinmode(1, GPIO)
+            gpiozero.pin.function = 'output'
             if(self.PiInfo == A_B_PLUS):
-                self.pinUsageList = []   #TODO FILL IN 40 PINS AS FALSE
-            elif(self.PiInfo == A_B):
-                
+                self.pinUsageList = [False] * 40 
+            elif(self.PiInfo.model.lower() == "b"):
+                self.pinUsageList = [False] * 24
         elif(gpioMOde == RaspPi.GPIO_MODE_2):
-            gpiozero.pinmode()
+            gpiozero.pinmode(1, GPIO)
         else:
             self.DebugObject.Dprint("ERROR: Invalid GPIO mode, see RaspPi.py CONSTANTS")
 
@@ -164,34 +164,49 @@ class RaspPi:
         TempDebugObject.Dprint("Or Remote GPIO setup https://gpiozero.readthedocs.io/en/stable/remote_gpio.html")
 
 
-    def isPinFree(self, pin):
+    def isPinFree(self, pinNum):
         """
+        Determine if pin has been used in another part of the program. Helps developers from accidentally using pin for two different functions 
         
+        Key arguments:
+        pinNum -- GPIO pin to change usage state of
+        
+        Return value:
+        state -- Boolean, describing is pin is in use by the program for a Sensor() or Actuator() or TODO object
         """
-        
-        # TODO USE gpiozero CONSTANT
-        if(piType == A_B_PLUS):
-        
-        elif(piType == A_B):
-            state = self.pinUsageList[pin]
-        elif(piType == ZERO):
-        else():
-    MAX_NUM_PI_A_OR_B_PLUS_GPIO_PINS = 40 	# Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
-    MAX_NUM_PI_A_OR_B_GPIO_PINS = 26      	# Pins 1 to 26 on Raspberry Pi A or B
-
+        if(self.DebugObject.DEBUG_MODE == True):
+        state = self.pinUsageList[pinNum]
 
         return state
 
     
-    def usePin(self, pin):
+    def reservePin(self, pinNum):
         """
-        Note use of a pin by  parts of aprogram 
+        Reserve the use of a pin by part of the program 
+        
+        Key arguments:
+        pinNum -- GPIO pin to change usage state of
+        
+        Return value:
+        NONE
         """
+        gpiozero.pin.reserve(pinNum)
+        self.pinUsageList[pinNum] = True
     
-    def releasePin(self, pin):
+    
+    def releasePin(self, pinNum):
         """
         Release use of a pin for use by other parts of program 
+        
+        Key arguments:
+        pinNum -- GPIO pin to change usage state of
+        
+        Return value:
+        NONE
         """
+        
+        self.pinUsageList[pinNum] = False
+
 
     def UnitTest():
         """
