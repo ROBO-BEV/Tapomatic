@@ -18,14 +18,13 @@ import os
 # Allow communication (Read and write) to senors via the serial port
 #TODO import serial if gpiozero or RPi.GPIO as GPIO doesn't support
 
-# Allow communication between one or more kiosks with central server
-from MissionControl import *
+# Custom CocoTaps and Robotic Beverage Technologies code
+from Debug import *             # Configure datalogging parameters and debug printing control
+from CocoDrink import *         # Stores valid CoCoTaps drink configurations
+from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
+from ComputerVision import * 	# Custom CocoTaps code for measuring coconut sizes and control webcams
+from MissionControl import *	# Allow communication between one or more kiosks with central server
 
-# Custom CocoTaps code for measuring coconut sizes and control webcams
-from ComputerVision import *
-
-# Robotic Beverage Technologies code for custom data logging and terminal debugging output
-from Debug import *
 
 try:
 	# The following imports do NOT work in a Mac or PC dev enviroment
@@ -54,7 +53,7 @@ except ImportError:
 
 	currentProgramFilename = os.path.basename(__file__)
 	ImportDebugObject = Debug(True, currentProgramFilename)
-	ImportDebug.Dprint("WARNING: You are running code on Mac or PC (NOT a Raspberry Pi)")
+	ImportDebugObject.Dprint("WARNING: You are running code on Mac or PC (NOT a Raspberry Pi)")
 
 
 class Sensor():
@@ -64,18 +63,19 @@ class Sensor():
 	BOTTLE_WEIGHT = 1.5 #Units Newtons TODO WEIGHT EMPTY BOTTLE
 
 	# TODO Define all pins in schematic and measure density of each liquid
-	RED_BULL_FORCE_SENSOR = 0
-	RED_BULL_DENSITY = 1.1      	# Units grams/mL
-	IMMUNITY_FORCE_SENSOR = 1
+	IMMUNITY_FORCE_SENSOR = CocoDrink.IMMUNITY_BOOST
 	IMMUNITY__DENSITY = 1.001      	# Units grams/mL
-	VITAMINS_FORCE_SENSOR = 2
-	VITAMINS_DENSITY = 1.3      	# Units grams/mL
-	PINA_COLADA_FORCE_SENSOR = 3
+	DAILY_VITAMINS_FORCE_SENSOR = CocoDrink.DAILY_VITAMINS
+	DAILY_VITAMINS_DENSITY = 1.3      	# Units grams/mL
+	ENERGY_BOOST_FORCE_SENSOR = CocoDrink.ENERGY_BOOST
+	ENERGY_BOOST__DENSITY = 1.001      	# Units grams/mL
+
+	PINA_COLADA_FORCE_SENSOR = CocoDrink.PINA_COLADA
 	PINA_COLADA_DENSITY = 1.5      	# Units grams/mL
-	ORANGE_FORCE_SENSOR = 4
-	ORANGE_DENSITY = 1.01      		# Units grams/mL
-	PINEAPPLE_FORCE_SENSOR = 5
+	PINEAPPLE_FORCE_SENSOR = CocoDrink.PINEAPPLE_FLAVOR
 	PINEAPPLE_DENSITY = 1.12      	# Units grams/mL
+	ORANGE_FORCE_SENSOR = CocoDrink.ORANGE_FLAVOR
+	ORANGE_DENSITY = 1.01      		# Units grams/mL
 
 	LIFTING_PLATFORM_FORCE_SENSOR = 6
 	#CUTTING_FORCE_SENSOR = 7
@@ -95,19 +95,35 @@ class Sensor():
 	PING_GPIO_TRIGGER = -1
 	PING_GPIO_ECHO = -1
 
-	def __init__(self, currentNumOfSensors, sType, pins, partNumber, currentCount):
+	# Global class variables
+	currentNumOfActuators = 0
+
+	def __init__(self, pins, sType, sensorID, partNumber):
+		"""
+
+		Key arguments:
+		pins --
+		sType --
+		sensorID --
+		partNumber --
+
+		Return value:
+		New Sensor() object
+		"""
+
 		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 		for i in pins:
 			self.wires[i] = pins[i]
 
-	    currentProgramFilename = os.path.basename(__file__)
-	    self.DebugObject = Debug(True, currentProgramFilename)
+		currentProgramFilename = os.path.basename(__file__)
+		self.DebugObject = Debug(True, currentProgramFilename)
 
-        self.sensorType = sType
-        currentNumOfActuators = currentNumOfActuators + 1
-        self.sensorID = currentNumOfSensors                 # Auto-incremented interger class variable
-        self.partNumber = partNumber
-        self.currentCount = 0
+		self.sensorType = sType
+		currentNumOfActuators = currentNumOfActuators + 1
+		self.sensorID = currentNumOfSensors       				# Auto-incremented interger class variable
+		self.partNumber = partNumber
+
+		self.liftPlatformCount = 0								# Used to count number of vending cycles
 
 
 	def StartFullDuplexSerial():
@@ -132,52 +148,53 @@ class Sensor():
 		print("TODO")
 
 
-	def SetLiftPlatformCount(self):
+	def IncreaseLiftPlatformCount(self):
 		"""
 		Update the number of times coconuts have been lifted into the Tapomatic
-		
+
 		Key arguments:
-		
+
 		Return value:
 		NONE
 		"""
-		self.currentCount = self.currentCount + 1
+		self.liftPlatformCount = self.liftPlatformCount + 1
 
 
 	def ScanQRcode():
 		print("TODO")
 		"""
 		Use camera with white LED to scan a QR
-		
+
 		Return value:
 		id -- Interger CONSTANT of liquid type as defined in CocoDrinks.py (e.g. TODO ORANGE_FLAVOR, IMMUNITY_) 
 		"""
-		
-		
+
 		#TODO id = myQR.TakePhoto()
 		id = -1
-		
 		return id
-		
+
+
 	def CreateQRcode(bottleID):
 		"""
 		Create PNG QR code file for print
-		
+
 		Key arguments:
 		bottleID --
-		
+
 		Return vale:
 		filemane -- fileName.png of custom QR code
 		"""
 		#MyQR.
 		print("TODO")
-		
+
+
 	def PrintQRcode(png):
 		"""
 		https://smallbusiness.chron.com/sending-things-printer-python-58655.html
 		"""
 		print("TODO")
-	
+
+
 	def GetLevel(self, lType):
 		"""
 		Determine level / percentage of liquid left in a 750 ml glass bottle to notify service employee refill needed at 10%
@@ -202,34 +219,35 @@ class Sensor():
 			liquidWeightAt100percent = 2.2 #TODO Get Density of PINA_COLADA Units are Newtons
 		elif(lType == CocoDrink.ORANGE_FLAVOR):
 			liquidWeightAt100percent = 2.2 #TODO Get Density of ORANGE_JUICE Units are Newtons		
-	
+
 		percentage = GetForce(lType)/liquidWeightAt100percent
 
 		bottleLocation = FindLiquidForceSensor(lType)
-		
+
 		#TODO MissionControl.ReportLiquidLevel(lType, percentage, MissionControl.KIOSK_ID)
-		
+
 		if(percentage < LOW_LEVEL):
 			#TODO MissionControl.ReportLowLiquidLevel(lType, bottleLocation, MissionControl.KIOSK_ID)
 			print("TODO")
-            
+
 		return percentage
 
 	def GetForce(lType):
 		"""
 		Get force as measured by hx711 connected to a 5 kg analog strain gauge. Most Sign Bit first amd 25 (to 27) pulses 
-		
+
 		@link https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf
 		@link https://github.com/aguegu/ardulibs/
-		@link https://www.amazon.com/dp/B075317R45/ref=cm_sw_r_cp_api_i_Ph7JEb5A1F12M
+		https://www.amazon.com/dp/B075317R45/ref=cm_sw_r_cp_api_i_Ph7JEb5A1F12M
 
-		Degraw 5kg Load Cell and HX711 Combo Pack Kit - Load Cell Amplifier ADC Weight Sensor for Arduino Scale - Everything Needed for Accurate Force Measurement 
+		Degraw 5kg Load Cell and HX711 Combo Pack Kit - Load Cell Amplifier ADC Weight Sensor for Arduino
+		Scale - Everything Needed for Accurate Force Measurement
 
 		Keyword arguments:
-		lType - Type (name) of liquid being measured as defined in CocoDrink.py 
-		
+		lType - Type (name) of liquid being measured as defined in CocoDrink.py
+
 		Return value:
-		forceInNewtons - The weight of liquid type in Newtons 
+		forceInNewtons - The weight of liquid type in Newtons
 		"""
 
 		forceSensorID = FindLiquidForceSensor(lType)
@@ -240,7 +258,7 @@ class Sensor():
 
 		forceInlbs = DT 
 		forceInNewtons = forceInlbs * 0.2248
-		
+
 		return forceInNewtons
 
 
@@ -248,7 +266,7 @@ class Sensor():
 	    """
 	    Determine if any object (e.g. human hand, dog, chopstick, etc) is within 1 of 3 rectanglur danger zones
 	    TODO This may require upto 24 LASER sensors (S) unless we use mirrors or ultrasonics
-        
+
 	    Top View of DANGER ZONES (D) and LASER Sensors (S)
 	    S S SS S S
 	    0 25cm 50cm 75cm (x-axis)
@@ -260,50 +278,51 @@ class Sensor():
 	    |  DDDDDDDDDD  |   - 20 cm
 	    |  SDSDSSDSDS  | S - 25 cm
     	|  DDDDSSDDDD  | S - 30 cm (y-axis)
-    
+
     	Keyword arguments:
     	None
 
 	    Return value:
 	    safe -- True if danger zones are clear; Otherwise False
 	    """
-        
-        safe = True	
-        # Zone (15,0) to (60,-29) cm 
+
+	    safe = True
+        # Zone (15,0) to (60,-29) cm
         # Flip between X-axis S#1 and S#2
-        # Check (ZS#1, YS#1) then (ZS#2, YS#1) 
-        # Check (ZS#5, YS#2) 
+        # Check (ZS#1, YS#1) then (ZS#2, YS#1)
+        # Check (ZS#5, YS#2)
         # Check (ZS#9, YS#3) then (ZS#10, YS#3)
-        for xAxisSensor in range(0, NUM_X_AXIS_PING_SENSORS): 
-            for yAxix in range(0, NUM_Y_AXIS_PING_SENSORS):
-                xDist = GetLASERpingDistance(PING_Xaxis_Pin)
-                yDist = GetLASERpingDistance(PING_Yaxis_Pin)
-                zDist = GetLASERpingDistance(PING_Zaxis_Pin)
-                if(xDist <= 29): # 29 cm
-			        if(15 <= yDist and yDisy <= 60):
-				        if(zDist <= 22):
-					        safe = False
-					        self.DebugObject.Dprint("X-Axis LASER pin: " + PING_Xaxis_Pin)
-					        self.DebugObject.Dprint("Y-Axis LASER pin: " + PING_Yaxis_Pin) 
-					        self.DebugObject.Dprint("Z-Axis LASER pin: " + PING_Zaxis_Pin)
+	    for xAxisSensor in range(0, NUM_X_AXIS_PING_SENSORS):
+	    	for yAxix in range(0, NUM_Y_AXIS_PING_SENSORS):
+	    		xDist = GetLASERpingDistance(PING_Xaxis_Pin)
+	    		yDist = GetLASERpingDistance(PING_Yaxis_Pin)
+	    		zDist = GetLASERpingDistance(PING_Zaxis_Pin)
+	    		if(xDist <= 29): # 29 cm
+	    			if(15 <= yDist and yDisy <= 60):
+	    				if(zDist <= 22):
+	    					safe = False
+	    					self.DebugObject.Dprint("X-Axis LASER pin: " + PING_Xaxis_Pin)
+	    					self.DebugObject.Dprint("Y-Axis LASER pin: " + PING_Yaxis_Pin)
+	    					self.DebugObject.Dprint("Z-Axis LASER pin: " + PING_Zaxis_Pin)
+
 	    return safe
-        
-        
+
+
 	def GetLASERpingDistance(pingPinNumber, units):
-	    """
-	    Get distance to the closet object in direct line of sight of a PING LASER or ultrasonic rangefinder
-    	
-    	Keyword arguments:
-    	pingPinNumber -- Interger Broadcom (BCM) pin number (NOT physical BOARD #) on Raspberry Pi that PING sensor is connected to
-    	units -- Unit of measure that distance should be returned in millimeter (default) or inches
-    	
-    	Return value:
-    	range -- Interger distance in millimeters (default) or inches
-    	"""
-    	
-    	if(units == "in" or units == "IN" or units == "In" or units == "iN" or units== "Inches"):
-		    range = Ping.GetInches(pingPinNumber) 
-    	else:
-    	    range = Ping.GetMillimeters(pingPinNumber) 
-    	    
-    	return rangee
+		"""
+		Get distance to the closet object in direct line of sight of a PING LASER or ultrasonic rangefinder
+
+		Keyword arguments:
+		pingPinNumber -- Interger Broadcom (BCM) pin number (NOT physical BOARD #) on Raspberry Pi that PING sensor is connected to
+		units -- Unit of measure that distance should be returned in millimeter (default) or incheS
+
+		Return value:
+		range -- Interger distance in millimeters (default) or inches
+		"""
+
+		if(units.lower() == "in" or units.lower() == "inches" or units.lower() == "inch"):
+			range = 25.4 * Ping.GetMillimeters(pingPinNumber)
+		else:
+			range = Ping.GetMillimeters(pingPinNumber)
+
+		return range
