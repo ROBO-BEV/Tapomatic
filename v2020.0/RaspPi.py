@@ -1,19 +1,33 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
 """
 __author__  = "Blaze Sanders"
-__email__   = "blaze@cocotaps.mvp"
+__email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-05-08"
-__doc__     = "Class to document the configurations of the multiple Raspberry Pi 4 inside the Tampomatic"
+__date__    = "Late Updated: 2020-07-23"
+__doc__     = "Class to document the internal configurations of the Raspberry Pi's 
 """
 
-# Robotic Beverage Technologies code for custom data logging and terminal debugging output
-from Debug import *
+# Allow program to extract filename of the current file
+import os
+
+# Allow BASH command to be run inside Python3 code like this file
+import subprocess
+from subprocess import Popen, PIPE
+from subprocess import check_call
+
+# Custom CocoTaps and Robotic Beverage Technologies Inc code
+from Debug import *             # Configure datalogging parameters and debug printing control
+
+# TODO
+from gpiozero import *
+#from gpiozero.pinmode import *
+#PiBoardInfo
 
 class RaspPi:
+
     # Internal local network IP addresses and ports
+    # TODO Configure with rc.local startup script ipconfig command
     GUI_PI_IP = "69.69.1.69"
     VEND_PI_IP = "69.69.1.42"
     UDP_PORT = 5005
@@ -22,6 +36,12 @@ class RaspPi:
     LINODE_MYSQL_IP = "45.79.104.34"
     RAVEN_DB_IP = "TODO"
 
+    # GPIO & POWER configuration CONSTANTS
+    GPIO_MODE_1 = 1         # Enable all ??? GPIO pins to allow max relay control
+    GPIO_MODE_2 = 2         # Enable all ??? PWM pins to allow max servo control
+    HIGH_POWER = 1          # Use all CPU cores, high screen brightness, and all motors
+    LOW_POWER = 0           # Use only one CPU core, low screen brightness, and disable main motor relay to reduce phathom drain while on battery power
+
     # TODO Raspberry Pi 4B refernce pin constants as defined in rc.local script at ~/usr/??? 
     NUM_PI_GPIO_PINS = 8              	    # Outputs: GPO0 to GPO3 Inputs: GPI0 to GPI3
     MAX_NUM_PI_A_OR_B_PLUS_GPIO_PINS = 40 	# Pins 1 to 40 on Raspberry Pi A+ or B+ or ZERO W
@@ -29,8 +49,8 @@ class RaspPi:
     NUM_PI_OUTPUT_PINS = 4                	# This software instance of Raspberry Pi can have up to four output pins
     NUM_PI_INPUT_PINS = 4                 	# This software instance of Raspberry Pi can have up to four input pins
 
-    # Wire value CONTSTANTS 
-    # Raspberry Pi 4 Pin Layout https://pinout.xyz/pinout 
+    # Wire value CONTSTANTS
+    # Raspberry Pi 4 Pin Layout https://pinout.xyz/pinout
     # https://www.element14.com/community/docs/DOC-92640/l/raspberry-pi-4-model-b-default-gpio-pinout-with-poe-header
     # BOARDX pin names are preferred in this code but in BCM mode GPIOX can SOMETIMES be used
     NO_PIN = -1  				#TODO This constant may not be needed :)
@@ -39,42 +59,42 @@ class RaspPi:
     # 3.3 Volts @ upto 0.050 Amps = 0.165 Watts https://pinout.xyz/pinout/pin1_3v3_power
     # 5 Volts @ upto ~1.5 Amps (Power Adapter - Pi usgae) = 7.5 Watts https://pinout.xyz/pinout/pin2_5v_power
     VCC_3_3V = 1
-    VCC_3_3V_NAME = "BOARD1"     		
+    VCC_3_3V_NAME = "BOARD1"
     VCC_5V = 2
-    VCC_5V_NAME = "BOARD2"        		
+    VCC_5V_NAME = "BOARD2"
     GND = "BOARD6&9&14&20&25&30&34&39"	# Digital Ground (0 Volts) https://pinout.xyz/pinout/ground
 
-    # Both I2C lines have fixed, 1.8 kohms pull-ups to 3.3v 
+    # Both I2C lines have fixed, 1.8 kohms pull-ups to 3.3v
     # https://pinout.xyz/pinout/pin3_gpio2
     # https://pinout.xyz/pinout/pin5_gpio3
-    I2C_SDA0 = 3					
-    I2C_SDA1_NAME  = "BOARD3"		
+    I2C_SDA0 = 3
+    I2C_SDA1_NAME  = "BOARD3"
     I2C_SCL0 = 5
-    I2C_SCL1_NAME = "BOARD5"	
+    I2C_SCL1_NAME = "BOARD5"
 
-    # Pulse Width Modulation https://pinout.xyz/pinout/pin12_gpio18 
+    # Pulse Width Modulation https://pinout.xyz/pinout/pin12_gpio18
     PWM0 = 12
-    PWM0_NAME = "BOARD12"				
+    PWM0_NAME = "BOARD12"
     PWM0_BCM_NAME = "GPIO18"
 
-    # UART recieve pin / Serial Port https://pinout.xyz/pinout/pin10_gpio15					
+    # UART recieve pin / Serial Port https://pinout.xyz/pinout/pin10_gpio15
     TXD = 8
-    TXD_NAME = "BOARD8" 				
+    TXD_NAME = "BOARD8"
     TXD_BCM_NAME = "GPIO14"
-    RXD = 10	
+    RXD = 10
     RXD_NAME = "BOARD10"
     RXD_BCM_NAME = "GPIO15"
 
-    # General Purpose Input / Output (GPIO) pins that work in default mode 
+    # General Purpose Input / Output (GPIO) pins that work in default mode
     # Format for following pin "BCM mode pin name= BOARD mode pin name":
-    BOARD7 = "GPIO4"
+    BOARD7  = "GPIO4"
     BOARD11 = "GPIO17"
     BOARD13 = "GPIO27"
-    BOARD15 = "GPIO22"  
+    BOARD15 = "GPIO22"
     BOARD16 = "GPIO23"
     BOARD18 = "GPIO24"
     BOARD22 = "GPIO25"
-    BOARD29 = "GPIO5"    
+    BOARD29 = "GPIO5"
     BOARD31 = "GPIO6"
     BOARD32 = "GPIO12"
     BOARD33 = "GPIO13"
@@ -84,25 +104,134 @@ class RaspPi:
     BOARD38 = "GPIO20"
     BOARD40 = "GPIO21"
 
-class Raspi:
+
+    def __init__(self, gpioMode, cpuPowerMode):
+        """
+        Create Raspberry Pi 4 GPIO and power configuration
+
+        Key arguments:
+        self --
+        gpioModes --Interger CONSTANT, that
+        cpuPowerMode -- Interger CONSTANT, that defines CPU computation power
+
+        Return value:
+        New RaspPi() object
+        """
+
+        currentProgramFilename = os.path.basename(__file__)
+        self.DebugObject = Debug(True, currentProgramFilename)
+
+        self.gpioMode = gpioMode
+        self.cpuPowerMode = cpuPowerMode
+        #self.PiInfo = gpiozero.PiBoardInfo()
+
+        # Define each of the 24 to 40 pins to a specific type 
+        if(gpioMode == RaspPi.GPIO_MODE_1):
+            gpiozero.pin.function = 'output'
+            if(self.PiInfo == A_B_PLUS):
+                self.pinUsageList = [False] * 40 
+            elif(self.PiInfo.model.lower() == "b"):
+                self.pinUsageList = [False] * 24
+        elif(gpioMOde == RaspPi.GPIO_MODE_2):
+            gpiozero.pinmode(1, GPIO)
+        else:
+            self.DebugObject.Dprint("ERROR: Invalid GPIO mode, see RaspPi.py CONSTANTS")
+
+        if(cpuPowerMode == HIGH_POWER):
+            check_call("TODO Max Screen brightness", shell=True)   #xrand -outpout LVDS --TODO 0.5
+        elif(cpuPowerMode == LOW_POWER):
+            check_call("TODO Min Screen brightness", shell=True)   #xrand -outpout LVDS --TODO 0.5
+            pin = [RaspPi.BOARD7]
+            mainPowerRelay = Actuator('R', 0, pin, "Main 120VAC Tapomatic Relay: P/N?TODO?", Actuator.CW)
+            #mainPowerRelay = gpiozero.OutputDevice(RaspPi.BOARD7)
+        else:
+            self.DebugObject.Dprint("ERROR: Invalid CPU power mode, see RaspPi.py CONSTANTS")
+
+
+    def DevPinConfigError(TempDebugObject):
+        """
+        Inform programmer that control of Raspberry Pi pins from a Mac or PC is not possible without advance settings
+
+        Key arguments:
+        TempDebugObject -- Debug() Object from python Class where error occured
+
+        Return value:
+        NONE
+        """
+
+        TempDebugObject.Dprint("WARNING - You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
+        TempDebugObject.Dprint("Try using Mock pin fatory setting https://gpiozero.readthedocs.io/en/stable/api_pins.html#mock-pins")
+        TempDebugObject.Dprint("Or Remote GPIO setup https://gpiozero.readthedocs.io/en/stable/remote_gpio.html")
+
+
+    def isPinFree(self, pinNum):
+        """
+        Determine if pin has been used in another part of the program. Helps developers from accidentally using pin for two different functions 
+        
+        Key arguments:
+        pinNum -- GPIO pin to change usage state of
+        
+        Return value:
+        state -- Boolean, describing is pin is in use by the program for a Sensor() or Actuator() or TODO object
+        """
+        if(self.DebugObject.DEBUG_MODE == True):
+        state = self.pinUsageList[pinNum]
+
+        return state
+
     
-    def __init__(self):
-        self.DebugObject = Debug(True)
+    def reservePin(self, pinNum):
+        """
+        Reserve the use of a pin by part of the program 
+        
+        Key arguments:
+        pinNum -- GPIO pin to change usage state of
+        
+        Return value:
+        NONE
+        """
+        gpiozero.pin.reserve(pinNum)
+        self.pinUsageList[pinNum] = True
+    
+    
+    def releasePin(self, pinNum):
+        """
+        Release use of a pin for use by other parts of program 
+        
+        Key arguments:
+        pinNum -- GPIO pin to change usage state of
+        
+        Return value:
+        NONE
+        """
+        
+        self.pinUsageList[pinNum] = False
 
 
-#    ROTATAIIONAL_MOTOR_
-#    Z_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[1]
-#    X_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[2]
-#    Y_LINEAR_TOOL_STEPPER_MOTOR = actuatorObjects[3]
+    def UnitTest():
+        """
 
-#    Z1_LINEAR_LIFT_MOTOR = actuatorObjects[4]
-#    Z2_LINEAR_LIFT_MOTOR = actuatorObjects[5]
+        """
+        print("START RaspPi.py UnitTest()")
 
-#    Y1_LINEAR_CUT_MOTOR = actuatorObjects[6]
-#    Y2_LINEAR_CUT_MOTOR = actuatorObjects[7]
-#    X1_LINEAR_KNIFE_POSITION_MOTOR = actuatorObjects[8]
+        testObject0 = RaspPi(GPIO_MODE_1, HIGH_POWER)
+        testObject1 = RaspPi(GPIO_MODE_1, LOW_POWER)
+        testObject2 = RaspPi(GPIO_MODE_2, HIGH_POWER)
+        testObject3 = RaspPi(GPIO_MODE_2, LOW_POWER)
 
-#    Y1_LINEAR_COVER_MOTOR = actuatorObjects[9]
-#    Y2_LINEAR_COVER_MOTOR = actuatorObjects[10]
+        print("END RaspPi.py UnitTest()")
 
-#    ROTATIONAL_DISK_STEPPER_MOTOR = actuatorObjects[19]
+        return DEBUG.OK
+
+
+if __name__ == "__main__":
+
+    try:
+        RaspPi.UnitTest()
+
+    except NameError:
+        currentProgramFilename = os.path.basename(__file__)
+        NameDebugObject = Debug(True, currentProgramFilename)
+        NameDebugObject.Dprint("Try fail in __main__ of " + str(currentProgramFilename))
+
+    print("END RaspPi.py __main__")

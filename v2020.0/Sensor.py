@@ -4,7 +4,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-07-16"
+__date__ =    "Late Updated: 2020-07-24"
 __doc__ =     "Class to communicate with all sensors inside the Tapomatic kiosk"
 """
 
@@ -55,6 +55,9 @@ except ImportError:
 	ImportDebugObject = Debug(True, currentProgramFilename)
 	ImportDebugObject.Dprint("WARNING: You are running code on Mac or PC (NOT a Raspberry Pi)")
 
+# Global Class variable 
+currentNumOfSensors = 0
+usedPins = [False]
 
 class Sensor():
 	# TODO Compare how many taps have been used vs the number of coconuts drill to
@@ -77,6 +80,9 @@ class Sensor():
 	ORANGE_FORCE_SENSOR = CocoDrink.ORANGE_FLAVOR
 	ORANGE_DENSITY = 1.01      		# Units grams/mL
 
+	FORCE_SENSOR = 0
+	FORCE_SENSOR_PN = 'TODO'
+
 	LIFTING_PLATFORM_FORCE_SENSOR = 6
 	#CUTTING_FORCE_SENSOR = 7
 
@@ -98,17 +104,9 @@ class Sensor():
 	# Global class variables
 	currentNumOfActuators = 0
 
-	def __init__(self, pins, sType, sensorID, partNumber):
+	def __init__(self, sType, pins, partNumber):
 		"""
-
-		Key arguments:
-		pins --
-		sType --
-		sensorID --
-		partNumber --
-
-		Return value:
-		New Sensor() object
+		TODO
 		"""
 
 		wires = numpy.empty(len(pins), dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
@@ -157,6 +155,8 @@ class Sensor():
 		Return value:
 		NONE
 		"""
+
+		#TODO WHERE  SHOULD THIS COUNT BE STORED???
 		self.liftPlatformCount = self.liftPlatformCount + 1
 
 
@@ -256,7 +256,7 @@ class Sensor():
 		#SCK = 
 		#DT = 
 
-		forceInlbs = DT 
+		forceInlbs = DT
 		forceInNewtons = forceInlbs * 0.2248
 
 		return forceInNewtons

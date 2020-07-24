@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
 ___author__ = "Blaze Sanders"
-__email__   = "blaze.d.a.sanders@gmail.mvp"
+__email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-16"
+__date__    = "Late Updated: 2020-07-19"
 __doc__     = "Install script to setup development enviroment for CoCoTaps Tapomatic v2020.0"
 """
 
@@ -113,11 +113,15 @@ if __name__ == "__main__":
 		#check_call("brew install opencv-python", shell=True)
 
 
-		#Install screenshot, keyboard and mouse control
-        #CHANGE TO BREW check_call("sudo apt-get install python3-tk python3-dev", shell=True)
-		check_call("pip3 install pyautogui", shell=True)
-
-		check_call("pip3 install scikit-image", shell=True)
+	#Install screenshot, keyboard and mouse control
+	#CHANGE TO BREW check_call("sudo apt-get install python3-tk python3-dev", shell=True)
+	check_call("pip3 install pyautogui", shell=True)
+	
+	# TODO ??Computer Vision Widow stuff??
+	check_call("pip3 install scikit-image", shell=True)
+	
+	#Install MYQR code
+	check_call("pip3 install myqr", shell=True)
 
 	# Start PIPENV Python Virtual Environment packaging tool installs
 	# @link https://pipenv.readthedocs.io/en/latest/basics/

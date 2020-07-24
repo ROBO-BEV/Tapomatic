@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies, Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-14"
+__date__    = "Late Updated: 2020-07-23"
 __doc__     = "Class to define OTA commuications architecture for 30K+ Tapomatic kiosk"
 """
 
@@ -14,34 +14,55 @@ from time import gmtime, strftime
 # Allow program to READ Comma Separated Value files
 import csv
 
-LOW_LIQUID_MESSAGE = 0
-PHYSICAL_DAMAGE_MESSAGE = 1
-LOW_POWER_MESSAGE = 2
-DULL_KNIFE_MESSAGE = 3
-VERISON_MESSAGE = 4
-
-# Power CONSTANTS
-ON = 1
-OFF = 0
-
 
 class MissionControl():
 
+	# Message CONSTANTS
+	LOW_LIQUID_MESSAGE = 0
+	PHYSICAL_DAMAGE_MESSAGE = 1
+	LOW_POWER_MESSAGE = 2
+	DULL_KNIFE_MESSAGE = 3
+	VERISON_MESSAGE = 4
+
+
+	# EDI 944 Interface CONSTANTS from filepath:
+	# Tapomatic/v2020.0/static/apiDocumentation/Wins-944-3060.pdf
+	# Describes Warehouse Stock Transfer Receipt Advice Transaction Set (944)
+	# for use within the context of an Electronic Data Interchange (EDI) environment.
+    ST_HEADING  = "Transaction Set Header"
+    W17_HEADING = "Warehouse Receipt Identification"
+    N1_HEADING  = "Name"
+
+	W07_DETAIL  = "Item Detail For Stock Receipt"
+    N9_DETAIL   = "Reference Identification"
+
+    W14_SUMMARY = "Total Receipt Information"
+    SE_SUMMARY  = "Transaction Set Trailer"
+
+
+	# Power CONSTANTS
+	ON = 1
+	OFF = 0
+
+
+	# Global Class Variables
 	totalCoconutsVended = 0
 	totalTapsUsed = 0
-	totalFlavorOzUsed = 0
-	totalHealthOzUsed = 0
-	totalCoirFiberRemoved = 0
+	totalFlavorOzUsed = 0.0
+	totalHealthOzUsed = 0.0
+	totalCoirFiberKgRemoved = 0.0
 	currentHealthPercentage = 100.0
+
 
 	def __init__(self, kioskID, version, key):
 		"""
         Constructor to setup a data connection between centrol server (Mission Control) and robot out in field
 
 		Key arguments:
+		self -- Newly created object
 		kioskID -- Unique ID for every prototype or production Tapomatic manufactured
-		version -- Verison on software that should be running on a Tapomatic
-		key -- Security key for ALL Tapoamtics to allow Over-The-Air (OTA) updates
+		version -- Verison of software that is running on remote device
+		key -- Security key for devices to allow Over-The-Air (OTA) updates
 
 		Return value:
 		New MissionControl() object
@@ -53,6 +74,12 @@ class MissionControl():
 		self.kioskID = kioskID
 		self.version = version
 		self.key = key
+
+		# Definition for sensors sending data back to Mission Control (internal sensors not included)
+		pins = [Actuator.VCC_3_3V, RaspPi.BOARD?, RaspPi.PWM0?, Actuator.GND]
+		self.ForceSensorObject = Sensor(Sensor.FORCE_SENSOR,pins, Sensor.FORCE_SENSOR_PART_NUMBER)
+        pins = [Actuator.VCC_3V, RaspPi.BOARD?, Actuator.GND]
+        self.laserRangerFinderObject = Sensor(Sensor.LASER_RANGE_SENSOR, pins, Sensor.LASER_RANGE_PART_NUMBER)
 
 
 	def ReportLiquidLevel(self, lType, internalBottleLocation, kioskID):
@@ -101,12 +128,18 @@ class MissionControl():
 
 	    # Hard coded locations that have TERRIBLE cell service
 	    try:
-	        f = open(kioskLocation.csv, 'rb')  # open only in read mode.
-	        data = f.read(DATA_BUFFER_SIZE) # Read for Buffer Size.
+	        print("TODO RavenDB or TextFile?")
+            f = open(kioskLocation.csv, 'rb')   # Open only in read mode.
+	        data = f.read(DATA_BUFFER_SIZE)     # Read for Buffer Size.
+	        if(data[0] == kioskID):
+	            gpsData = [data[3],  data[4]]   # Latitude & Longitude
+	        else:
+	            gpsData = Sensor.GetLocation()
 	    except:
-	        this.DebugObject.Dprint("Could not open {}, ensure the filepath is correct.")
+	        this.DebugObject.Dprint("Could not open {kioskLocation.txt}, ensure the filepath is correct.")
+            gpsDATA = [Debug.BAD, DEBUG.BAD]
 
-	    print("TODO RavenDB or TextFile?")
+        return gpsData
 
 
 	def GetKioskLocationName(self, kioskID):
@@ -138,9 +171,21 @@ class MissionControl():
 
 
 	def ReportPowerState(self):
+        """
+        TODO
+        
+        Key arguments:
 
-	    return 1
+        Return values:
+        ON -- if Tapomatic is plugged in and main relay is ON; OFF otherwise
+        """
 
+        if(gpiozero.mainPowerRelay.isActive()):
+            powerState = ON
+        else:
+            powerState = OFF
+
+        return powerState
 
 	def ReportTapUsage(self):
 	    """
@@ -151,6 +196,7 @@ class MissionControl():
 	    """
 
 	    return totalTapsUsed
+
 
 	def ReportCoconutUsage(self):
 	    """
@@ -193,6 +239,17 @@ class MissionControl():
         https://www.jobisez.com/edi/tp/guide.aspx?doc=/edi-igs/3m/Wins-944-3060.pdf
 
 	    """
+
+            f = open(CocoEDI944.txt, 'rb')   # Open only in read mode.
+	        data = f.read(DATA_BUFFER_SIZE)     # Read for Buffer Size.
+	        if(data[0] == W7_HEADER):
+	            stockData = [data[3],  data[4]]   # Latitude & Longitude
+	        else:
+	            TODO
+	    except:
+	        this.DebugObject.Dprint("Could not open {CocoEDI944.txt}, ensure the filepath is correct.")
+            stockData = [Debug.BAD, DEBUG.BAD]
+	    
 
 	    return -1
 
@@ -243,6 +300,7 @@ class MissionControl():
 	        self.DebugObject.Dprint("This is old code that ia on longer supported on this hardware.")	    
 	    else:
 	        self.DebugObject.Dprint("Invalid version number updating to v2020.0")
+
 
 	def StopOTA(self):
 	    """

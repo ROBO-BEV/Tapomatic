@@ -4,7 +4,7 @@ __author__ =  "Blaze Sanders"
 __email__ =   "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__ =  "Development"
-__date__ =    "Late Updated: 2020-07-15"
+__date__ =    "Late Updated: 2020-07-21"
 __doc__ =     "Class to operate at least 64 servos, 16 relays, and 32 motors at once with latency less then 100 ms"
 """
 
@@ -29,8 +29,9 @@ from time import sleep
 # Allow program to extract filename of the current file
 import os
 
-# Robotic Beverage Technologies code for custom data logging and terminal debugging output
-from Debug import *
+# Custom CocoTaps and Robotic Beverage Technologies code
+from Debug import *             # Configure datalogging parameters and debug printing control
+from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
 
 # Create an array of specific length to restrict resizing and appending (like Pythom list) to improve performance
 import numpy as np
@@ -60,16 +61,15 @@ try:
 
 	# Allow control of output devices such as Motors, Servos, LEDs, and Relays
 	from gpiozero import Motor, Servo, LED, Energenie, OutputDevice, AngularServo
-	import gpiozero
-	from gpiozero.pins.mock import MockFactory
-	gpiozero.Device.pin_factory = MockFactory()
+	#import gpiozero
+	#from gpiozero.pins.mock import MockFactory
+	#gpiozero.Device.pin_factory = MockFactory()
 
 except ImportError:
 	#TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
 	currentProgramFilename = os.path.basename(__file__)
-	ImportDebugObject = Debug(True, currentProgramFilename)
-	ImportDebugObject.Dprint("WARNING: You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
-
+	TempDebugObject = Debug(True, "Try/Catch ImportError in " + currentProgramFilename)
+	RaspPi.DevPinConfigError(TempDebugObject)
 
 class Actuator:
 
@@ -113,6 +113,7 @@ class Actuator:
 
     # Class variable
 	actuatorID = 0
+	usedPins = [False]   #TODO use Python List or Array?
 
 
 	def __init__(self, aType, actuatorID, pins, partNumber, direction):
@@ -143,6 +144,8 @@ class Actuator:
 		wires = np.empty(numOfWires, dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 		for i in range(numOfWires):
 			#TODO REMOVE print("PIN: "  + repr(i))
+			if(1 <= pins[i] or pins[i] <= RaspPi.MAX_NUM_PI_A_OR_B_PLUS_GPIO_PINS):
+			    usedPins[i] = True
 			wires[i] = pins[i]
 
 		self.partNumber = partNumber

@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-05"
+__date__    = "Late Updated: 2020-07-21"
 __doc__     = "Class to control and move LASER system"
 """
 
@@ -17,7 +17,8 @@ from time import gmtime, strftime, sleep
 # Custom CocoTaps and Robotic Beverage Technologies code
 from Debug import *             # Configure datalogging parameters and debug printing control
 from CocoDrink import *        	# Stores valid CoCoTaps drink configurations
-from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
+from RaspPi import *        # Contains usefull GPIO pin CONSTANTS and setup configurations
+from Actuator import *          # Modular plug and play control of motors, servos, and relays
 
 # Computer Vision modules to edit / warp images
 #import numpy as np     #TODO REMOVE SINCE IM NOT USE ARRAY ANY MORE
@@ -34,8 +35,8 @@ except ImportError:
     #TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
     currentProgramFilename = os.path.basename(__file__)
     TempDebugObject = Debug(True, "Try/Catch ImportError in " + currentProgramFilename)
-    TempDebugObject.Dprint("WARNING - You are running code on Mac or PC (NOT a Raspberry Pi 4), thus hardware control is not possible.")
-    
+    RaspPi.DevPinConfigError(TempDebugObject)
+        
     
 class LASER:
 
@@ -45,6 +46,12 @@ class LASER:
 	LOW_POWER = 2.50
 	MAX_POWER_LEVEL = HIGH_POWER
 	DEFAULT_LASER_CONSTANT = 0.05264472  	#TODO Adjust this until LASER branding looks good
+	
+	# Motor CONSTANTS
+	ONE_PIXEL = 1
+	CARRIAGE_RETURN = 20
+	CARRIAGE_RETURN_DELAY = 1.420 # 1420 milliseconds
+	
 
     # Global class variable
 	laserConstant = -1
@@ -239,16 +246,25 @@ class LASER:
 		imageBurnComplete = MoveLaserStepperMotor(pixelDwellDuration, frequency)
 
 
-	def MoveLaserStepperMotor(self, frequency, motorID):
+	def MoveLaserStepperMotor(self, frequency):
 		"""
 
 		Return value:
 		NOTHING
 		"""
+		pins = [Actuator.HIGH_PWR_12V, ACtuator.GND, Actuator.I2C_SDA, Actuator.I2C_SCL]
+		horizontalMotor = gpiozero.Motor(pins)
+		pins = [Actuator.HIGH_PWR_12V, ACtuator.GND, Actuator.I2C_SDA, Actuator.I2C_SCL]
+		verticallMotor = gpiozero.Motor(pins)
 
-		for pixelNum in range (0, GetNumOfPixels(filename) - 1):
+		for pixelNum in range (0, GetNumOfPixels(self.brandingArt) - 1):
 			sleep(pixelDwellDuration + 1/frequency)
-			#TODO if(pixelNum = )
+			horizontalMotor.run(ONE_PIXEL)
+			
+			
+			if(pixelNum%self.brandingArt.width() == 0):
+			    sleep(CARRIAGE_RETURN_DELAY)
+			    verticalMotor.run(CARRIAGE_RETURN)
 
 
 	def SetPowerLevel(self, watts, cocoPartNumber):
@@ -317,16 +333,16 @@ class LASER:
 	    """
 	    
 	    LASER.__WarpImage()
-                
-        
-        
+
+
+
+
 
 if __name__ == "__main__":
 
     currentProgramFilename = os.path.basename(__file__)
     LaserDebugObject = Debug(True, currentProgramFilename)
     LaserDebugObject.Dprint("Running LASER.py main unit test")
-    
     #laserConfig = -1
     TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrink.COCOTAPS_LOGO)
     
