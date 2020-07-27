@@ -174,33 +174,33 @@ class LASER:
 
 
 	def __ConfigureLaserForNewImage(img):
-	    	"""
-	    	PRIVATE FUNCATION (See __)
+	    """
+	    PRIVATE FUNCATION (See __)
 
-		Calculate pixel dwell duration based on LASER power level and image size
+	    Calculate pixel dwell duration based on LASER power level and image size
 
-	        Key arguments:
-        	img -- PNG file to load into memory
+	    Key arguments:
+            img -- PNG file to load into memory
 
-        	Return value:
-       		 pixelBurnDuration -- Time in seconds that LASER should dwell on coconut pixel
-		"""
+            Return value:
+	    pixelBurnDuration -- Time in seconds that LASER should dwell on coconut pixel
+	    """
 
-		numOfPixels = LASER.__GetNumOfPixels(img)
-		moistureLevel = GetCoconutMoistureLevel()
+	    numOfPixels = LASER.__GetNumOfPixels(img)
+	    moistureLevel = GetCoconutMoistureLevel()
 
-		if(0 < self.powerLevel or self.powerLevel <= LOW_POWER):
-			laserConstant = DEFAULT_LASER_CONSTANT * 0.5
-		elif(LOW < self.powerLevel or  self.powerLevel < STANDARD_POWER):
-			laserConstant = DEFAULT_LASER_CONSTANT * 1.0
-		elif(self.powerLevel >= STANDARD_POWER):
-			laserConstant = DEFAULT_LASER_CONSTANT * 1.5
-		else:
-			self.DebugObject.Lprint("ERROR: Invalid power level choosen in ConfigureLaserForNewImage() function")
+	    if(0 < self.powerLevel or self.powerLevel <= LOW_POWER):
+	        laserConstant = DEFAULT_LASER_CONSTANT * 0.5
+	    elif(LOW < self.powerLevel or  self.powerLevel < STANDARD_POWER):
+	        laserConstant = DEFAULT_LASER_CONSTANT * 1.0
+	    elif(self.powerLevel >= STANDARD_POWER):
+	        laserConstant = DEFAULT_LASER_CONSTANT * 1.5
+	    else:
+	        self.DebugObject.Lprint("ERROR: Invalid power level choosen in ConfigureLaserForNewImage() function")
 
-		pixelBurnDuration = laserConstant * moistureLevel/100.0 * numOfPixels/1000000
+	    pixelBurnDuration = laserConstant * moistureLevel/100.0 * numOfPixels/1000000
 
-		return pixelBurnDuration
+	    return pixelBurnDuration
 
 
 	def StopLaser(self):
@@ -213,8 +213,8 @@ class LASER:
 	    Return value:
 	    NOTHING
 	    """
+
 	    self.gpioFirePin.off()
-	    #gpiozero.off(self.gpioFirePin)
 
 
 	def BurnImage(self, laserConfig):
@@ -284,40 +284,41 @@ class LASER:
 
 
 	def __GetNumOfPixels(inputImage):
-		"""
-		Calculate the total number of (pixels / 1,000,000) that is in an image file
+	    """
+	    Calculate the total number of (pixels / 1,000,000) that is in an image file
 
-		Key argument:
-	        inputImage -- Image to analysis
+	    Key argument:
+	    inputImage -- Image to analysis
 
-		Return value:
-		totalNumOfPixels -- Total number of megapixels (million pixels) in an image
-		"""
+   	    Return value:
+	    totalNumOfPixels -- Total number of megapixels (million pixels) in an image
+	    """
 
-		#img = LoadLImage(self.brandingArt #TODO DOES LoadImage RETURN a img variable)
-		img = cv2.imread(inputImage)
-		imgWidth = img.width
-		imgHeight = img.height
-		totalNumOfPixels = imgWidth * imgHeight
+	    #img = LoadLImage(self.brandingArt #TODO DOES LoadImage RETURN a img variable)
+	    img = cv2.imread(inputImage)
+	    imgWidth = img.width
+	    imgHeight = img.height
+	    totalNumOfPixels = imgWidth * imgHeight
 
-		return totalNumOfPixels
+	    return totalNumOfPixels
 
 
 	def GetCoconutMoistureLevel(self):
-		"""
-		Moisture level from 0 to 100 corresponing to % humidity
+            """
+            Moisture level from 0 to 100 corresponing to % humidity
 
-    	Key arguments:
-    	NONE
+            Key arguments:
+            NONE
 
-    	Return value:
-    	moisturePercentage -- An float from 0.0 to 100.0
-		"""
+            Return value:
+            moisturePercentage -- An float from 0.0 to 100 percent
+            """
 
-	    #TODO Moisture sensor in fridge
-		print("TODO I2C sensor")
-		moisturePercentage = 100
-		return moisturePercentage
+            #TODO Moisture sensor in fridge
+            print("TODO I2C sensor")
+            moisturePercentage = 100
+
+            return moisturePercentage
 
 
 	def CompileImageAndStoreToEMMC():
