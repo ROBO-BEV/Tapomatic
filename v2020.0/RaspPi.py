@@ -4,8 +4,8 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-26"
-__doc__     = "Class to document the internal configurations of the Raspberry Pi's 
+__date__    = "Late Updated: 2020-07-28"
+__doc__     = "Class to document the internal configurations of the Raspberry Pi's"
 """
 
 # Allow program to extract filename of the current file
@@ -27,8 +27,9 @@ import gpiozero
 class RaspPi:
 
     # Internal local network IP addresses and ports
-    # TODO Configure with rc.local startup script ipconfig command
-    GUI_PI_IP = "69.69.1.69"
+    # TODO Configure with /etc/rc.local startup script ipconfig command
+    # ifconfig eth0 192.168.0.69 netmask 255.255.255.0 up
+    GUI_PI_IP = "192.168.0.69"
     VEND_PI_IP = "69.69.1.42"
     UDP_PORT = 5005
 
@@ -77,7 +78,7 @@ class RaspPi:
 
     # Pulse Width Modulation
     # https://pinout.xyz/pinout/pin12_gpio18
-	# https://pinout.xyz/pinout/pin32_gpio12
+    # https://pinout.xyz/pinout/pin32_gpio12
     # https://pinout.xyz/pinout/pin33_gpio13
     # https://pinout.xyz/pinout/pin35_gpio19
     PWM0_0 = 18
@@ -178,13 +179,12 @@ class RaspPi:
             self.DebugObject.Dprint("ERROR: Invalid GPIO mode, see RaspPi.py CONSTANTS")
 
         if(cpuPowerMode == RaspPi.HIGH_POWER):
-        	#check_call("TODO Max Screen brightness", shell=True)   #xrand -outpout LVDS --TODO 0.5
+        	check_call("xrandr --output LVDS --brightness 0.90", shell=True)
         	print("TODO RaspPi.py cpuPowerMode == RaspPi.HIGH_POWER")
         elif(cpuPowerMode == RaspPi.LOW_POWER):
-        	#check_call("TODO Min Screen brightness", shell=True)   #xrand -outpout LVDS --TODO 0.5
+        	check_call("xrandr --output LVDS --brightness 0.20", shell=True)
         	pin = [RaspPi.BOARD7]
-        	mainPowerRelay = Actuator('R', 0, pin, "Main 120VAC Tapomatic Relay: P/N?TODO?", Actuator.CW)
-        	#mainPowerRelay = gpiozero.OutputDevice(RaspPi.BOARD7)
+        	mainPowerRelay = Actuator('R', 0, pin, "Main 120VAC Tapomatic Relay: P/N SRD-05VDC-SL-C?", Actuator.CW) #mainPowerRelay = gpiozero.OutputDevice(RaspPi.BOARD7)
         else:
         	self.DebugObject.Dprint("ERROR: Invalid CPU power mode, see RaspPi.py CONSTANTS")
 
