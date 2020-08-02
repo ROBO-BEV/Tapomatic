@@ -131,31 +131,25 @@ class MissionControl():
 		"""
 
 		# Hard coded locations that have TERRIBLE cell service
+		gpsData = []
 		try:
 			print("TODO RavenDB or TextFile?")
 			##TODO Blaze , Until END OF 2020 Better to have textfile only.
-			gpsData = []
-			f = open(os.getcwd() + '/kioskLocation.txt')
-			lines = f.readLines
-			print('Could not find the KioskID')
-			for line in lines:
-				currentline = line.split(",")
-				if(currentline[0] == kioskID):
-					print('found it')
-					gpsData = [currentline[3], currentline[4]]
-					break
-				else:
-					print('No')
-
-
-			if(data[0] == kioskID):
-				gpsData = [data[3],  data[4]]   # Latitude & Longitude
-			else:
-				#TODO Have to implement this.
-				#gpsData = Sensor.GetLocation()
-				print('Could not find the KioskID')
+			with open(os.getcwd() + '/kioskLocation.txt') as file:
+				csv_f = csv.reader(file)
+				for row in csv_f:
+					print(row[0])
+					if int(row[0]) == kioskID:
+						gpsDATA = [row[3], row[4]]
+						break
+		# if(data[0] == kioskID):
+			# 	gpsData = [data[3],  data[4]]   # Latitude & Longitude
+			# else:
+			# 	#TODO Have to implement this.
+			# 	#gpsData = Sensor.GetLocation()
+			# 	print('Could not find the KioskID')
 		except:
-			this.DebugObject.Dprint("Could not open {kioskLocation.txt}, ensure the filepath is correct.")
+			print("Could not open {kioskLocation.txt}, ensure the filepath is correct.")
 			gpsDATA = [Debug.BAD, DEBUG.BAD]
 		return gpsData
 
