@@ -166,6 +166,15 @@ class MissionControl():
 		"""
 
 		#Read CVS and take 2nd entry (0, Vinny's Home, 2728 Brookstone Court Las Vegas NV 89117, 36.1416584, -115.2958079;)
+		try:
+			with open(os.getcwd() + '/kioskLocation.txt') as file:
+				csv_f = csv.reader(file)
+				for row in csv_f:
+					if int(row[0]) == kioskID:
+						locationName = row[1]
+						break
+		except:
+			print("Could not open {kioskLocation.txt}, ensure the filepath is correct.")
 		return locationName
 
 
@@ -346,7 +355,7 @@ class MissionControl():
 		GoodMissionControlObject = MissionControl(prototypeKioskID, 2020.0, f)
 		#Get Kiosk GPS Location.
 		GoodMissionControlObject.GetKioskGPSlocation(prototypeKioskID)
-
+		GoodMissionControlObject.GetKioskLocationName((prototypeKioskID))
 		GoodMissionControlObject.ReportLiquidLevel(CocoDrink.ORANGE_FLAVOR, 0, prototypeKioskID)
 
 		#BadMissionControlObject = MissionControl(1, 2020.2, ".key")
