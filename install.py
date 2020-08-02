@@ -133,6 +133,8 @@ if __name__ == "__main__":
 	# Install a documentation library
 	check_call("pip3 install docutils", shell=True)
 
+	check_call("pip3 install gpiozero", shell=True)
+
 	# Flask is the GUI front-end to that runs in parallel with python back-end controlling pumps
 	# Remember to run flask with "python3" NOT "python" command, or you will get weird errors :)
 	# @link https://aryaboudaie.com/python/technical/educational/web/flask/2018/10/17/flask.html
