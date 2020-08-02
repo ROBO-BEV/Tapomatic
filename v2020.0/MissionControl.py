@@ -15,6 +15,10 @@ from time import gmtime, strftime
 import csv
 import RaspPi
 import Actuator
+import CocoDrink
+import Debug
+from flask import current_app
+import os
 
 
 class MissionControl():
@@ -68,19 +72,19 @@ class MissionControl():
 		Return value:
 		New MissionControl() object
 		"""
-
-		currentProgramFilename = os.path.basename(__file__)
-		self.DebugObject = Debug(True, currentProgramFilename)
+        ##TODO UNCOMMENT THEM LATER ONCE FIX IT
+		# currentProgramFilename = os.path.basename(__file__)
+		# self.DebugObject = Debug(True, currentProgramFilename)
 
 		self.kioskID = kioskID
 		self.version = version
 		self.key = key
-
 		# Definition for sensors sending data back to Mission Control (internal sensors not included)
-		pins = [Actuator.VCC_3_3V, RaspPi.BOARD, RaspPi.PWM0, Actuator.GND]
-		self.ForceSensorObject = Sensor(Sensor.FORCE_SENSOR,pins, Sensor.FORCE_SENSOR_PART_NUMBER)
-		pins = [Actuator.VCC_3V, RaspPi.BOARD, Actuator.GND]
-		self.laserRangerFinderObject = Sensor(Sensor.LASER_RANGE_SENSOR, pins, Sensor.LASER_RANGE_PART_NUMBER)
+		##TODO UNCOMMENT THEM LATER ONCE FIX IT
+		# pins = [Actuator.VCC_3_3V, RaspPi.BOARD, RaspPi.PWM0, Actuator.GND]
+		# self.ForceSensorObject = Sensor(Sensor.FORCE_SENSOR,pins, Sensor.FORCE_SENSOR_PART_NUMBER)
+		# pins = [Actuator.VCC_3V, RaspPi.BOARD, Actuator.GND]
+		# self.laserRangerFinderObject = Sensor(Sensor.LASER_RANGE_SENSOR, pins, Sensor.LASER_RANGE_PART_NUMBER)
 
 
 	def ReportLiquidLevel(self, lType, internalBottleLocation, kioskID):
@@ -130,12 +134,26 @@ class MissionControl():
 		try:
 			print("TODO RavenDB or TextFile?")
 			##TODO Blaze , Until END OF 2020 Better to have textfile only.
-			f = open(kioskLocation.csv, 'rb')   # Open only in read mode.
-			# data = f.read(DATA_BUFFER_SIZE)     # Read for Buffer Size.
+			gpsData = []
+			f = open(os.getcwd() + '/kioskLocation.txt')
+			lines = f.readLines
+			print('Could not find the KioskID')
+			for line in lines:
+				currentline = line.split(",")
+				if(currentline[0] == kioskID):
+					print('found it')
+					gpsData = [currentline[3], currentline[4]]
+					break
+				else:
+					print('No')
+
+
 			if(data[0] == kioskID):
 				gpsData = [data[3],  data[4]]   # Latitude & Longitude
 			else:
-				gpsData = Sensor.GetLocation()
+				#TODO Have to implement this.
+				#gpsData = Sensor.GetLocation()
+				print('Could not find the KioskID')
 		except:
 			this.DebugObject.Dprint("Could not open {kioskLocation.txt}, ensure the filepath is correct.")
 			gpsDATA = [Debug.BAD, DEBUG.BAD]
@@ -326,16 +344,18 @@ class MissionControl():
 		try:
 			filename = ".key"
 			f = open(filename, 'rb')            # Open only in read mode.
-			data = f.read(DATA_BUFFER_SIZE)     # Read for Buffer Size.
+			data = f.read()     # Read for Buffer Size.
 		except:
-			this.DebugObject.Dprint("Could not open {}, ensure the filepath is correct.")
+			print("Could not open {}, ensure the filepath is correct.")
 
 		prototypeKioskID = 0
 		GoodMissionControlObject = MissionControl(prototypeKioskID, 2020.0, f)
+		#Get Kiosk GPS Location.
+		GoodMissionControlObject.GetKioskGPSlocation(prototypeKioskID)
+
 		GoodMissionControlObject.ReportLiquidLevel(CocoDrink.ORANGE_FLAVOR, 0, prototypeKioskID)
 
 		#BadMissionControlObject = MissionControl(1, 2020.2, ".key")
-		GoodMissionControlObject.GetKioskGPSlocation(prototypeKioskID)
 		print("END UnitTest()")
 
 		return DEBUG.OK
