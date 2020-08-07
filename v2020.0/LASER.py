@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-21"
+__date__    = "Late Updated: 2020-07-27"
 __doc__     = "Class to control and move LASER system"
 """
 
@@ -21,7 +21,6 @@ from RaspPi import *        # Contains usefull GPIO pin CONSTANTS and setup conf
 from Actuator import *          # Modular plug and play control of motors, servos, and relays
 
 # Computer Vision modules to edit / warp images
-#import numpy as np     #TODO REMOVE SINCE IM NOT USE ARRAY ANY MORE
 #import cv2 as cv       #TODO REMOVE SINCE MAKING SIMPLER IS DUMB!
 import cv2
 
@@ -32,12 +31,12 @@ try:
     #from gpiozero import Energenize #TODO REMOVE SINCE TOO SPECIFIC???
 
 except ImportError:
-    #TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVER WHERE? http://wiringpi.com/the-gpio-utility/
+    #TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVERYWHERE? http://wiringpi.com/the-gpio-utility/
     currentProgramFilename = os.path.basename(__file__)
     TempDebugObject = Debug(True, "Try/Catch ImportError in " + currentProgramFilename)
     RaspPi.DevPinConfigError(TempDebugObject)
-        
-    
+
+
 class LASER:
 
 	# Preset LASER power level CONSTANTS (units are Watts)
@@ -46,14 +45,14 @@ class LASER:
 	LOW_POWER = 2.50
 	MAX_POWER_LEVEL = HIGH_POWER
 	DEFAULT_LASER_CONSTANT = 0.05264472  	#TODO Adjust this until LASER branding looks good
-	
+
 	# Motor CONSTANTS
 	ONE_PIXEL = 1
 	CARRIAGE_RETURN = 20
 	CARRIAGE_RETURN_DELAY = 1.420 # 1420 milliseconds
-	
 
-    # Global class variable
+
+	# Global class variable
 	laserConstant = -1
 	laserConfig = -1
 
@@ -63,7 +62,7 @@ class LASER:
 	    Create a LASER object with power settings, part numbers, and image data to used when fired via GPIO pin
 
 	    Key arguments:
-        gpioFirePin -- 5V GPIO pin used to control a LASER or a 12V relay connected to a LASER
+    	    gpioFirePin -- 5V GPIO pin used to control a LASER or a 12V relay connected to a LASER
 	    supplierPartNumber -- External supplier part number (i.e. PA-07-12-5V)
 	    cocoPartNumber -- Internal part number (i.e XXX-YYYYY-Z)) linked to one supplier part number
 	    powerLevel -- Power in Wats to intialize a LASER module first fire to
@@ -73,10 +72,10 @@ class LASER:
 	    Return value:
 	    New LASER() object
 	    """
-	    
+
 	    currentProgramFilename = os.path.basename(__file__)
 	    self.DebugObject = Debug(True, currentProgramFilename)
-	    
+
 	    #self.gpioFirePin = gpiozero.OutputDevice(gpioFirePin)
 
 	    self.supplierPartNumber = supplierPartNumber
@@ -98,7 +97,7 @@ class LASER:
 	        self.powerLevel = powerLevel
 
 	    self.brandingArt = LASER.__WarpImage(CocoDrink.COCOTAPS_LOGO, CocoDrink.SIZE_102MM) # Initialize to standard CocoTaps logo
-	    
+
 	    LASER.__ConfigureLaserForNewImage(self.brandingArt)
 
 
@@ -125,11 +124,11 @@ class LASER:
 		coconutSize -- Horizontal diameter of coconut in millimeters
 
 		Return value:
-		newImage -- A new image that has been warpped to to display correctly after LASER branding 
+		newImage -- A new image that has been warpped to to display correctly after LASER branding
 		"""
-		
+
 		# https://docs.opencv.org/2.4/doc/tutorials/core/mat_the_basic_image_container/mat_the_basic_image_container.html
-        # https://pythonprogramming.net/loading-images-python-opencv-tutorial/
+	        # https://pythonprogramming.net/loading-images-python-opencv-tutorial/
 
 		fileNameLength = len(fileName)
 		periodIndex = fileNameLength - 3
@@ -159,7 +158,7 @@ class LASER:
    			    print(" of ", imgHeight)
    			    #TODO rgbColor = originalImage.at<Vec3b>(xPixel,yPixel)
 				# Split image into three part vertically and horizonatlly
-				### TODO SyntaxError: can't assign to comparison 
+				### TODO SyntaxError: can't assign to comparison
 				# warppedImg.at<Vec3b>(xPixel,yPixel) = rgbColor
 
    			    if(xPixel < (imgWidth/5)):
@@ -175,33 +174,33 @@ class LASER:
 
 
 	def __ConfigureLaserForNewImage(img):
-		"""
-		PRIVATE FUNCATION (See __)
+	    """
+	    PRIVATE FUNCATION (See __)
 
-		Calculate pixel dwell duration based on LASER power level and image size
+	    Calculate pixel dwell duration based on LASER power level and image size
 
-        Key arguments:
-        img -- PNG file to load into memory
+	    Key arguments:
+            img -- PNG file to load into memory
 
-        Return value:
-        pixelBurnDuration -- Time in seconds that LASER should dwell on coconut pixel
-		"""
+            Return value:
+	    pixelBurnDuration -- Time in seconds that LASER should dwell on coconut pixel
+	    """
 
-		numOfPixels = LASER.__GetNumOfPixels(img)
-		moistureLevel = GetCoconutMoistureLevel()
+	    numOfPixels = LASER.__GetNumOfPixels(img)
+	    moistureLevel = GetCoconutMoistureLevel()
 
-		if(0 < self.powerLevel or self.powerLevel <= LOW_POWER):
-			laserConstant = DEFAULT_LASER_CONSTANT * 0.5
-		elif(LOW < self.powerLevel or  self.powerLevel < STANDARD_POWER):
-			laserConstant = DEFAULT_LASER_CONSTANT * 1.0
-		elif(self.powerLevel >= STANDARD_POWER):
-			laserConstant = DEFAULT_LASER_CONSTANT * 1.5
-		else:
-			self.DebugObject.Lprint("ERROR: Invalid power level choosen in ConfigureLaserForNewImage() function")
+	    if(0 < self.powerLevel or self.powerLevel <= LOW_POWER):
+	        laserConstant = DEFAULT_LASER_CONSTANT * 0.5
+	    elif(LOW < self.powerLevel or  self.powerLevel < STANDARD_POWER):
+	        laserConstant = DEFAULT_LASER_CONSTANT * 1.0
+	    elif(self.powerLevel >= STANDARD_POWER):
+	        laserConstant = DEFAULT_LASER_CONSTANT * 1.5
+	    else:
+	        self.DebugObject.Lprint("ERROR: Invalid power level choosen in ConfigureLaserForNewImage() function")
 
-		pixelBurnDuration = laserConstant * moistureLevel/100.0 * numOfPixels/1000000
+	    pixelBurnDuration = laserConstant * moistureLevel/100.0 * numOfPixels/1000000
 
-		return pixelBurnDuration
+	    return pixelBurnDuration
 
 
 	def StopLaser(self):
@@ -214,8 +213,8 @@ class LASER:
 	    Return value:
 	    NOTHING
 	    """
+
 	    self.gpioFirePin.off()
-	    #gpiozero.off(self.gpioFirePin)
 
 
 	def BurnImage(self, laserConfig):
@@ -260,8 +259,7 @@ class LASER:
 		for pixelNum in range (0, GetNumOfPixels(self.brandingArt) - 1):
 			sleep(pixelDwellDuration + 1/frequency)
 			horizontalMotor.run(ONE_PIXEL)
-			
-			
+
 			if(pixelNum%self.brandingArt.width() == 0):
 			    sleep(CARRIAGE_RETURN_DELAY)
 			    verticalMotor.run(CARRIAGE_RETURN)
@@ -286,56 +284,55 @@ class LASER:
 
 
 	def __GetNumOfPixels(inputImage):
-		"""
-		Calculate the total number of (pixels / 1,000,000) that is in an image file
+	    """
+	    Calculate the total number of (pixels / 1,000,000) that is in an image file
 
-		Key argument:
-        inputImage
+	    Key argument:
+	    inputImage -- Image to analysis
 
-		Return value:
-		totalNumOfPixels -- Total number of megapixels (million pixels) in an image
-		"""
+   	    Return value:
+	    totalNumOfPixels -- Total number of megapixels (million pixels) in an image
+	    """
 
-		#img = LoadLImage(self.brandingArt #TODO DOES LoadImage RETURN a img variable)
-		img = cv2.imread(inputImage)
-		imgWidth = img.width
-		imgHeight = img.height
-		totalNumOfPixels = imgWidth * imgHeight
+	    #img = LoadLImage(self.brandingArt #TODO DOES LoadImage RETURN a img variable)
+	    img = cv2.imread(inputImage)
+	    imgWidth = img.width
+	    imgHeight = img.height
+	    totalNumOfPixels = imgWidth * imgHeight
 
-		return totalNumOfPixels
+	    return totalNumOfPixels
 
 
 	def GetCoconutMoistureLevel(self):
-		"""
-		Moisture level from 0 to 100 corresponing to % humidity
+            """
+            Moisture level from 0 to 100 corresponing to % humidity
 
-    	Key arguments:
-    	NONE
+            Key arguments:
+            NONE
 
-    	Return value:
-    	moisturePercentage -- An float from 0.0 to 100.0
-		"""
+            Return value:
+            moisturePercentage -- An float from 0.0 to 100 percent
+            """
 
-	    #TODO Moisture sensor in fridge
-		print("TODO I2C sensor")
-		moisturePercentage = 100
-		return moisturePercentage
-		
-	
+            #TODO Moisture sensor in fridge
+            print("TODO I2C sensor")
+            moisturePercentage = 100
+
+            return moisturePercentage
+
+
 	def CompileImageAndStoreToEMMC():
 	    """
-	    
+  	    Store image on eMMC / SD card for use after power cycle
+
 	    Key arguments:
 	    NONE
-	    
+
 	    Return value:
 	    NOTHING
 	    """
-	    
+
 	    LASER.__WarpImage()
-
-
-
 
 
 if __name__ == "__main__":
@@ -345,9 +342,9 @@ if __name__ == "__main__":
     LaserDebugObject.Dprint("Running LASER.py main unit test")
     #laserConfig = -1
     TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrink.COCOTAPS_LOGO)
-    
+
     TestLASERobject.ConfigureLaserForNewImage()
     TestLASERobject.BurnImage(laserConfig)
     time.sleep(10) 										# Pause 10 seconds
-    
+
     StopLASER()

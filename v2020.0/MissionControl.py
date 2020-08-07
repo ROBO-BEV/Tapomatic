@@ -13,6 +13,12 @@ from time import gmtime, strftime
 
 # Allow program to READ Comma Separated Value files
 import csv
+import RaspPi
+import Actuator
+import CocoDrink
+import Debug
+from flask import current_app
+import os
 
 
 class MissionControl():
@@ -24,20 +30,19 @@ class MissionControl():
 	DULL_KNIFE_MESSAGE = 3
 	VERISON_MESSAGE = 4
 
-
 	# EDI 944 Interface CONSTANTS from filepath:
 	# Tapomatic/v2020.0/static/apiDocumentation/Wins-944-3060.pdf
 	# Describes Warehouse Stock Transfer Receipt Advice Transaction Set (944)
 	# for use within the context of an Electronic Data Interchange (EDI) environment.
-    ST_HEADING  = "Transaction Set Header"
-    W17_HEADING = "Warehouse Receipt Identification"
-    N1_HEADING  = "Name"
+	ST_HEADING  = "Transaction Set Header"
+	W17_HEADING = "Warehouse Receipt Identification"
+	N1_HEADING  = "Name"
 
 	W07_DETAIL  = "Item Detail For Stock Receipt"
-    N9_DETAIL   = "Reference Identification"
+	N9_DETAIL   = "Reference Identification"
 
-    W14_SUMMARY = "Total Receipt Information"
-    SE_SUMMARY  = "Transaction Set Trailer"
+	W14_SUMMARY = "Total Receipt Information"
+	SE_SUMMARY  = "Transaction Set Trailer"
 
 
 	# Power CONSTANTS
@@ -56,7 +61,7 @@ class MissionControl():
 
 	def __init__(self, kioskID, version, key):
 		"""
-        Constructor to setup a data connection between centrol server (Mission Control) and robot out in field
+		Constructor to setup a data connection between centrol server (Mission Control) and robot out in field
 
 		Key arguments:
 		self -- Newly created object
@@ -67,287 +72,303 @@ class MissionControl():
 		Return value:
 		New MissionControl() object
 		"""
-
-		currentProgramFilename = os.path.basename(__file__)
-		self.DebugObject = Debug(True, currentProgramFilename)
+        ##TODO UNCOMMENT THEM LATER ONCE FIX IT
+		# currentProgramFilename = os.path.basename(__file__)
+		# self.DebugObject = Debug(True, currentProgramFilename)
 
 		self.kioskID = kioskID
 		self.version = version
 		self.key = key
-
 		# Definition for sensors sending data back to Mission Control (internal sensors not included)
-		pins = [Actuator.VCC_3_3V, RaspPi.BOARD?, RaspPi.PWM0?, Actuator.GND]
-		self.ForceSensorObject = Sensor(Sensor.FORCE_SENSOR,pins, Sensor.FORCE_SENSOR_PART_NUMBER)
-        pins = [Actuator.VCC_3V, RaspPi.BOARD?, Actuator.GND]
-        self.laserRangerFinderObject = Sensor(Sensor.LASER_RANGE_SENSOR, pins, Sensor.LASER_RANGE_PART_NUMBER)
+		##TODO UNCOMMENT THEM LATER ONCE FIX IT
+		# pins = [Actuator.VCC_3_3V, RaspPi.BOARD, RaspPi.PWM0, Actuator.GND]
+		# self.ForceSensorObject = Sensor(Sensor.FORCE_SENSOR,pins, Sensor.FORCE_SENSOR_PART_NUMBER)
+		# pins = [Actuator.VCC_3V, RaspPi.BOARD, Actuator.GND]
+		# self.laserRangerFinderObject = Sensor(Sensor.LASER_RANGE_SENSOR, pins, Sensor.LASER_RANGE_PART_NUMBER)
 
 
 	def ReportLiquidLevel(self, lType, internalBottleLocation, kioskID):
-	    """
-	    Report the current liquid level as percentage
+		"""
+		Report the current liquid level as percentage
 
-    	Key arguments:
-        lType -- Type of liquid add-on to inject into thr coconut
-        internalBottleLocation -- Position starting with 0 that a bottle is from the left side of kiosk as you move right
-        kioskID -- Unique ID for every prototype or production Tapomatic manufactured
+		Key arguments:
+		lType -- Type of liquid add-on to inject into thr coconut
+		internalBottleLocation -- Position starting with 0 that a bottle is from the left side of kiosk as you move right
+		kioskID -- Unique ID for every prototype or production Tapomatic manufactured
 
-    	Return value:
-    	liqPercentage -- Percent that a 750 mL botle is full
-    	"""
-
-	    return liqPercentage
+		Return value:
+		liqPercentage -- Percent that a 750 mL botle is full
+		"""
+		return liqPercentage
 
 
 	def ReportLowLiquidLevel(self, lType, internalBottleLocation, kioskID):
-	    """
-	    High priority alert that the current liquid level is below 20%
+		"""
+		High priority alert that the current liquid level is below 20%
 
-	    Key arguments:
-	    lType -- Type of liquid add-on to inject into the coconut
-	    internalBottleLocation -- Position starting with 0 that a bottle is from the left side of kiosk as you move right
-	    kioskID -- Unique ID for every prototype or production Tapomatic manufactured
+		Key arguments:
+		lType -- Type of liquid add-on to inject into the coconut
+		internalBottleLocation -- Position starting with 0 that a bottle is from the left side of kiosk as you move right
+		kioskID -- Unique ID for every prototype or production Tapomatic manufactured
 
-	    Return value:
-	    liqPercentage -- Percent (less then 20%) that a 750 mL botle is full
-	    """
+		Return value:
+		liqPercentage -- Percent (less then 20%) that a 750 mL botle is full
+		"""
 
-	    return liqPercentage
+		return liqPercentage
 
 
 	def GetKioskGPSlocation(self, kioskID):
-	    """
-	    Determine the GPS location using celluar towers (not a GPS satilite receiver) or a hard coded value in non-volitile memory 
-	    Update to RavenDB Implemention in August 20200
+		"""
+		Determine the GPS location using celluar towers (not a GPS satilite receiver) or a hard coded value in non-volitile memory
+		Update to RavenDB Implemention in August 20200
 
-	    Key arguments:
-	    kioskID -- Unique ID for every prototype or production Tapomatic manufactured
+		Key arguments:
+		kioskID -- Unique ID for every prototype or production Tapomatic manufactured
 
-	    Return value:
-	    gpsData -- Lattitude, Longitude, and Altitude data
-	    """
+		Return value:
+		gpsData -- Lattitude, Longitude, and Altitude data
+		"""
 
-	    # Hard coded locations that have TERRIBLE cell service
-	    try:
-	        print("TODO RavenDB or TextFile?")
-            f = open(kioskLocation.csv, 'rb')   # Open only in read mode.
-	        data = f.read(DATA_BUFFER_SIZE)     # Read for Buffer Size.
-	        if(data[0] == kioskID):
-	            gpsData = [data[3],  data[4]]   # Latitude & Longitude
-	        else:
-	            gpsData = Sensor.GetLocation()
-	    except:
-	        this.DebugObject.Dprint("Could not open {kioskLocation.txt}, ensure the filepath is correct.")
-            gpsDATA = [Debug.BAD, DEBUG.BAD]
-
-        return gpsData
+		# Hard coded locations that have TERRIBLE cell service
+		gpsData = []
+		try:
+			print("TODO RavenDB or TextFile?")
+			##TODO Blaze , Until END OF 2020 Better to have textfile only.
+			with open(os.getcwd() + '/kioskLocation.txt') as file:
+				csv_f = csv.reader(file)
+				for row in csv_f:
+					print(row[0])
+					if int(row[0]) == kioskID:
+						gpsDATA = [row[3], row[4]]
+						break
+		# if(data[0] == kioskID):
+			# 	gpsData = [data[3],  data[4]]   # Latitude & Longitude
+			# else:
+			# 	#TODO Have to implement this.
+			# 	#gpsData = Sensor.GetLocation()
+			# 	print('Could not find the KioskID')
+		except:
+			print("Could not open {kioskLocation.txt}, ensure the filepath is correct.")
+			gpsDATA = [Debug.BAD, DEBUG.BAD]
+		return gpsData
 
 
 	def GetKioskLocationName(self, kioskID):
-	    """
-        #TODO Description
+		"""
+		#TODO Description
 
-	    Key arguments:
-	    kioskID -- Unique ID for every prototype or production Tapomatic manufactured
+		Key arguments:
+		kioskID -- Unique ID for every prototype or production Tapomatic manufactured
 
-	    Return value:
-	    locationName -- Human readable String variable describing the location
-	    """
+		Return value:
+		locationName -- Human readable String variable describing the location
+		"""
 
-	    #Read CVS and take 2nd entry (0, Vinny's Home, 2728 Brookstone Court Las Vegas NV 89117, 36.1416584, -115.2958079;)
-	    return locationName
+		#Read CVS and take 2nd entry (0, Vinny's Home, 2728 Brookstone Court Las Vegas NV 89117, 36.1416584, -115.2958079;)
+		try:
+			with open(os.getcwd() + '/kioskLocation.txt') as file:
+				csv_f = csv.reader(file)
+				for row in csv_f:
+					if int(row[0]) == kioskID:
+						locationName = row[1]
+						break
+		except:
+			print("Could not open {kioskLocation.txt}, ensure the filepath is correct.")
+		return locationName
 
 
 	def ReportHealthPercentage(self):
-	    """
-	    #TODO Descriptio
+		"""
+		#TODO Description
 
-    	Key arguments:
+		Key arguments:
 
-    	Return value:
+		Return value:
 
-    	"""
+		"""
 
-	    return currentHealthPercentage
+		return currentHealthPercentage
 
 
 	def ReportPowerState(self):
-        """
-        TODO
-        
-        Key arguments:
+		"""
+		TODO
 
-        Return values:
-        ON -- if Tapomatic is plugged in and main relay is ON; OFF otherwise
-        """
+		Key arguments:
 
-        if(gpiozero.mainPowerRelay.isActive()):
-            powerState = ON
-        else:
-            powerState = OFF
+		Return values:
+		ON -- if Tapomatic is plugged in and main relay is ON; OFF otherwise
+		"""
 
-        return powerState
+		if(gpiozero.mainPowerRelay.isActive()):
+			powerState = ON
+		else:
+			powerState = OFF
+
+		return powerState
 
 	def ReportTapUsage(self):
-	    """
-        #TODO Description
+		"""
+		#TODO Description
 
-	    Return value:
-	    totalTapsUsed -- Total number of CoirTek taps removed from tap ring since last count. Power cycling machine should NOT reset this variable.
-	    """
+		Return value:
+		totalTapsUsed -- Total number of CoirTek taps removed from tap ring since last count. Power cycling machine should NOT reset this variable.
+		"""
 
-	    return totalTapsUsed
+		return totalTapsUsed
 
 
 	def ReportCoconutUsage(self):
-	    """
-        #TODO Description
+		"""
+		#TODO Description
 
-	    Return value:
-	    totalCoconutsUsed -- Total number coconuts tapped since last count. Power cycling machine should NOT reset this variable.
-	    """
+		Return value:
+		totalCoconutsUsed -- Total number coconuts tapped since last count. Power cycling machine should NOT reset this variable.
+		"""
 
-	    return totalCoconutsUsed
+		return totalCoconutsUsed
 
 
 	def ReportKnifeStatus(self):
-	    """
-	    TODO REMOVE in v2020.1
+		"""
+		TODO REMOVE in v2020.1
 
-	    Return value:
-	    sharpness -- Interger, from 0 to MAX_CUTTING_SURFACES 
-        """
+		Return value:
+		sharpness -- Interger, from 0 to MAX_CUTTING_SURFACES
+		"""
 
-	    return -1
+		return -1
 
 
 	def ConnectToDSDservive(self, serviceName):
-	    """
-	    Rob's sale CRM and accounting sysytem EDI 944
-	    https://www.jobisez.com/edi/tp/guide.aspx?doc=/edi-igs/3m/Wins-944-3060.pdf
+		"""
+		Rob's sale CRM and accounting sysytem EDI 944
+		https://www.jobisez.com/edi/tp/guide.aspx?doc=/edi-igs/3m/Wins-944-3060.pdf
 
-	    Key arguments:
-	    serviceName -- String,
+		Key arguments:
+		serviceName -- String,
 
-	    Return value:
-	    status -- Interger, HTML error code
-	    """
+		Return value:
+		status -- Interger, HTML error code
+		"""
 
 
 	def SetEDI944(self):
-	    """
-        Write to EDI 944 text file using interface defined at:
-        https://www.jobisez.com/edi/tp/guide.aspx?doc=/edi-igs/3m/Wins-944-3060.pdf
+		"""
+		Write to EDI 944 text file using interface defined at:
+		https://www.jobisez.com/edi/tp/guide.aspx?doc=/edi-igs/3m/Wins-944-3060.pdf
 
-	    """
-
-            f = open(CocoEDI944.txt, 'rb')   # Open only in read mode.
-	        data = f.read(DATA_BUFFER_SIZE)     # Read for Buffer Size.
-	        if(data[0] == W7_HEADER):
-	            stockData = [data[3],  data[4]]   # Latitude & Longitude
-	        else:
-	            TODO
-	    except:
-	        this.DebugObject.Dprint("Could not open {CocoEDI944.txt}, ensure the filepath is correct.")
-            stockData = [Debug.BAD, DEBUG.BAD]
-	    
-
-	    return -1
+		"""
+		try:
+			f = open(CocoEDI944.txt, 'rb')   # Open only in read mode.
+			data = f.read(self.DATA_BUFFER_SIZE)     # Read for Buffer Size.
+			if(data[0] == self.W7_HEADER):
+				stockData = [data[3],  data[4]]   # Latitude & Longitude
+			else:
+				print('In else block')
+		except:
+			self.DebugObject.Dprint("Could not open {CocoEDI944.txt}, ensure the filepath is correct.")
+			stockData = [Debug.BAD, DEBUG.BAD]
+		return -1
 
 
 	def GetEDI944(self):
-	    """
-	    Read from  EDI 944 text file using interface defined at:
-	    https://www.jobisez.com/edi/tp/guide.aspx?doc=/edi-igs/3m/Wins-944-3060.pdf
+		"""
+		Read from  EDI 944 text file using interface defined at:
+		https://www.jobisez.com/edi/tp/guide.aspx?doc=/edi-igs/3m/Wins-944-3060.pdf
 
 
-	    """
+		"""
 
-	    return -1
+		return -1
 
 
 	def StartOTA(self, verison):
-	    """
-	    Update kiosk to version specified or newish version if invalid version number is given
+		"""
+		Update kiosk to version specified or newish version if invalid version number is given
 
-	    Key arguments:
+		Key arguments:
 		version -- Verison on software that should be running on a Tapomatic
 
 		Return value:
 		??? --	    
-	    """
+		"""
 
-	    if(verison > 2020.0):
-	        self.DebugObject.Dprint("Tracking your IP address, this in not public code :)")
-	    elif(version == 2020.0):
-	        #OLD Tapomatic CodeBase FilePath
-	        oldFilepath = "~/Tapomatic/v" + version
-	        #NEW Tapomatic CodeBase FilePath
-	        newVersion = version + 0.1
-	        check_call("mkdir newVersion", shell=True)
-	        newFilepath = "~/Tapomatic/v" + version
-	        check_call("cd newVersion", shell=True)
+		if(verison > 2020.0):
+			self.DebugObject.Dprint("Tracking your IP address, this in not public code :)")
+		elif(version == 2020.0):
+			#OLD Tapomatic CodeBase FilePath
+			oldFilepath = "~/Tapomatic/v" + version
+			#NEW Tapomatic CodeBase FilePath
+			newVersion = version + 0.1
+			check_call("mkdir newVersion", shell=True)
+			newFilepath = "~/Tapomatic/v" + version
+			check_call("cd newVersion", shell=True)
 
-	        #TODO Start downloading code with wget or CURL (CURL is most likely not useful)
-	        # https://curl.haxx.se/docs/manpage.html
-	        # https://stackoverflow.com/questions/15034471/using-git-and-curl-command-line
-	        # curl https://github.com/ROBO-BEV/Tapomatic
+			#TODO Start downloading code with wget or CURL (CURL is most likely not useful)
+			# https://curl.haxx.se/docs/manpage.html
+			# https://stackoverflow.com/questions/15034471/using-git-and-curl-command-line
+			# curl https://github.com/ROBO-BEV/Tapomatic
 
-	        check_call("wget https://github.com/ROBO-BEV/Tapomatic/tree/master/v2020.1", shell=True) 
-	        #TODO USE THIS url = "https://github.com/ROBO-BEV/Tapomatic/tree/master/" + newVersion       
-            #TODO wget url
+			check_call("wget https://github.com/ROBO-BEV/Tapomatic/tree/master/v2020.1", shell=True)
+			#TODO USE THIS url = "https://github.com/ROBO-BEV/Tapomatic/tree/master/" + newVersion
+			#TODO wget url
 
-	    elif(verison < 2020.0):
-	        self.DebugObject.Dprint("This is old code that ia on longer supported on this hardware.")	    
-	    else:
-	        self.DebugObject.Dprint("Invalid version number updating to v2020.0")
+		elif(verison < 2020.0):
+			self.DebugObject.Dprint("This is old code that ia on longer supported on this hardware.")
+		else:
+			self.DebugObject.Dprint("Invalid version number updating to v2020.0")
 
 
 	def StopOTA(self):
-	    """
+		"""
 
-	    Key arguments:
+		Key arguments:
 
-	    Return value:
+		Return value:
 
-	    """
+		"""
 
-	    return -1
+		return -1
 
 
 	def UnitTest():
-	    """
-	    Test object creatation and .key file reading
+		"""
+		Test object creatation and .key file reading
 
-	    Return value:
-	    DEBUG.OK if all tests pass
+		Return value:
+		DEBUG.OK if all tests pass
 
-	    """
+		"""
 
-	    print("START MissionControl.py UnitTest()")
+		print("START MissionControl.py UnitTest()")
 
-	    try:
-	        filename = ".key"
-	        f = open(filename, 'rb')            # Open only in read mode.
-	        data = f.read(DATA_BUFFER_SIZE)     # Read for Buffer Size.
-	    except:
-	        this.DebugObject.Dprint("Could not open {}, ensure the filepath is correct.")
+		try:
+			filename = ".key"
+			f = open(filename, 'rb')            # Open only in read mode.
+			data = f.read()     # Read for Buffer Size.
+		except:
+			print("Could not open {}, ensure the filepath is correct.")
 
-	    prototypeKioskID = 0
-	    GoodMissionControlObject = MissionControl(prototypeKioskID, 2020.0, f)
-	    GoodMissionControlObject.ReportLiquidLevel(CocoDrink.ORANGE_FLAVOR, 0, prototypeKioskID)
+		prototypeKioskID = 0
+		GoodMissionControlObject = MissionControl(prototypeKioskID, 2020.0, f)
+		#Get Kiosk GPS Location.
+		GoodMissionControlObject.GetKioskGPSlocation(prototypeKioskID)
+		GoodMissionControlObject.GetKioskLocationName((prototypeKioskID))
+		GoodMissionControlObject.ReportLiquidLevel(CocoDrink.ORANGE_FLAVOR, 0, prototypeKioskID)
 
-	    #BadMissionControlObject = MissionControl(1, 2020.2, ".key")
+		#BadMissionControlObject = MissionControl(1, 2020.2, ".key")
+		print("END UnitTest()")
 
-	    print("END UnitTest()")
-
-	    return DEBUG.OK
+		return DEBUG.OK
 
 
 if __name__ == "__main__":
 
-    try:
-        passedTest = MissionControl.UnitTest()
-    except NameError:
-        print("UnitTest() failed - Have a nice day :)")
+	try:
+		passedTest = MissionControl.UnitTest()
+	except NameError:
+		print("UnitTest() failed - Have a nice day :)")
 
-    print("END MissionControl.py MAIN")
+	print("END MissionControl.py MAIN")

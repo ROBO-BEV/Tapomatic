@@ -18,8 +18,7 @@ import socket
 from time import sleep, gmtime, strftime
 from datetime import datetime, timezone, timedelta
 
-# Allow keyboard to control program flow and typing to terminal window
-import pyautogui
+# Allow keyboard to control program flow and typing to terminal window import pyautogui
 
 # Create array
 import numpy as np

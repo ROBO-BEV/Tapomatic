@@ -113,7 +113,7 @@ class Actuator:
 
     # Class variable
 	actuatorID = 0
-	usedPins = [False]   #TODO use Python List or Array?
+	usedActuatorPins = [False] * 40
 
 
 	def __init__(self, aType, actuatorID, pins, partNumber, direction):
@@ -121,12 +121,12 @@ class Actuator:
 		Constructor to initialize an Actutator object, which can be an AngularServo(), Motor(), or Relay()
 
 		Key arguments:
-		self - Newly created object
-		aType - Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
-		actuatorID - Interger CONSTANT defined in Driver.py to enable quick array searches
-		pins - Array to document wires / pins being used by Raspberry Pi to control an actuator
-		partNumber - Vendor part number string variable (e.g. Seamuing MG996R)
-		direction - Set counter-clockwise (CCW) / Linear IN or clockwise (CW) / Linear OUT as the forward direction
+		self -- Newly created object
+		aType -- Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
+		actuatorID -- Interger CONSTANT defined in Driver.py to enable quick array searches
+		pins -- Array to document wires / pins being used by Raspberry Pi to control an actuator
+		partNumber -- Vendor part number string variable (e.g. Seamuing MG996R)
+		direction -- Set counter-clockwise (CCW) / Linear IN or clockwise (CW) / Linear OUT as the forward direction
 
 		Return value:
 		Newly created Actuator() object
@@ -144,8 +144,8 @@ class Actuator:
 		wires = np.empty(numOfWires, dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
 		for i in range(numOfWires):
 			#TODO REMOVE print("PIN: "  + repr(i))
-			if(1 <= pins[i] or pins[i] <= RaspPi.MAX_NUM_PI_A_OR_B_PLUS_GPIO_PINS):
-			    usedPins[i] = True
+			#TODO REMOVE print(pins[i])
+			usedActuatorPins = RaspPi.reservePin(i)
 			wires[i] = pins[i]
 
 		self.partNumber = partNumber
@@ -160,7 +160,7 @@ class Actuator:
 		#tempMotorObject = Motor(wires[len(wires)-2], wires[len(wires)-1])
 
 	    # The last wire in array is the relay control pin
-		#tempRelayObject = OutputDevice(wires[len(wires)-1])
+		tempRelayObject = OutputDevice(wires[len(wires)-1])
 
 	    # https://gist.github.com/johnwargo/ea5edc8516b24e0658784ae116628277
 	    # https://gpiozero.readthedocs.io/en/stable/api_output.html

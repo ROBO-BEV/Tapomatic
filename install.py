@@ -4,7 +4,7 @@ ___author__ = "Blaze Sanders"
 __email__   = "blaze.d.a.sanders@gmail.com"
 __company__ = "Robotic Beverage Technologies Inc"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-19"
+__date__    = "Late Updated: 2020-07-24"
 __doc__     = "Install script to setup development enviroment for CoCoTaps Tapomatic v2020.0"
 """
 
@@ -51,6 +51,8 @@ if __name__ == "__main__":
 		# @link https://medium.com/@mahmudahsan/how-to-use-python-pipenv-in-mac-and-windows-1c6dc87b403e
 		print("Please install Python3.7 or higher from www.python.org/downloads/windows/ before running install.py")
 		check_call("pip install pipenv", shell=True)    							#TODO Does this work with PowerShell?
+		check_call("pip install rpi.gpio", shell=True)
+
 		filepath = 'c:\\users\\' + args.PC_username + '\\appdata\\local\\programs\\python\\python36-32\\Scripts'
 		check_call("set PATH=%PATH%;set PATH=%PATH%;'" + filepath +"'", shell=True) #TODO Does this work with PowerShell?
 
@@ -99,34 +101,39 @@ if __name__ == "__main__":
 		#check_call("mkdir ~/.linuxbrew/bin", shell=True)
 		#check_call("vn -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin", shell=True)
 		#check_call("eval $(~/.linuxbrew/bin/brew shellenv)", shell=True)
+		#check_call("brew install pipenv", shell=True)
+
 		# Flask requires Python 3 to work
 		check_call("brew install python3", shell=True)
-		#check_call("brew install pipenv", shell=True)
-		check_call("brew install docutils", shell=True)
+
 		# Install CV libs
 		check_call("pip3 install opencv-python", shell=True)
-		# This import SHOULD work on both Mac & PC to allow software dev work (no hardware)
-		check_call("pip3 install gpiozero pigpio", shell=True)
 		# The above line of code replaces the next three??? Blaze tests say so....
 		#check_call("brew install opencv-python", shell=True)
 		#check_call("brew install numpy", shell=True)
 		#check_call("brew install opencv-python", shell=True)
 
+		# ONE OF THESE  imports SHOULD work on both Mac & PC to allow software dev work (no hardware)
+		check_call("pip3 install gpiozero pigpio", shell=True)
+		#TODO USE IN RaspPi.py? from gpiozero.pins.mock import MockFactory
+		#TODO REMOVE check_call("pip install rpi.gpio", shell=True)
+
+
 
 	#Install screenshot, keyboard and mouse control
 	#CHANGE TO BREW check_call("sudo apt-get install python3-tk python3-dev", shell=True)
 	check_call("pip3 install pyautogui", shell=True)
-	
+
 	# TODO ??Computer Vision Widow stuff??
 	check_call("pip3 install scikit-image", shell=True)
-	
+
 	#Install MYQR code
 	check_call("pip3 install myqr", shell=True)
 
-	# Start PIPENV Python Virtual Environment packaging tool installs
-	# @link https://pipenv.readthedocs.io/en/latest/basics/
-	# Communicate with sensors
-	# TODO DO WE NEEDED THIS? check_call("pipenv install pyserial", shell=True)
+	# Install a documentation library
+	check_call("pip3 install docutils", shell=True)
+
+	check_call("pip3 install gpiozero", shell=True)
 
 	# Flask is the GUI front-end to that runs in parallel with python back-end controlling pumps
 	# Remember to run flask with "python3" NOT "python" command, or you will get weird errors :)
@@ -134,12 +141,12 @@ if __name__ == "__main__":
 	check_call("pip install flask", shell=True) 		# Python microframework for GUI creation 
 	check_call("export FLASK_APP=GUI.py", shell=True)   # Set enviroment variable to select GUI.py file as the Flask application
 
-	# Install a documentation library
-	check_call("pip install docutils", shell=True)
+	# Start PIPENV Python Virtual Environment packaging tool installs
+	# @link https://pipenv.readthedocs.io/en/latest/basics/
+	# Communicate with sensors
+	# TODO DO WE NEEDED THIS? check_call("pipenv install pyserial", shell=True)
 
-
-
-# Install a numby library for array creation
+	# Install a numby library for array creation
 	#check_call("pipenv install numpy", shell=True)
 
 	# Activate PIPENV
