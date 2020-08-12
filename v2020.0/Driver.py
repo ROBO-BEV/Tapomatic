@@ -9,13 +9,12 @@ __doc__     = "Logic to run Tapomatic back-end services (i.e. not GUI)"
 """
 
 # Useful standard Python system jazz
-import sys, traceback, argparse, string
+import argparse
 
 # Allow UDP communication between computers
 import socket
 
 # TODO DOWNSELECT LIBRARIES Allow program to create GMT and local timestamps
-from time import sleep, gmtime, strftime
 from datetime import datetime, timezone, timedelta
 
 # Allow keyboard to control program flow and typing to terminal window import pyautogui
@@ -25,9 +24,6 @@ import numpy as np
 
 # Custom CocoTaps and Robotic Beverage Technologies Inc code
 from CocoDrink import *        	# Store valid CoCoTaps drink configurations
-from Actuator import *         	# Modular plug and play control of motors, servos, and relays
-from Debug import *		        # Configure datalogging parameters and debug printing control
-from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
 from LASER import *		        # Enable LASER movement and image warping around coconut
 
 # Over The Air (OTA) Updating Configurations

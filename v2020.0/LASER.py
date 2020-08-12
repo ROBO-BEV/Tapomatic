@@ -12,13 +12,10 @@ __doc__     = "Class to control and move LASER system"
 import os
 
 # Allow program to create GMT and local timestamps and pause program execution
-from time import gmtime, strftime, sleep
 
 # Custom CocoTaps and Robotic Beverage Technologies code
-from Debug import *             # Configure datalogging parameters and debug printing control
 from CocoDrink import *        	# Stores valid CoCoTaps drink configurations
 from RaspPi import *        # Contains usefull GPIO pin CONSTANTS and setup configurations
-from Actuator import *          # Modular plug and play control of motors, servos, and relays
 
 # Computer Vision modules to edit / warp images
 #import cv2 as cv       #TODO REMOVE SINCE MAKING SIMPLER IS DUMB!

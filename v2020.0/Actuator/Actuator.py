@@ -24,6 +24,7 @@ __doc__ =     "Class to operate at least 64 servos, 16 relays, and 32 motors at 
 #TODO REMOVE? import time
 
 # Allow program to pause operation and create local timestamps
+from builtins import ImportError, len, NameError
 from time import sleep
 
 # Allow program to extract filename of the current file
@@ -116,13 +117,12 @@ class Actuator:
 	usedActuatorPins = [False] * 40
 
 
-	def __init__(self, aType, actuatorID, pins, partNumber, direction):
+	def __init__(self, pins, partNumber, direction):
 		"""
 		Constructor to initialize an Actutator object, which can be an AngularServo(), Motor(), or Relay()
 
 		Key arguments:
 		self -- Newly created object
-		aType -- Single String character to select type of actuator to create (S=Servo, M=Motor, R=Relay)
 		actuatorID -- Interger CONSTANT defined in Driver.py to enable quick array searches
 		pins -- Array to document wires / pins being used by Raspberry Pi to control an actuator
 		partNumber -- Vendor part number string variable (e.g. Seamuing MG996R)
@@ -131,14 +131,10 @@ class Actuator:
 		Return value:
 		Newly created Actuator() object
 	    """
-
 		currentProgramFilename = os.path.basename(__file__)
 		self.DebugObject = Debug(True, currentProgramFilename)
-
 		self.actuatorID = Actuator.actuatorID
 		Actuator.actuatorID = Actuator.actuatorID + 1
-
-		self.actuatorType = aType
 
 		numOfWires = len(pins)
 		wires = np.empty(numOfWires, dtype=object)   # TODO wires = ndarray((len(pins),),int) OR wires = [None] * len(pins) 				# Create an array on same length as pins[?, ?, ?]
@@ -156,26 +152,6 @@ class Actuator:
 		#tempServoObject = gpiozero.Servo(pins[0]) #TODO REMOVE BECAUSE TO SIMPLE AN OBJECT
 		#tempAngularServoObject = AngularSevo(wires[len(wires)-1])
 
-    	# The last two wires in array are the INPUT control pins
-		#tempMotorObject = Motor(wires[len(wires)-2], wires[len(wires)-1])
-
-	    # The last wire in array is the relay control pin
-		tempRelayObject = OutputDevice(wires[len(wires)-1])
-
-	    # https://gist.github.com/johnwargo/ea5edc8516b24e0658784ae116628277
-	    # https://gpiozero.readthedocs.io/en/stable/api_output.html
-	    # https://stackoverflow.com/questions/14301967/bare-asterisk-in-function-arguments/14302007#14302007
-		if(aType == "S"):
-			self.actuatorObject = tempAngularServoObject
-			#TODO If above DOES NOT WORK: self.actuatorType = Servo(wires[0], initial_value=0, min_pulse_width=1/1000, max_pulse_width=2/1000, frame_width=20/1000, pin_factory=None)
-		elif(aType == "M"):
-			self.actuatorObject = tempMotorObject
-			#TODO If above DOES NOT WORK: self.actuatorType = Motor(wires[0], wires[1], pwm=true, pin_factory=None)
-		elif(aType == "R"):
-			self.actuatorObject = tempRelayObject
-			#TODO If above DOES NOT WORK: self.actuatorObject = gpiozero.OutputDevice(wired[0], active_high=False, initial_value=False)
-		else:
-			self.DebugObject.Dprint("INVALID Actutator Type in __init__ method, please use S, M, or R string as first parameter to Actuator() Object")
 
 
 	def Run(self, duration, newPosition, speed, direction):
@@ -193,43 +169,9 @@ class Actuator:
 		Return Value:
 		NOTHING
 		"""
-
 		print("Actuator.py Run() function started!")
 
-		if(type == "S"):
-			currentPosition = self.actuatorObject.value()
-			if(currentPosition < (newPosition - Actuator.SERVO_SLACK)):
-				self.actuatorObject.max() #TODO THIS MAY NOT STOP AND GO ALL THE WAY TO MAX POS
-			elif(currentPosition > (newPosition - Actuator.SERVO_SLACK)):
-				self.actuatorObject.min() #TODO THIS MAY NOT STOP AND GO ALL THE WAY TO MIN POS
-			else:
-				# NEAR to new position DO NOTHING
-				self.actuatotObject.dettach()
-		elif(type == "M"):
-			#TODO Write motor control code
 
-			Motor.enable() #TODO CHANGE TO self.acutatorObject
-			currentPosition = actuatorObject.value
-
-			while(currentPosition != newPosition):
-				if(actuatorObject.forwardDirection == Actuator.CW):
-					Motor.forward(speed)
-				else:
-					Motor.reverse(speed)
-
-				currentPosition = self.actuatorObject.value
-
-			sleep(duration)    #TODO signal.pause(duration)
-			Motor.disable()
-
-		elif(type == "R"):
-			relay.on()
-			sleep(duration) 	#TODO signal.pause(duration)
-			relay.off()
-		else:
-			self.DebugObject.Dprint("INVALID Actutator Type sent to Run method, please use S, M, R as first parameter to Actuator() Object")
-
-		self.DebugObject.Dprint("Run function completed!")
 
 
 	def setAngularPosition(self, newAngle):
@@ -242,16 +184,7 @@ class Actuator:
         Return value:
         NOTHING
         """
-
-		if(self.actuatorType == "S"):
-			self.angle = newAngle
-		elif(self.actuatorType == "M"):
-			self.DebugObject.Dprint("THIS CODE IS GOING TO BE HARD")
-			#TODO Possible global variable with dead recoking needed
-		elif(self.actuatorType == "R"):
-			self.Debug.Dprint("Relays do not have rotational positions. Are you sure you called the correct object?")
-		else:
-			self.DebugObject.Dprint("INVALID Actutator Type sent to SetAngularPosition method, please use S, M, R as first parameter to Actuator() Object")
+		self.Debug.Dprint("Relays do not have rotational positions.")
 
 
 	def getPosition(self):
@@ -261,11 +194,6 @@ class Actuator:
 		Return value:
 		The position of actuator, with value between -1.0 and 1.0 inclusively
 		"""
-
-		if(self.actuatorType == "S"):
-			print("TODO")
-			#TODO return self.value
-
 
 	def isActive(self):
 		"""

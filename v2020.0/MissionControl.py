@@ -9,15 +9,11 @@ __doc__     = "Class to define OTA commuications architecture for 30K+ Tapomatic
 """
 
 # Allow program to create GMT and local timestamps
-from time import gmtime, strftime
 
 # Allow program to READ Comma Separated Value files
 import csv
-import RaspPi
-import Actuator
 import CocoDrink
 import Debug
-from flask import current_app
 import os
 
 

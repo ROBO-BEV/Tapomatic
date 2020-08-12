@@ -12,13 +12,10 @@ __doc__     = "Class to document the internal configurations of the Raspberry Pi
 import os
 
 # Allow BASH command to be run inside Python3 code like this file
-import subprocess
-from subprocess import Popen, PIPE
 from subprocess import check_call
 
 # Custom CocoTaps and Robotic Beverage Technologies Inc code
 from Debug import *             # Configure datalogging parameters and debug printing control
-from Actuator import *          # Modular plug and play control of motors, servos, and relays
 
 # Import the whole gpiozero library for low level control or pins and high level Pi data
 import gpiozero
