@@ -129,7 +129,7 @@ class Actuator:
 		direction -- Set counter-clockwise (CCW) / Linear IN or clockwise (CW) / Linear OUT as the forward direction
 
 		Return value:
-		Newly created Actuator1() object
+		Newly created Actuator() object
 	    """
 		currentProgramFilename = os.path.basename(__file__)
 		self.DebugObject = Debug(True, currentProgramFilename)
@@ -169,7 +169,7 @@ class Actuator:
 		Return Value:
 		NOTHING
 		"""
-		print("Actuator1.py Run() function started!")
+		print("Actuator.py Run() function started!")
 
 
 
@@ -224,7 +224,7 @@ class Actuator:
 if __name__ == "__main__":
 
 	try:
-		#Actuator1.UnitTest()
+		#Actuator.UnitTest()
 		#relay = OutputDevice(8) #BCM-8
 		#relay.on()
 		#time.sleep(20) # seconds or milliseconds?

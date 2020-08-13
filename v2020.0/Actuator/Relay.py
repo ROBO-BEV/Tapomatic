@@ -7,7 +7,7 @@ __status__ =  "Development"
 __date__ =    "Late Updated: 2020-08-11"
 __doc__ =     "Class Contains Relay Operations"
 """
-import Actuator
+from Actuator import Actuator
 from builtins import super
 from time import sleep
 
