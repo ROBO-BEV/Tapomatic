@@ -28,13 +28,14 @@ from builtins import ImportError, len, NameError
 from time import sleep
 
 # Allow program to extract filename of the current file
-import os
-
+import sys, os.path
+v2020 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(v2020)
 # Custom CocoTaps and Robotic Beverage Technologies code
-from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
-from Debug import *
-# Create an array of specific length to restrict resizing and appending (like Pythom list) to improve performance
-import numpy as np
+import RaspPi
+import Debug
+# # Create an array of specific length to restrict resizing and appending (like Pythom list) to improve performance
+# import numpy as np
 #TODO REMOVE? from numpy import ndarray, empty #Pick the one that is faster
 
 try:
@@ -128,7 +129,7 @@ class Actuator:
 		direction -- Set counter-clockwise (CCW) / Linear IN or clockwise (CW) / Linear OUT as the forward direction
 
 		Return value:
-		Newly created Actuator() object
+		Newly created Actuator1() object
 	    """
 		currentProgramFilename = os.path.basename(__file__)
 		self.DebugObject = Debug(True, currentProgramFilename)
@@ -168,7 +169,7 @@ class Actuator:
 		Return Value:
 		NOTHING
 		"""
-		print("Actuator.py Run() function started!")
+		print("Actuator1.py Run() function started!")
 
 
 
@@ -223,12 +224,14 @@ class Actuator:
 if __name__ == "__main__":
 
 	try:
-		#Actuator.UnitTest()
+		#Actuator1.UnitTest()
 		#relay = OutputDevice(8) #BCM-8
 		#relay.on()
 		#time.sleep(20) # seconds or milliseconds?
 		#relay.off()
 		print("THIS CANT FAIL?")
+		v2020 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+		print('******** ' + v2020)
 
 	except NameError:
 		currentProgramFilename = os.path.basename(__file__)

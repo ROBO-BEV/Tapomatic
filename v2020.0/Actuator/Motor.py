@@ -9,7 +9,6 @@ __doc__ =     "Class Contains Motor Operations"
 """
 from builtins import super
 from time import sleep
-
 import Actuator
 
 class Motor(Actuator):
@@ -17,7 +16,7 @@ class Motor(Actuator):
         # https://gist.github.com/johnwargo/ea5edc8516b24e0658784ae116628277
         # https://gpiozero.readthedocs.io/en/stable/api_output.html
         # https://stackoverflow.com/questions/14301967/bare-asterisk-in-function-arguments/14302007#14302007
-        super(Motor, self, pins, partNumber, direction).__init__()
+        super(Motor, pins, partNumber, direction).__init__()
         # The last two wires in array are the INPUT control pins
         tempMotorObject = Motor(wires[len(wires)-2], wires[len(wires)-1])
         self.actuatorObject = tempMotorObject
