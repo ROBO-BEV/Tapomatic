@@ -5,7 +5,8 @@ import Relay
 
 class TestActuator(unittest.TestCase):
     def test_sample(self):
-        self.assertEqual(1,1)
+        m = Motor(2,1234,'FWD')
+        self.assertIsInstance(Actuator)
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)

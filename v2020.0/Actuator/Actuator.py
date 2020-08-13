@@ -31,9 +31,8 @@ from time import sleep
 import os
 
 # Custom CocoTaps and Robotic Beverage Technologies code
-from Debug import *             # Configure datalogging parameters and debug printing control
 from RaspPi import *            # Contains usefull GPIO pin CONSTANTS and setup configurations
-
+from Debug import *
 # Create an array of specific length to restrict resizing and appending (like Pythom list) to improve performance
 import numpy as np
 #TODO REMOVE? from numpy import ndarray, empty #Pick the one that is faster
