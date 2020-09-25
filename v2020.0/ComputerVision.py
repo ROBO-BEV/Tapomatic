@@ -233,20 +233,35 @@ class ComputerVision():
         """
 
         return numOfPixels
-    
-    def ScanQRcode():
+
+    def CreateQRcode():
         """
         Used MyQR https://github.com/sylnsfar/qrcode and/or https://www.qrcode-monkey.com/#text to made Image QR codes with return intergers 
-        
+
         Key arguments:
         NONE
-        
+
         Return value:
         qrCodeInt -- Interger, corresponding to the CocoDrink.py CONSTANT for each bottle flavor and/or health additiive
         """
-        
+
         return qrCodeInt
 
+	def ScanQRcode():
+		"""
+		Use https://manpages.debian.org/jessie/fswebcam/fswebcam.1.en.html
+		https://www.raspberrypi.org/documentation/usage/webcams/
+		https://www.raspberrypi.org/forums/viewtopic.php?t=142489
+		https://elinux.org/RPi_USB_Webcams
+		https://www.raspberrypi.org/forums/viewtopic.php?t=23800
+		
+		"""
+		img = cv2.imread(path, mode)  # 0 for black, 1 for rgb
+		check_call("fwswebcam -d /dev/video0 - r 960x720 pic.jpg" , shell=True)
+
+		img = /pic.jpg
+
+		return img
 
 if __name__ == "__main__":
     object = ComputerVision()
