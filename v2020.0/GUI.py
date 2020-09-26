@@ -42,6 +42,7 @@ def WelcomeScreen():
 	HTMLtoDisplay = "welcome.html"
 	return render_template(HTMLtoDisplay)
 
+#TODO Remove tap or cut options since cutting motors where removed
 @app.route('/TapOrCut', methods=['GET'])
 def TapOrCutScreen():
 	"""
@@ -130,17 +131,3 @@ if __name__ == '__main__':
     else:
 	    app.run(debug=False) # check_call("export FLASK_DEBUG=0", shell=True)
 	    app.run(host='0.0.0.0')
-
-    # #WelcomeScreen()
-    # #TODO Add button code
-    # #sleep(3)
-    # TapOrCutScreen()
-    #
-    # print("Sleeping Worked")
-    # #FlavorScreen()
-    # #sleep(3)
-    # #BrandScreen()
-    # #sleep(3)
-    # #WaitingScreen()
-    # #sleep(3)
-    # #CompleteScreen()

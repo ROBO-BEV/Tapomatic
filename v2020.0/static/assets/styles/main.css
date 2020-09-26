@@ -188,8 +188,8 @@ button:focus{
 .side-option-img{
     width: auto;
     height: auto;
-    max-width: 80px;
-    max-height: 40px;
+    max-width: 250px;
+    max-height: 125px;
 }
 /* 4 */
 .count-down{
@@ -208,7 +208,7 @@ button:focus{
     width: var(--md-option-width);
 }
 .add-option h1{
-    margin: 8px auto;
+    margin: 40px auto;
 }
 /* 7 */
 .tap-your-thirst-img{

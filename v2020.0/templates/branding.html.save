@@ -44,10 +44,10 @@
     <main>
         <div class="container flex-column flex-container justify-space-between">
             <div class="flex-container justify-center">
-                <img class="side-main-img" src="../static/images/BacardiLogoV0.png" alt="red bull image">
+                <img class="side-main-img" src="../static/images/red-bull.jpeg" alt="red bull image">
             </div>
             <div class="text-center">
-                <h1 class="option-title">Select image for the side of our coconut from list below</h1>
+                <h1 class="option-title">Select image for the side of your coconut from list below</h1>
             </div>
             <div class="flex-container justify-space-between flex-wrap">
                 <div class="side-option border-box text-center">
@@ -60,7 +60,7 @@
                 <div class="side-option border-box text-center">
                 <a href="{{ url_for('Health', userselection='red_bull') }}", method="GET" >
                     <button>
-                        <img class="side-option-img" src="../static/images/BacardiLogoV0.png" alt="bacardi option">
+                        <img class="side-option-img" src="../static/images/red-bull.jpeg" alt="red bull option">
                     </button>
                 </a>
                 </div>
