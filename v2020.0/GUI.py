@@ -43,7 +43,7 @@ def WelcomeScreen():
 	return render_template(HTMLtoDisplay)
 
 #TODO Remove tap or cut options since cutting motors where removed
-@app.route('/TapOrCut', methods=['GET'])
+@app.route('/Size', methods=['GET'])
 def TapOrCutScreen():
 	"""
 	GUI for displaying options to the user Cancel order or  1. Tap 2. Cutoff.
@@ -52,7 +52,7 @@ def TapOrCutScreen():
 	"""
 	# userSelection = request.args.get('userselection')
 	# print('userSelection:: ' + str(userSelection))
-	HTMLtoDisplay = "tapOrCut.html"
+	HTMLtoDisplay = "size.html"
 	return render_template(HTMLtoDisplay)
 
 

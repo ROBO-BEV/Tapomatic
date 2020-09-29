@@ -1,0 +1,64 @@
+<!--
+ * @file tapOrCut.html
+ * @author Blaze Sanders Robotic Beverage Technologies Inc
+ * @date 2020-03-14
+ * @link https://aryaboudaie.com/python/technical/educational/web/flask/2018/10/17/flask.html
+ * @version 0.0
+ *
+ * @brief HTML code to render second screen for the CoCoTaps food service system
+ *	
+ * @section DESCRIPTION
+ *
+ * Brand colors: 
+ * Dark Green (0x086D38), Light Green (0x86C042), 
+ * Apple White (0xFDFDFD), White (0xFFFFFF),
+ * Apple Black (0x010306), Logo Black (0x2A3627)
+ * 
+ -->
+<html lang="en">
+  <head>
+    <title> Drink Size </title>
+
+    <!--TODO CSS STUFF HERE-->
+    <!Try using Arial typeface first and Source Sans Pro last> 
+     <!-- custom styles -->
+    <link rel="stylesheet" href="./static/assets/styles/main.css">
+  </head>
+
+  <body>
+    <!--TODO: FIX SCRIPT TO ALLOW USE OF ARRAYS-->
+    <script language ="JavaScript">
+	  var fontSize = 60;
+    </script>
+    <main>
+        <div class="container flex-column flex-container justify-space-between">
+            <div>
+				<center>
+                <img class="logo-img" src="../static/images/coco-taps.jpeg" alt="coco taps logo">
+				</center>
+            </div>
+            <div class="flex-container justify-space-between flex-wrap sm-justify-center">
+                <div class="option-box flex-container flex-column justify-center align-center cursor-pointer">
+                    <a href="{{ url_for('Branding', userselection='TapOrCut') }}", method="GET" >
+                        <button class="border-box text-center">
+                            <h1> Select SINGLE size drink </h1>
+                        </button>
+                    </a>
+                    <img class="down-arrow" src="../static/images/stretched-down-arrow.png" alt="down arrow">
+                    <img class="product-img" src="../static/images/SingleSize.jpeg" alt="Single">
+                </div>
+                <div class="option-box flex-container flex-column justify-center align-center cursor-pointer">
+                    <a href="{{ url_for('Branding', userselection='TapCoco') }}", method="GET" >
+                        <button class="border-box text-center">
+                            <h1> Select DOUBLE size drink </h1>
+                        </button>
+                    </a>
+                    <img class="down-arrow" src="../static/images/stretched-down-arrow.png" alt="down arrow">
+                    <img class="product-img" src="../static/images/DoubleSize.jpeg" alt="Double">
+                </div>
+            </div>
+        </div>
+    </main>
+
+  </body>
+</html>
