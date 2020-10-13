@@ -4,14 +4,16 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-27"
+__date__    = "Late Updated: 2020-10-12"
 __doc__     = "Class to control and move LASER system"
 """
 
 # Allow program to extract filename of the current file
 import os
 
-# Allow program to create GMT and local timestamps and pause program execution
+# Allow program to pause and create GMT and local timestamps and pause program execution
+import time
+#import datetime
 
 # Custom CocoTaps and Robotic Beverage Technologies code
 from CocoDrink import *        	# Stores valid CoCoTaps drink configurations
@@ -21,20 +23,21 @@ from RaspPi import *        # Contains usefull GPIO pin CONSTANTS and setup conf
 #import cv2 as cv       #TODO REMOVE SINCE MAKING SIMPLER IS DUMB!
 import cv2
 
+# Allow control of simple output devices such as power relays
+import RPi.GPIO as GPIO
 
-try:
-    # Allow control of output devices such as LEDs and Relays
-    from gpiozero import LED, OutputDevice
-    #from gpiozero import Energenize #TODO REMOVE SINCE TOO SPECIFIC???
-
-except ImportError:
-    #TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVERYWHERE? http://wiringpi.com/the-gpio-utility/
-    currentProgramFilename = os.path.basename(__file__)
-    TempDebugObject = Debug(True, "Try/Catch ImportError in " + currentProgramFilename)
-    RaspPi.DevPinConfigError(TempDebugObject)
+#TODO DO LOW LEVEL PIN CONTROL THAT WORKS EVERYWHERE? http://wiringpi.com/the-gpio-utility/
+##currentProgramFilename = os.path.basename(__file__)
+##TempDebugObject = Debug(True, "Try/Catch ImportError in " + currentProgramFilename)
+#RaspPi.DevPinConfigError(TempDebugObject)
 
 
 class LASER:
+
+	# GPIO pin CONSTANTS for relay controling LASER
+	LASER_FIRE_PIN = 7
+	HIGH = 1
+	LOW = 0
 
 	# Preset LASER power level CONSTANTS (units are Watts)
 	HIGH_POWER = 10.00
@@ -59,21 +62,24 @@ class LASER:
 	    Create a LASER object with power settings, part numbers, and image data to used when fired via GPIO pin
 
 	    Key arguments:
-    	    gpioFirePin -- 5V GPIO pin used to control a LASER or a 12V relay connected to a LASER
-	    supplierPartNumber -- External supplier part number (i.e. PA-07-12-5V)
-	    cocoPartNumber -- Internal part number (i.e XXX-YYYYY-Z)) linked to one supplier part number
-	    powerLevel -- Power in Wats to intialize a LASER module first fire to
-	    maxPowerLevel -- Max power in Watts that LASER can support in continous operation (> 30 seconds)
-	    brandingArt -- Black & White PNG image to brand / burn into an object
+    		gpioFirePin -- 5V GPIO pin used to control a LASER or a 12V relay connected to a LASER
+	    	supplierPartNumber -- External supplier part number (i.e. PA-07-12-5V)
+	    	cocoPartNumber -- Internal part number (i.e XXX-YYYYY-Z)) linked to one supplier part number
+	    	powerLevel -- Power in Wats to intialize a LASER module first fire to
+	    	maxPowerLevel -- Max power in Watts that LASER can support in continous operation (> 30 seconds)
+	    	brandingArt -- Black & White PNG image to brand / burn into an object
 
 	    Return value:
-	    New LASER() object
+	    	New LASER() object
 	    """
 
 	    currentProgramFilename = os.path.basename(__file__)
 	    self.DebugObject = Debug(True, currentProgramFilename)
+	    print("1")
 
-	    #self.gpioFirePin = gpiozero.OutputDevice(gpioFirePin)
+	    GPIO.setmode(GPIO.BOARD)
+	    self.gpioFirePin = GPIO.setup(LASER_FIRE_PIN, GPIO.OUT, initial=GPIO.LOW)
+	    print("2")
 
 	    self.supplierPartNumber = supplierPartNumber
 
@@ -93,9 +99,9 @@ class LASER:
 	    else:
 	        self.powerLevel = powerLevel
 
-	    self.brandingArt = LASER.__WarpImage(CocoDrink.COCOTAPS_LOGO, CocoDrink.SIZE_102MM) # Initialize to standard CocoTaps logo
+	    #self.brandingArt = LASER.__WarpImage(CocoDrink.COCOTAPS_LOGO, CocoDrink.SIZE_102MM) # Initialize to standard CocoTaps logo
 
-	    LASER.__ConfigureLaserForNewImage(self.brandingArt)
+	    #LASER.__ConfigureLaserForNewImage(self.brandingArt)
 
 
 	def LoadImage(fileName):
@@ -212,6 +218,35 @@ class LASER:
 	    """
 
 	    self.gpioFirePin.off()
+
+	def ImageMatrix(self, cols, row):
+		"""
+
+		"""
+		imgMatrix = [ ([0]*cols) for row in range(row)]
+
+		imgMatrix[0][0] = 255
+		imgMatrix[0][1] = 0
+		imgMatrix[0][2] = 0
+		imgMatrix[0][3] = 0
+		imgMatrix[0][4] = 255
+		imgMatrix[0][5] = 255
+		imgMatrix[0][6] = 255
+		imgMatrix[0][7] = 126
+		imgMatrix[0][8] = 126
+		imgMatrix[0][9] = 126
+
+
+		imgMatrix[1][0] = 0
+		imgMatrix[1][1] = 255
+		imgMatrix[1][2] = 255
+		imgMatrix[1][3] = 255
+		imgMatrix[1][4] = 0
+		imgMatrix[1][5] = 0
+		imgMatrix[1][6] = 0
+		imgMatrix[1][7] = 126
+		imgMatrix[1][8] = 126
+		imgMatrix[1][9] = 126
 
 
 	def BurnImage(self, laserConfig):
@@ -338,10 +373,10 @@ if __name__ == "__main__":
     LaserDebugObject = Debug(True, currentProgramFilename)
     LaserDebugObject.Dprint("Running LASER.py main unit test")
     #laserConfig = -1
-    TestLASERobject = LASER(RaspPi.BOARD7, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrink.COCOTAPS_LOGO)
+    #TestLASERobject = LASER(LASER_FIRE_PIN, "40004672601138", "205-0003-A", LASER.STANDARD_POWER, 10, CocoDrink.COCOTAPS_LOGO)
 
-    TestLASERobject.ConfigureLaserForNewImage()
-    TestLASERobject.BurnImage(laserConfig)
+    #TestLASERobject.ConfigureLaserForNewImage(BaracdiLogoV1.png) #1000 x 536
+    #TestLASERobject.BurnImage(laserConfig)
     time.sleep(10) 										# Pause 10 seconds
 
     StopLASER()
