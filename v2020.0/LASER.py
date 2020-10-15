@@ -20,7 +20,7 @@ from CocoDrink import *        	# Stores valid CoCoTaps drink configurations
 from RaspPi import *        # Contains usefull GPIO pin CONSTANTS and setup configurations
 
 # Computer Vision modules to edit / warp images
-#import cv2 as cv       #TODO REMOVE SINCE MAKING SIMPLER IS DUMB!
+# https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-raspbian-buster/
 import cv2
 
 # Allow control of simple output devices such as power relays

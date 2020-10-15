@@ -4,7 +4,7 @@ __author__  = "Blaze Sanders"
 __email__   = "blaze@cocotaps.com"
 __company__ = "CocoTaps"
 __status__  = "Development"
-__date__    = "Late Updated: 2020-07-28"
+__date__    = "Late Updated: 2020-10-15"
 __doc__     = "Class to document the internal configurations of the Raspberry Pi's"
 """
 
@@ -20,14 +20,16 @@ from Debug import *             # Configure datalogging parameters and debug pri
 # Import the whole gpiozero library for low level control or pins and high level Pi data
 import gpiozero
 
+# Allow program to pause program execution
+import time
 
 class RaspPi:
 
     # Internal local network IP addresses and ports
     # TODO Configure with /etc/rc.local startup script ipconfig command
     # ifconfig eth0 192.168.0.69 netmask 255.255.255.0 up
-    GUI_PI_IP = "192.168.0.69"
-    VEND_PI_IP = "69.69.1.42"
+    GUI_PI_IP = "192.168.0.26"
+    VEND_PI_IP = "192.168.0.42"
     UDP_PORT = 5005
 
     # External network IP addresses
@@ -146,7 +148,7 @@ class RaspPi:
 
         if(gpioMode == RaspPi.GPIO_MODE_0):
         	# DO NOTHING BY SLEEPING 10 ms
-        	sleep(0.010)
+        	time.sleep(0.010)
         elif(gpioMode == RaspPi.GPIO_MODE_1):
         	# Define each of the pins to a specific type
          	gpiozero.OutputDevice(RaspPi.BOARD7)
@@ -176,7 +178,7 @@ class RaspPi:
             self.DebugObject.Dprint("ERROR: Invalid GPIO mode, see RaspPi.py CONSTANTS")
 
         if(cpuPowerMode == RaspPi.HIGH_POWER):
-        	check_call("xrandr --output LVDS --brightness 0.90", shell=True)
+        	#check_call("xrandr --output LVDS --brightness 0.90", shell=True)
         	print("TODO RaspPi.py cpuPowerMode == RaspPi.HIGH_POWER")
         elif(cpuPowerMode == RaspPi.LOW_POWER):
         	check_call("xrandr --output LVDS --brightness 0.20", shell=True)
@@ -270,13 +272,14 @@ class RaspPi:
 
 if __name__ == "__main__":
 
-#    try:
-	RaspPi.UnitTest()
+    try:
+	#piDevice = RaspPi(RaspPi.GPIO_MODE_0, RaspPi.HIGH_POWER)
+	RaspPi.UnitTest
 
-#   except NameError:
+    except NameError:
 
 	currentProgramFilename = os.path.basename(__file__)
 	NameDebugObject = Debug(True, currentProgramFilename)
-#   	NameDebugObject.Dprint("Try fail in __main__ of " + str(currentProgramFilename))
+   	NameDebugObject.Dprint("Try fail in __main__ of " + str(currentProgramFilename))
 
 	print("END RaspPi.py __main__")
