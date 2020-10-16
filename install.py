@@ -82,7 +82,6 @@ if __name__ == "__main__":
         check_call("sudo apt-get install python3-tk python3-dev", shell=True)
         check_call("pip3 install pyautogui", shell=True)
 
-		# Install GUI serial communication software for CNC control
 		sudo apt install minicom
 
 		# Install Docker for enviroment configuration
@@ -121,6 +120,8 @@ if __name__ == "__main__":
 		#TODO REMOVE check_call("pip install rpi.gpio", shell=True)
 
 
+	# Install serial communication software for USB  CNC control
+	check_call("pip install pyserial", shell=True)
 
 	#Install screenshot, keyboard and mouse control
 	#CHANGE TO BREW check_call("sudo apt-get install python3-tk python3-dev", shell=True)

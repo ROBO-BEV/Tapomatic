@@ -7,6 +7,8 @@ import numpy
 import cv2
 #from CocoDrink import *
 
+import multiprocessing as mp
+
 HIGH = 1
 LOW = 0
 
@@ -78,7 +80,7 @@ def BurnImage(img, laserConstant):
 	pixelBurnDuration = 0.015
 
 	dutyCycle = 100
-	frequency = 1                                         # Desired LASER pulse in Hz
+	frequency = 100                                         # Desired LASER pulse in Hz
 
 	imageBurnComplete = False
 	pixelNum = 1
@@ -87,14 +89,24 @@ def BurnImage(img, laserConstant):
 	grayScaleImage = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
 
 	imgHeight, imgWidth =  grayScaleImage.shape
-	totalPixel = imgHeight * imgWidth
-	print('Total Number Of Pixels: ', totalPixel)
+	totalPixels = imgHeight * imgWidth
+	print('Total Number Of Pixels: ', totalPixels)
 
-	while(not imageBurnComplete):                           # laserConstant is a class variable                                                                   highTime = 1/frequency  * dutyCycle * laserConstant
-		highTime = 1/frequency  * dutyCycle * laserConstant
-		time.sleep(highTime)                             		# Sleep upto 10 ms = 100 Hz and keep LASER ON
+	highTime = 1/frequency  * dutyCycle * laserConstant
+	print('High Time: ', highTime)
+	print('Low Time: ', highTime - (1/frequency))
+
+	while(not imageBurnComplete):
+
+		#https://www.machinelearningplus.com/python/parallel-processing-python/
+		pool = mp.Pool(2)
+		results = pool.apply(MoveLaserStepperMotor, args=(totalPixels, pixelDwellDuration, frequency))
+
+	pool.close
+
+		time.sleep(highTime)
 		GPIO.output(7, HIGH)
-		time.sleep(0.010 - highTime)                             # Sleep 10 ms minus time is HIGH
+		time.sleep(highTime - (1/frequency))
 		GPIO.output(7, LOW)
 
 		#imageBurnComplete = MoveLaserStepperMotor(pixelDwellDuration, frequency)
@@ -103,19 +115,25 @@ def BurnImage(img, laserConstant):
 			imageBurnComplete = True
 
 
+def MoveLaserStepperMotor(pixelDwellDuration, frequency):
+	print('NOT DONE')
+
 if __name__ == "__main__":
+
+	print("Number of processors: ", mp.cpu_count())
+
+	GPIO.setmode(GPIO.BOARD)
+	GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW)
 
 	LoadColorImage()
 	LoadGrayScaleImage()
 	LoadBlackWhiteImage()
 	BurnImage(LoadGrayScaleImage, 1.0)
 
-	GPIO.setmode(GPIO.BOARD)
-
-	GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW)
+	# Relays
 	#GPIO.setup(15, GPIO.OUT, initial=GPIO.LOW)
 	#GPIO.setup(31, GPIO.OUT, initial=GPIO.LOW)
-	GPIO.setup(37, GPIO.OUT, initial=GPIO.LOW)
+	#GPIO.setup(37, GPIO.OUT, initial=GPIO.LOW)
 
 	GPIO.output(7, HIGH)
 	#GPIO.output(15, HIGH)
