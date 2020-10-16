@@ -21,6 +21,7 @@ ORANGE_FLAVOR_PIN = 15
 PINEAPPLE_FLAVOR_PIN = 31
 PINA_COLADA_FLAVOR_PIN = 37
 
+PUMP_CONSTANT = 2
 
 def LoadImage(path):
 	"""
@@ -183,10 +184,26 @@ def MoveLaserStepperMotor(ser, dwellDuration, endOfRow, yPixel, xPixel):
 		gCode = "G0 X" + str(xPixel) + "Y" + str(yPixel)
 		time.sleep(dwellDuration)
 
+	# https://www.cnc4fun.com/wp-content/uploads/2019/12/Grbl-Commands-v1.1-2.pdf
+	# https://www.robotshop.com/community/forum/t/can-one-arduino-resent-serial-com-to-another-arduino/10602/7
+	# https://github.com/grbl/grbl/wiki/Interfacing-with-Grbl
 	ser.write(gCode.encode()) 		# Encode G0 X? Y? string into byte data
 
 
-def PumpFlavor(flavorID):
+def PumpFlavor(flavorPin, volume):
+	"""
+	Turn on pump corresponding to select flavor
+
+	Key arguments:
+	flavorPin -- GPIO pin to toggle high
+	volume - Amount of liquid to pump in units of Ounces
+
+	Return value:
+	NOTHING
+	"""
+	GPIO.output(flavorPin, HIGH)
+	time.sleep(volume*PUMP_CONSTANT)
+	GPIO.output(flavorPin, LOW)
 
 
 if __name__ == "__main__":
@@ -197,22 +214,15 @@ if __name__ == "__main__":
 	##LoadColorImage()
 	##LoadGrayScaleImage()
 	##LoadBlackWhiteImage()
-	BurnImage(LoadImage(BACARDI_LOGO))
+	#BurnImage(LoadImage(BACARDI_LOGO))
 
 	# Relays
-	##GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW)
-	##GPIO.setup(15, GPIO.OUT, initial=GPIO.LOW)
-	##GPIO.setup(31, GPIO.OUT, initial=GPIO.LOW)
-	##GPIO.setup(37, GPIO.OUT, initial=GPIO.LOW)
+	GPIO.setup(ORANGE_FLAVOR_PIN, GPIO.OUT, initial=GPIO.LOW)
+	GPIO.setup(PINEAPPLE_FLAVOR_PIN, GPIO.OUT, initial=GPIO.LOW)
+	GPIO.setup(PINA_COLADA_FLAVOR_PIN, GPIO.OUT, initial=GPIO.LOW)
 
-	##GPIO.output(7, HIGH)
-	##GPIO.output(15, HIGH)
-	##GPIO.output(31, HIGH)
-	##GPIO.output(37, HIGH)
+	PumpFlavor(ORANGE_FLAVOR_PIN, 1.5)
 
 	time.sleep(3)
 
 	GPIO.cleanup()
-	##GPIO.cleanup(15)
-	##GPIO.cleanup(31)
-	##GPIO.cleanup(37)
