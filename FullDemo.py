@@ -2,6 +2,7 @@
 
 import RPi.GPIO as GPIO
 import time
+import pyautogui
 
 import cv2
 
@@ -168,7 +169,7 @@ def BurnImage(img):
 
 	totalTime = 0
 
-	for yPixel in range(imgHeight):
+	for yPixel in range(50, 167):  #(imgHeight)
 		#print("yPixel: ", yPixel)
 
 		for xPixel in range(imgWidth):
@@ -289,6 +290,8 @@ def PumpFlavor(flavorPin, volume):
 
 if __name__ == "__main__":
 
+	screenWidth, screenHeight = pyautogui.size() # Get the size of the primary monitor.
+	print('SCREEN SIZE: ', screenWidth, screenHeight )
 	GPIO.setmode(GPIO.BOARD)
 	GPIO.setup(LASER_FIRE_PIN, GPIO.OUT, initial=GPIO.LOW)
 
@@ -301,7 +304,8 @@ if __name__ == "__main__":
 
 	#BurnImage(LoadImage(WHITE_LOGO))
 	#WriteImage(BACARDI_LOGO)
-	BurnImage(LoadImage(BACARDI_LOGO))
+ 	pyautogui.click(100, 200)  # Move the mouse to XY coordinates in Candle GUI and click  it
+ 	BurnImage(LoadImage(BACARDI_LOGO))
 
 	# Relays
 	GPIO.setup(ORANGE_FLAVOR_PIN, GPIO.OUT, initial=GPIO.LOW)
